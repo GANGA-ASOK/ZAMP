@@ -28,6 +28,7 @@ load_dotenv()
 from src.database.mongodb import connect_to_mongodb, close_mongodb_connection  # noqa: E402
 from src.routes.test import router as test_router  # noqa: E402
 from src.routes.vendors import router as vendors_router  # noqa: E402
+from src.routes.documents import router as documents_router  # noqa: E402
 from src.services.vendor_service import VendorService  # noqa: E402
 
 logging.basicConfig(
@@ -83,6 +84,7 @@ app.add_middleware(
 # ---------------------------------------------------------------------------
 
 app.include_router(vendors_router, prefix="/api")
+app.include_router(documents_router, prefix="/api/vendors", tags=["Documents"])
 app.include_router(test_router, prefix="/api", tags=["Database Testing"])
 
 
