@@ -76,7 +76,7 @@ class CompanyInfoModel:
     registered_address: AddressModel = field(default_factory=AddressModel)
     # When True the operational address mirrors the registered address.
     is_operational_same_as_registered: bool = True
-    operational_address: AddressModel = field(default_factory=AddressModel)
+    operational_address: AddressModel | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -90,7 +90,11 @@ class CompanyInfoModel:
             "website": self.website,
             "registered_address": self.registered_address.to_dict(),
             "is_operational_same_as_registered": self.is_operational_same_as_registered,
-            "operational_address": self.operational_address.to_dict(),
+            "operational_address": (
+                self.operational_address.to_dict()
+                if (self.operational_address and not self.is_operational_same_as_registered)
+                else None
+            ),
         }
 
 
@@ -265,6 +269,7 @@ class VendorDocument:
     # Onboarding workflow fields
     reference_number: str = ""         # e.g. VND-2026-00001
     status: str = "draft"              # VendorStatus enum value
+    user_id: str | None = None         # Authenticated User ID who owns this vendor profile
 
     # Form data sub-documents (one per step)
     company_info: CompanyInfoModel = field(default_factory=CompanyInfoModel)
@@ -284,12 +289,16 @@ class VendorDocument:
     updated_at: datetime = field(default_factory=_utcnow)
     submitted_at: datetime | None = None
     reviewed_at: datetime | None = None
+    resubmitted_at: datetime | None = None
+    approved_at: datetime | None = None
+    rejected_at: datetime | None = None
 
     def to_dict(self) -> dict[str, Any]:
         """Serialise to a plain dict suitable for PyMongo insert/replace."""
         return {
             "reference_number": self.reference_number,
             "status": self.status,
+            "user_id": self.user_id,
             "company_info": self.company_info.to_dict(),
             "contact_info": self.contact_info.to_dict(),
             "tax_details": self.tax_details.to_dict(),
@@ -303,5 +312,8 @@ class VendorDocument:
             "updated_at": self.updated_at,
             "submitted_at": self.submitted_at,
             "reviewed_at": self.reviewed_at,
+            "resubmitted_at": self.resubmitted_at,
+            "approved_at": self.approved_at,
+            "rejected_at": self.rejected_at,
         }
 

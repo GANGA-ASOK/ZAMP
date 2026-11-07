@@ -1,0 +1,45 @@
+Nimbus Traders — bank account belongs to another vendor  (expected AI decision: REJECT)
+
+
+STEP 1 - COMPANY INFORMATION
+  Legal company name           Nimbus Traders Private Limited
+  Trade name                   Nimbus
+  Business entity type         Private Limited Company
+  Country                      India
+  Registration number (CIN)    U51909KA2021PTC567890
+  Incorporation date           2021-11-03
+  Industry                     Information Technology
+  Registered address           7 Residency Road
+  City                         Bengaluru
+  State                        Karnataka
+  Pincode                      560025
+  Operational address          Same as registered
+
+STEP 2 - CONTACT INFORMATION
+  Primary first name           Vikram
+  Primary last name            Rao
+  Designation                  Director
+  Email                        vikram@nimbustraders.in
+  Mobile                       9900112233
+  Department                   Management
+  Authorized signatory         Vikram Rao
+  Signatory designation        Director
+  Signatory email              vikram@nimbustraders.in
+
+STEP 3 - TAX & BANKING
+  PAN                          AAHCN3344P
+  GST status                   Registered
+  GSTIN                        29AAHCN3344P1Z6
+  GST state                    Karnataka
+  Account holder name          Nimbus Traders Private Limited
+  Bank name                    HDFC Bank
+  Account number               50200012345678
+  IFSC                         HDFC0001234
+  Account type                 Current Account
+  Branch                       Indiranagar, Bengaluru
+
+STEP 4 - DOCUMENTS TO UPLOAD
+  Pan Card                     pan_card.pdf
+  Gst Certificate              gst_reg06.pdf
+  Certificate Of Incorporation certificate_of_incorporation.pdf
+  Bank Proof                   cancelled_cheque.pdf

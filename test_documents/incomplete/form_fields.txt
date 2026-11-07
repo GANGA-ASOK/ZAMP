@@ -1,0 +1,43 @@
+Sunrise Foods — GST certificate missing, unreadable bank proof  (expected AI decision: REVIEW)
+
+
+STEP 1 - COMPANY INFORMATION
+  Legal company name           Sunrise Foods
+  Trade name                   Sunrise Foods
+  Business entity type         Partnership
+  Country                      India
+  Registration number (CIN)    (not applicable)
+  Incorporation date           2015-04-01
+  Industry                     Information Technology
+  Registered address           B-12 Okhla Industrial Area Phase 2
+  City                         New Delhi
+  State                        Delhi
+  Pincode                      110020
+  Operational address          Same as registered
+
+STEP 2 - CONTACT INFORMATION
+  Primary first name           Amit
+  Primary last name            Gupta
+  Designation                  Director
+  Email                        amit@sunrisefoods.in
+  Mobile                       9811012345
+  Department                   Management
+  Authorized signatory         Amit Gupta
+  Signatory designation        Director
+  Signatory email              amit@sunrisefoods.in
+
+STEP 3 - TAX & BANKING
+  PAN                          AAKFS2233M
+  GST status                   Registered
+  GSTIN                        07AAKFS2233M1Z9
+  GST state                    Delhi
+  Account holder name          Sunrise Foods
+  Bank name                    Punjab National Bank
+  Account number               0123000100456789
+  IFSC                         PUNB0012300
+  Account type                 Current Account
+  Branch                       Okhla, New Delhi
+
+STEP 4 - DOCUMENTS TO UPLOAD
+  Pan Card                     pan_card.pdf
+  Bank Proof                   cheque_photo.jpg

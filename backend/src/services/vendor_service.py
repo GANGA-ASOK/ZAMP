@@ -169,6 +169,7 @@ class VendorService:
     async def create_vendor(
         self,
         payload: VendorDraftCreate | VendorCreate | dict[str, Any],
+        user_id: str | None = None,
     ) -> VendorResponse:
         """
         Create a new vendor registration (initial status: draft).
@@ -200,6 +201,7 @@ class VendorService:
         doc_template = VendorDocument(
             reference_number=ref_num,
             status=VendorStatus.DRAFT.value,
+            user_id=user_id,
             created_at=now,
             updated_at=now,
         ).to_dict()
@@ -219,6 +221,19 @@ class VendorService:
         result = self.collection.insert_one(doc_template)
         doc_template["_id"] = result.inserted_id
 
+        try:
+            from src.services.workflow_service import WorkflowService
+            wf = WorkflowService(db=self.db)
+            wf.log_activity(
+                application_id=str(result.inserted_id),
+                vendor_id=str(result.inserted_id),
+                event_type="created",
+                description="Vendor registration initialized.",
+                actor_type="vendor",
+            )
+        except Exception as exc:
+            logger.warning("Workflow hook during create skipped: %s", exc)
+
         logger.info("Vendor registration created with ID: %s, Ref: %s", result.inserted_id, ref_num)
         return VendorResponse.from_mongo(doc_template)
 
@@ -228,6 +243,13 @@ class VendorService:
         doc = self.collection.find_one({"_id": oid})
         if not doc:
             raise VendorNotFoundError(vendor_id)
+        return VendorResponse.from_mongo(doc)
+
+    async def get_vendor_by_user_id(self, user_id: str) -> VendorResponse | None:
+        """Retrieve vendor profile associated with an authenticated user ID."""
+        doc = self.collection.find_one({"user_id": user_id})
+        if not doc:
+            return None
         return VendorResponse.from_mongo(doc)
 
     async def get_raw_vendor_doc(self, vendor_id: str) -> dict[str, Any]:
@@ -340,13 +362,17 @@ class VendorService:
         """
         # Prepare validation payload by copying sections
         val_payload = {
-            "company_info": raw_doc.get("company_info") or {},
+            "company_info": (raw_doc.get("company_info") or {}).copy(),
             "contact_info": raw_doc.get("contact_info") or {},
             "tax_details": raw_doc.get("tax_details") or {},
             "banking_details": (raw_doc.get("banking_details") or {}).copy(),
             "documents": raw_doc.get("documents") or [],
             "declarations": raw_doc.get("declarations") or {},
         }
+
+        # If operational address is marked same as registered, ensure operational_address is not validated as separate
+        if val_payload["company_info"].get("is_operational_same_as_registered", True):
+            val_payload["company_info"]["operational_address"] = None
 
         # BankingDetailsCreate expects confirm_account_number == account_number
         if "account_number" in val_payload["banking_details"]:
@@ -385,6 +411,37 @@ class VendorService:
             {"_id": oid},
             {"$set": update_fields},
         )
+
+        try:
+            from src.services.workflow_service import WorkflowService
+            wf = WorkflowService(db=self.db)
+            wf.log_activity(
+                application_id=str(oid),
+                vendor_id=str(oid),
+                event_type="submitted",
+                description="Vendor submitted application for compliance review.",
+                actor_type="vendor",
+            )
+            comp_name = raw_doc.get("company_info", {}).get("legal_company_name", "Vendor")
+            ref_num = raw_doc.get("reference_number", "")
+            wf.create_notification(
+                recipient_type="admin",
+                title="New Vendor Application",
+                message=f"New application submitted by {comp_name} ({ref_num}).",
+                notification_type="info",
+                vendor_id=str(oid),
+                application_id=str(oid),
+            )
+            wf.create_notification(
+                recipient_type="vendor",
+                title="Application Submitted",
+                message=f"Your onboarding application ({ref_num}) has been successfully submitted.",
+                notification_type="info",
+                vendor_id=str(oid),
+                application_id=str(oid),
+            )
+        except Exception as exc:
+            logger.warning("Workflow hooks during submission skipped: %s", exc)
 
         logger.info("Vendor %s successfully submitted with ref: %s", vendor_id, raw_doc.get("reference_number"))
         return VendorSubmissionResponse(

@@ -1,0 +1,71 @@
+{
+  "reference_number": "VND-DEMO-0003",
+  "status": "submitted",
+  "user_id": null,
+  "company_info": {
+    "legal_company_name": "Greenleaf Organics Private Limited",
+    "trade_name": "Greenleaf",
+    "business_entity_type": "Private Limited Company",
+    "country": "India",
+    "registration_number": "U01100TN2020PTC345678",
+    "incorporation_date": "2020-01-20",
+    "industry": "Information Technology",
+    "website": "",
+    "registered_address": {
+      "street": "22 Anna Salai, T Nagar",
+      "city": "Chennai",
+      "state": "Tamil Nadu",
+      "pincode": "600017",
+      "country": "India"
+    },
+    "is_operational_same_as_registered": true,
+    "operational_address": null
+  },
+  "contact_info": {
+    "primary": {
+      "first_name": "Rahul",
+      "last_name": "Mehta",
+      "full_name": "",
+      "designation": "Director",
+      "email": "rahul@greenleaforganics.in",
+      "phone": "9884012345",
+      "department": "Management"
+    },
+    "secondary": null,
+    "signatory": {
+      "first_name": "",
+      "last_name": "",
+      "full_name": "Rahul Mehta",
+      "designation": "Director",
+      "email": "rahul@greenleaforganics.in",
+      "phone": "",
+      "department": ""
+    },
+    "confirm_authorized": true
+  },
+  "tax_details": {
+    "pan_number": "AAFCG4521L",
+    "gst_status": "Registered",
+    "gstin": "33AAFCG4521L1Z8",
+    "gst_state": "Tamil Nadu",
+    "tan_number": ""
+  },
+  "banking_details": {
+    "account_holder_name": "Rahul Mehta",
+    "bank_name": "State Bank of India",
+    "account_number": "30987654321",
+    "ifsc_code": "SBIN0001234",
+    "account_type": "Current Account",
+    "bank_branch": "T Nagar, Chennai",
+    "confirm_bank_ownership": true
+  },
+  "documents": [],
+  "declarations": {
+    "confirm_accurate": true,
+    "authorize_verification": true,
+    "agree_terms": true
+  },
+  "review_notes": "",
+  "rejection_reason": "",
+  "clarification_requests": []
+}

@@ -174,6 +174,16 @@ class CompanyInfoCreate(_VendorBase):
     is_operational_same_as_registered: bool = True
     operational_address: AddressCreate | None = None
 
+    @model_validator(mode="before")
+    @classmethod
+    def normalize_operational_address(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            # When operational address is same as registered, it does not require a separate address
+            if data.get("is_operational_same_as_registered", True):
+                data = data.copy()
+                data["operational_address"] = None
+        return data
+
     @model_validator(mode="after")
     def validate_corporate_fields(self) -> "CompanyInfoCreate":
         corporate_types = {
@@ -639,6 +649,7 @@ class VendorResponse(_VendorBase):
     banking_details: BankingDetailsResponse
     documents: list[DocumentMetaResponse]
     declarations: DeclarationsResponse
+    user_id: str | None = Field(default=None, description="Associated user ID")
     created_at: datetime
     updated_at: datetime
     submitted_at: datetime | None = None
@@ -682,6 +693,7 @@ class VendorResponse(_VendorBase):
             banking_details=BankingDetailsResponse(**bank_resp),
             documents=doc.get("documents", []),
             declarations=doc.get("declarations", {}),
+            user_id=doc.get("user_id"),
             created_at=doc.get("created_at") or datetime.now(),
             updated_at=doc.get("updated_at") or datetime.now(),
             submitted_at=doc.get("submitted_at"),

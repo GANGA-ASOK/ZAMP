@@ -58,6 +58,7 @@ export const Step1CompanyInfo: FC<Step1CompanyInfoProps> = ({
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="sm:col-span-2">
           <FormInput
+            id="legalCompanyName"
             label="Legal Company Name"
             required
             placeholder="e.g. Acme Technologies Private Limited"
@@ -69,6 +70,7 @@ export const Step1CompanyInfo: FC<Step1CompanyInfoProps> = ({
 
         <div>
           <FormInput
+            id="tradeName"
             label="Trade Name / Brand Name"
             placeholder="e.g. Acme Cloud"
             value={data.tradeName}
@@ -79,6 +81,7 @@ export const Step1CompanyInfo: FC<Step1CompanyInfoProps> = ({
 
         <div>
           <FormSelect
+            id="businessEntityType"
             label="Business Entity Type"
             required
             placeholder="Select entity type"
@@ -91,6 +94,7 @@ export const Step1CompanyInfo: FC<Step1CompanyInfoProps> = ({
 
         <div>
           <FormSelect
+            id="country"
             label="Country of Registration"
             required
             options={COUNTRIES}
@@ -102,6 +106,7 @@ export const Step1CompanyInfo: FC<Step1CompanyInfoProps> = ({
 
         <div>
           <FormSelect
+            id="industry"
             label="Industry"
             required
             placeholder="Select industry"
@@ -117,6 +122,7 @@ export const Step1CompanyInfo: FC<Step1CompanyInfoProps> = ({
           <>
             <div>
               <FormInput
+                id="registrationNumber"
                 label="Registration Number (CIN / LLPIN)"
                 required
                 placeholder="e.g. U72200KA2021PTC123456"
@@ -129,6 +135,7 @@ export const Step1CompanyInfo: FC<Step1CompanyInfoProps> = ({
 
             <div>
               <FormInput
+                id="incorporationDate"
                 label="Date of Incorporation"
                 type="date"
                 required
@@ -143,6 +150,7 @@ export const Step1CompanyInfo: FC<Step1CompanyInfoProps> = ({
 
         <div className="sm:col-span-2">
           <FormInput
+            id="website"
             label="Company Website"
             type="url"
             placeholder="https://example.com"
@@ -161,6 +169,7 @@ export const Step1CompanyInfo: FC<Step1CompanyInfoProps> = ({
 
         <div className="space-y-4">
           <FormTextarea
+            id="registeredAddress"
             label="Registered Address"
             required
             placeholder="Street address, building, suite, or flat number"
@@ -173,6 +182,7 @@ export const Step1CompanyInfo: FC<Step1CompanyInfoProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
               <FormInput
+                id="registeredCity"
                 label="City"
                 required
                 placeholder="e.g. Bengaluru"
@@ -185,6 +195,7 @@ export const Step1CompanyInfo: FC<Step1CompanyInfoProps> = ({
             <div>
               {data.country === 'India' ? (
                 <FormSelect
+                  id="registeredState"
                   label="State"
                   required
                   placeholder="Select state"
@@ -195,6 +206,7 @@ export const Step1CompanyInfo: FC<Step1CompanyInfoProps> = ({
                 />
               ) : (
                 <FormInput
+                  id="registeredState"
                   label="State / Province"
                   required
                   placeholder="State/Province"
@@ -207,6 +219,7 @@ export const Step1CompanyInfo: FC<Step1CompanyInfoProps> = ({
 
             <div>
               <FormInput
+                id="registeredPincode"
                 label={data.country === 'India' ? 'PIN Code' : 'Postal Code'}
                 required
                 placeholder={data.country === 'India' ? '6 digits (e.g. 560001)' : 'Postal code'}
@@ -223,7 +236,7 @@ export const Step1CompanyInfo: FC<Step1CompanyInfoProps> = ({
       {/* Operational Address Toggle */}
       <div className="pt-2 border-t border-slate-100 space-y-4">
         <FormCheckbox
-          id="operational-address-toggle"
+          id="isOperationalSameAsRegistered"
           checked={data.isOperationalSameAsRegistered}
           onChange={(checked) => onChange('isOperationalSameAsRegistered', checked)}
           label="Is your operational address the same as your registered office address?"
@@ -236,6 +249,7 @@ export const Step1CompanyInfo: FC<Step1CompanyInfoProps> = ({
             </h4>
 
             <FormTextarea
+              id="operationalAddress"
               label="Operational Address"
               required
               placeholder="Physical office address"
@@ -247,6 +261,7 @@ export const Step1CompanyInfo: FC<Step1CompanyInfoProps> = ({
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <FormInput
+                id="operationalCity"
                 label="City"
                 required
                 placeholder="City"
@@ -257,6 +272,7 @@ export const Step1CompanyInfo: FC<Step1CompanyInfoProps> = ({
 
               {data.country === 'India' ? (
                 <FormSelect
+                  id="operationalState"
                   label="State"
                   required
                   placeholder="Select state"
@@ -267,6 +283,7 @@ export const Step1CompanyInfo: FC<Step1CompanyInfoProps> = ({
                 />
               ) : (
                 <FormInput
+                  id="operationalState"
                   label="State / Province"
                   required
                   placeholder="State/Province"
@@ -277,6 +294,7 @@ export const Step1CompanyInfo: FC<Step1CompanyInfoProps> = ({
               )}
 
               <FormInput
+                id="operationalPincode"
                 label={data.country === 'India' ? 'PIN Code' : 'Postal Code'}
                 required
                 placeholder="PIN / Postal Code"

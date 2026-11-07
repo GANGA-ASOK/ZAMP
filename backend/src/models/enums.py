@@ -36,6 +36,9 @@ class VendorStatus(str, Enum):
     CLARIFICATION_REQUIRED = "clarification_required"
     """Admin has requested additional information or document corrections."""
 
+    RESUBMITTED = "resubmitted"
+    """Vendor has submitted the requested corrections."""
+
     APPROVED = "approved"
     """The vendor has been verified and approved."""
 
@@ -127,4 +130,65 @@ class AccountType(str, Enum):
     CURRENT = "Current Account"
     SAVINGS = "Savings Account"
     OTHER = "Other"
+
+
+# ---------------------------------------------------------------------------
+# User authentication & RBAC roles
+# ---------------------------------------------------------------------------
+
+class UserRole(str, Enum):
+    VENDOR = "vendor"
+    ADMIN = "admin"
+
+
+class UserStatus(str, Enum):
+    ACTIVE = "active"
+    INACTIVE = "inactive"
+    SUSPENDED = "suspended"
+
+
+# ---------------------------------------------------------------------------
+# Phase 9: Approval Workflow, Clarifications, Notifications & Activity
+# ---------------------------------------------------------------------------
+
+class ClarificationStatus(str, Enum):
+    PENDING = "pending"
+    RESOLVED = "resolved"
+
+
+class ActorType(str, Enum):
+    VENDOR = "vendor"
+    ADMIN = "admin"
+    SYSTEM = "system"
+
+
+class NotificationRecipientType(str, Enum):
+    VENDOR = "vendor"
+    ADMIN = "admin"
+
+
+class NotificationType(str, Enum):
+    INFO = "info"
+    STATUS_CHANGE = "status_change"
+    CLARIFICATION = "clarification"
+    APPROVAL = "approval"
+    REJECTION = "rejection"
+    RESUBMISSION = "resubmission"
+
+
+class ActivityEventType(str, Enum):
+    CREATED = "created"
+    SUBMITTED = "submitted"
+    UNDER_REVIEW = "under_review"
+    CLARIFICATION_REQUESTED = "clarification_requested"
+    CLARIFICATION_RESPONDED = "clarification_responded"
+    RESUBMITTED = "resubmitted"
+    APPROVED = "approved"
+    REJECTED = "rejected"
+    DOCUMENT_UPLOADED = "document_uploaded"
+    DOCUMENT_REPLACED = "document_replaced"
+    COMMENT_ADDED = "comment_added"
+    AI_VERIFICATION = "ai_verification"
+
+
 

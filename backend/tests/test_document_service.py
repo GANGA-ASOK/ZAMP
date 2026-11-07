@@ -443,3 +443,116 @@ def test_16_storage_failure(doc_svc, vendor_id):
             type(doc_svc).fs = original_fs_prop
         else:
             del type(doc_svc).fs
+
+
+# ---------------------------------------------------------------------------
+# 17 — Vendor collection synchronization on upload
+# ---------------------------------------------------------------------------
+
+def test_17_vendor_collection_synchronization(mock_db, doc_svc):
+    v_id = _insert_vendor(mock_db, "Sync Test Vendor")
+    upload = doc_svc.upload_document(
+        vendor_id=v_id,
+        file_bytes=VALID_PDF_BYTES,
+        filename="pan.pdf",
+        category=DocumentCategory.PAN_CARD.value,
+    )
+    doc_id = upload["document_id"]
+
+    vendor_record = mock_db["vendors"].find_one({"_id": ObjectId(v_id)})
+    assert vendor_record is not None
+    docs = vendor_record.get("documents", [])
+    assert len(docs) == 1
+    assert docs[0]["document_id"] == doc_id
+    assert docs[0]["category"] == DocumentCategory.PAN_CARD.value
+    assert docs[0]["file_name"] == "pan.pdf"
+
+
+# ---------------------------------------------------------------------------
+# 18 — Vendor collection synchronization on replace
+# ---------------------------------------------------------------------------
+
+def test_18_vendor_collection_replacement_sync(mock_db, doc_svc):
+    v_id = _insert_vendor(mock_db, "Replace Sync Vendor")
+    upload = doc_svc.upload_document(
+        vendor_id=v_id,
+        file_bytes=VALID_PDF_BYTES,
+        filename="old_pan.pdf",
+        category=DocumentCategory.PAN_CARD.value,
+    )
+    old_doc_id = upload["document_id"]
+
+    replace_res = doc_svc.replace_document(
+        vendor_id=v_id,
+        document_id=old_doc_id,
+        file_bytes=VALID_PDF_BYTES,
+        filename="new_pan.pdf",
+    )
+    new_doc_id = replace_res["document_id"]
+
+    vendor_record = mock_db["vendors"].find_one({"_id": ObjectId(v_id)})
+    docs = vendor_record.get("documents", [])
+    assert len(docs) == 1
+    assert docs[0]["document_id"] == new_doc_id
+    assert docs[0]["file_name"] == "new_pan.pdf"
+
+
+# ---------------------------------------------------------------------------
+# 19 — Vendor collection synchronization on delete
+# ---------------------------------------------------------------------------
+
+def test_19_vendor_collection_deletion_sync(mock_db, doc_svc):
+    v_id = _insert_vendor(mock_db, "Delete Sync Vendor")
+    upload = doc_svc.upload_document(
+        vendor_id=v_id,
+        file_bytes=VALID_PDF_BYTES,
+        filename="delete_me.pdf",
+        category=DocumentCategory.OTHER.value,
+    )
+    doc_id = upload["document_id"]
+
+    doc_svc.delete_document(v_id, doc_id)
+
+    vendor_record = mock_db["vendors"].find_one({"_id": ObjectId(v_id)})
+    docs = vendor_record.get("documents", [])
+    assert len(docs) == 0
+
+
+# ---------------------------------------------------------------------------
+# 20 — AI Insights synthesis service
+# ---------------------------------------------------------------------------
+
+def test_20_ai_insights_generation(mock_db, doc_svc):
+    from src.services.insights_service import InsightsService
+
+    v_id = _insert_vendor(mock_db, "Insights Test Vendor")
+    # Set company info as Private Limited without incorporation certificate
+    mock_db["vendors"].update_one(
+        {"_id": ObjectId(v_id)},
+        {"$set": {
+            "company_info": {
+                "legal_company_name": "Insights Pvt Ltd",
+                "business_entity_type": "Private Limited Company",
+            },
+            "tax_details": {
+                "gst_status": "Registered",
+            }
+        }}
+    )
+
+    insights_svc = InsightsService(db=mock_db)
+    insights = insights_svc.generate_vendor_insights(v_id)
+
+    assert insights["vendor_id"] == v_id
+    assert "recommendation" in insights
+    assert "confidence_score" in insights
+    assert "document_summary" in insights
+    assert "missing_documents" in insights
+    # Since Pvt Ltd has no docs, PAN, GST, Incorporation, and Bank proof are flagged as missing
+    missing_cats = [d["category"] for d in insights["missing_documents"]]
+    assert "pan_card" in missing_cats
+    assert "bank_proof" in missing_cats
+    assert "certificate_of_incorporation" in missing_cats
+    assert "gst_certificate" in missing_cats
+    assert insights["recommendation"] == "Clarification Required"
+

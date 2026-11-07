@@ -61,6 +61,7 @@ export const Step3TaxBankingInfo: FC<Step3TaxBankingInfoProps> = ({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <FormInput
+              id="panNumber"
               label="PAN Number"
               required
               placeholder="e.g. ABCDE1234F"
@@ -74,6 +75,7 @@ export const Step3TaxBankingInfo: FC<Step3TaxBankingInfoProps> = ({
 
           <div>
             <FormSelect
+              id="gstStatus"
               label="GST Registration Status"
               required
               options={GST_STATUS_OPTIONS}
@@ -87,6 +89,7 @@ export const Step3TaxBankingInfo: FC<Step3TaxBankingInfoProps> = ({
             <>
               <div>
                 <FormInput
+                  id="gstin"
                   label="GSTIN (Goods & Services Tax ID)"
                   required
                   placeholder="e.g. 29ABCDE1234F1Z5"
@@ -104,6 +107,7 @@ export const Step3TaxBankingInfo: FC<Step3TaxBankingInfoProps> = ({
 
               <div>
                 <FormSelect
+                  id="gstState"
                   label="GST Registration State"
                   required
                   placeholder="Select state"
@@ -118,6 +122,7 @@ export const Step3TaxBankingInfo: FC<Step3TaxBankingInfoProps> = ({
 
           <div className={isGstRegistered ? 'sm:col-span-2' : ''}>
             <FormInput
+              id="tanNumber"
               label="TAN Number"
               placeholder="e.g. ABCD12345E"
               value={data.tanNumber}
@@ -157,6 +162,7 @@ export const Step3TaxBankingInfo: FC<Step3TaxBankingInfoProps> = ({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="sm:col-span-2">
             <FormInput
+              id="accountHolderName"
               label="Account Holder Name"
               required
               placeholder="As per bank statement / passbook"
@@ -168,6 +174,7 @@ export const Step3TaxBankingInfo: FC<Step3TaxBankingInfoProps> = ({
 
           <div>
             <FormInput
+              id="bankName"
               label="Bank Name"
               required
               placeholder="e.g. HDFC Bank, ICICI Bank"
@@ -179,6 +186,7 @@ export const Step3TaxBankingInfo: FC<Step3TaxBankingInfoProps> = ({
 
           <div>
             <FormInput
+              id="bankBranch"
               label="Branch Name"
               placeholder="e.g. Whitefield Branch"
               value={data.bankBranch}
@@ -189,6 +197,7 @@ export const Step3TaxBankingInfo: FC<Step3TaxBankingInfoProps> = ({
 
           <div>
             <FormInput
+              id="accountNumber"
               label="Bank Account Number"
               type={showAccountNo ? 'text' : 'password'}
               required
@@ -211,6 +220,7 @@ export const Step3TaxBankingInfo: FC<Step3TaxBankingInfoProps> = ({
 
           <div>
             <FormInput
+              id="confirmAccountNumber"
               label="Confirm Bank Account Number"
               type={showConfirmAccountNo ? 'text' : 'password'}
               required
@@ -243,6 +253,7 @@ export const Step3TaxBankingInfo: FC<Step3TaxBankingInfoProps> = ({
 
           <div>
             <FormInput
+              id="ifscCode"
               label="IFSC Code"
               required
               placeholder="e.g. HDFC0001234"
@@ -256,6 +267,7 @@ export const Step3TaxBankingInfo: FC<Step3TaxBankingInfoProps> = ({
 
           <div>
             <FormSelect
+              id="accountType"
               label="Account Type"
               required
               options={ACCOUNT_TYPES}
@@ -269,7 +281,7 @@ export const Step3TaxBankingInfo: FC<Step3TaxBankingInfoProps> = ({
         {/* Bank Ownership Mandatory Checkbox */}
         <div className="mt-5 pt-4 border-t border-slate-100">
           <FormCheckbox
-            id="confirm-bank-ownership"
+            id="confirmBankOwnership"
             required
             checked={data.confirmBankOwnership}
             onChange={(checked) => onChange('confirmBankOwnership', checked)}

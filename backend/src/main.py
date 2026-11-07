@@ -25,11 +25,21 @@ from fastapi.middleware.cors import CORSMiddleware
 # Load .env BEFORE importing any module that reads env vars
 load_dotenv()
 
-from src.database.mongodb import connect_to_mongodb, close_mongodb_connection  # noqa: E402
+import src.database.mongodb as _db_module  # noqa: E402
 from src.routes.test import router as test_router  # noqa: E402
 from src.routes.vendors import router as vendors_router  # noqa: E402
 from src.routes.documents import router as documents_router  # noqa: E402
+from src.routes.auth import router as auth_router  # noqa: E402
+from src.routes.admin import router as admin_router  # noqa: E402
+from src.routes.verification import router as verification_router  # noqa: E402
+from src.routes.workflow import router as workflow_router  # noqa: E402
+from src.routes.ai_decision import router as ai_decision_router  # noqa: E402
+from src.routes.demo import router as demo_router  # noqa: E402
+from src.services.application_decision_service import ApplicationDecisionService  # noqa: E402
 from src.services.vendor_service import VendorService  # noqa: E402
+from src.services.auth_service import AuthService  # noqa: E402
+from src.services.verification_service import VerificationService  # noqa: E402
+from src.services.workflow_service import WorkflowService  # noqa: E402
 
 logging.basicConfig(
     level=logging.INFO,
@@ -45,15 +55,19 @@ logger = logging.getLogger(__name__)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info("VendorFlow API starting up…")
-    await connect_to_mongodb()
+    await _db_module.connect_to_mongodb()
     try:
         VendorService().ensure_indexes()
+        AuthService().ensure_indexes()
+        VerificationService().ensure_indexes()
+        WorkflowService().ensure_indexes()
+        ApplicationDecisionService().ensure_indexes()
         logger.info("Database indexes ensured.")
     except Exception as exc:
         logger.warning("Index setup skipped or failed: %s", exc)
     yield
     logger.info("VendorFlow API shutting down…")
-    await close_mongodb_connection()
+    await _db_module.close_mongodb_connection()
 
 
 # ---------------------------------------------------------------------------
@@ -83,7 +97,13 @@ app.add_middleware(
 # Routers
 # ---------------------------------------------------------------------------
 
+app.include_router(auth_router, prefix="/api")
 app.include_router(vendors_router, prefix="/api")
+app.include_router(admin_router, prefix="/api")
+app.include_router(verification_router, prefix="/api")
+app.include_router(workflow_router, prefix="/api")
+app.include_router(ai_decision_router, prefix="/api")
+app.include_router(demo_router, prefix="/api")
 app.include_router(documents_router, prefix="/api/vendors", tags=["Documents"])
 app.include_router(test_router, prefix="/api", tags=["Database Testing"])
 

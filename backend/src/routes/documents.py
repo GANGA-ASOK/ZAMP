@@ -20,9 +20,11 @@ from __future__ import annotations
 import io
 import logging
 
-from fastapi import APIRouter, File, Form, HTTPException, UploadFile, status
+from fastapi import APIRouter, BackgroundTasks, Depends, File, Form, HTTPException, UploadFile, status
 from fastapi.responses import StreamingResponse
 
+from src.dependencies.auth import verify_vendor_ownership
+from src.models.user import UserModel
 from src.schemas.document import DocumentListResponse, DocumentMetadataResponse
 from src.services.document_service import (
     DocumentNotFoundError,
@@ -84,6 +86,36 @@ def _handle_service_error(exc: Exception) -> HTTPException:
 
 
 # ---------------------------------------------------------------------------
+# Background AI Pipeline Runner
+# ---------------------------------------------------------------------------
+
+async def _run_ai_pipeline(vendor_id: str, document_id: str) -> None:
+    """Run full extraction, deterministic verification, Super VL reasoning, and insight generation."""
+    try:
+        from src.services.verification_service import VerificationService
+        verif_svc = VerificationService()
+        await verif_svc.execute_verification(vendor_id, document_id)
+    except Exception as exc:
+        logger.warning("Background verification pipeline encountered an issue for %s: %s", document_id, exc)
+
+    try:
+        from src.services.insights_service import InsightsService
+        insights_svc = InsightsService()
+        insights_svc.generate_vendor_insights(vendor_id)
+    except Exception as exc:
+        logger.warning("Background insights generation encountered an issue for vendor %s: %s", vendor_id, exc)
+
+
+def _run_insights_sync(vendor_id: str) -> None:
+    try:
+        from src.services.insights_service import InsightsService
+        insights_svc = InsightsService()
+        insights_svc.generate_vendor_insights(vendor_id)
+    except Exception as exc:
+        logger.warning("Background insights sync encountered an issue for vendor %s: %s", vendor_id, exc)
+
+
+# ---------------------------------------------------------------------------
 # POST /api/vendors/{vendor_id}/documents  — upload
 # ---------------------------------------------------------------------------
 
@@ -95,8 +127,10 @@ def _handle_service_error(exc: Exception) -> HTTPException:
 )
 async def upload_document(
     vendor_id: str,
+    background_tasks: BackgroundTasks,
     category: str = Form(..., description="DocumentCategory value (e.g. pan_card)."),
     file: UploadFile = File(..., description="The file to upload."),
+    _auth: UserModel = Depends(verify_vendor_ownership),
 ):
     """
     Accept a multipart/form-data upload and store the file in GridFS.
@@ -106,6 +140,7 @@ async def upload_document(
     - Validates file extension and magic bytes.
     - Enforces the 10 MB file-size limit.
     - Returns document metadata (never raw file bytes).
+    - Queues asynchronous AI verification & insights pipeline.
     """
     file_bytes = await file.read()
     svc = _get_service()
@@ -120,6 +155,9 @@ async def upload_document(
     except Exception as exc:
         raise _handle_service_error(exc)
 
+    # Queue background verification & AI insights synthesis
+    background_tasks.add_task(_run_ai_pipeline, vendor_id, result["document_id"])
+
     return DocumentMetadataResponse(**result)
 
 
@@ -132,7 +170,10 @@ async def upload_document(
     response_model=DocumentListResponse,
     summary="List all documents for a vendor",
 )
-async def list_documents(vendor_id: str):
+async def list_documents(
+    vendor_id: str,
+    _auth: UserModel = Depends(verify_vendor_ownership),
+):
     """Return metadata for every document uploaded by the specified vendor."""
     svc = _get_service()
     try:
@@ -156,7 +197,11 @@ async def list_documents(vendor_id: str):
     response_model=DocumentMetadataResponse,
     summary="Get metadata for a specific document",
 )
-async def get_document_metadata(vendor_id: str, document_id: str):
+async def get_document_metadata(
+    vendor_id: str,
+    document_id: str,
+    _auth: UserModel = Depends(verify_vendor_ownership),
+):
     """Return metadata for a single document, verifying vendor ownership."""
     svc = _get_service()
     try:
@@ -175,7 +220,11 @@ async def get_document_metadata(vendor_id: str, document_id: str):
     "/{vendor_id}/documents/{document_id}/download",
     summary="Download a document file",
 )
-async def download_document(vendor_id: str, document_id: str):
+async def download_document(
+    vendor_id: str,
+    document_id: str,
+    _auth: UserModel = Depends(verify_vendor_ownership),
+):
     """
     Stream the raw file content for the requested document.
 
@@ -213,16 +262,19 @@ async def download_document(vendor_id: str, document_id: str):
 async def replace_document(
     vendor_id: str,
     document_id: str,
+    background_tasks: BackgroundTasks,
     file: UploadFile = File(..., description="The replacement file."),
     category: str | None = Form(
         default=None,
         description="New document category (optional; inherits existing if omitted).",
     ),
+    _auth: UserModel = Depends(verify_vendor_ownership),
 ):
     """
     Replace the stored file for an existing document record.
 
     The old GridFS file is deleted after the new file is successfully stored.
+    Re-queues AI verification & insights pipeline in background.
     """
     file_bytes = await file.read()
     svc = _get_service()
@@ -237,6 +289,8 @@ async def replace_document(
     except Exception as exc:
         raise _handle_service_error(exc)
 
+    background_tasks.add_task(_run_ai_pipeline, vendor_id, result["document_id"])
+
     return DocumentMetadataResponse(**result)
 
 
@@ -249,7 +303,12 @@ async def replace_document(
     status_code=status.HTTP_204_NO_CONTENT,
     summary="Delete a document",
 )
-async def delete_document(vendor_id: str, document_id: str):
+async def delete_document(
+    vendor_id: str,
+    document_id: str,
+    background_tasks: BackgroundTasks,
+    _auth: UserModel = Depends(verify_vendor_ownership),
+):
     """
     Permanently delete a document from GridFS.
 
@@ -261,3 +320,5 @@ async def delete_document(vendor_id: str, document_id: str):
         svc.delete_document(vendor_id, document_id)
     except Exception as exc:
         raise _handle_service_error(exc)
+
+    background_tasks.add_task(_run_insights_sync, vendor_id)

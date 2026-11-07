@@ -23,7 +23,7 @@ export const FormCheckbox: FC<FormCheckboxProps> = ({
   const checkboxId = id || `checkbox-${Math.random().toString(36).substring(2, 9)}`;
 
   return (
-    <div className={`flex flex-col space-y-1 ${className}`}>
+    <div id={id ? `${id}-container` : undefined} className={`flex flex-col space-y-1 ${className}`}>
       <label htmlFor={checkboxId} className="flex items-start space-x-3 cursor-pointer group text-left">
         <div className="relative flex items-center justify-center shrink-0 mt-0.5">
           <input

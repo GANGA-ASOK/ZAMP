@@ -1,0 +1,71 @@
+{
+  "reference_number": "VND-DEMO-0002",
+  "status": "submitted",
+  "user_id": null,
+  "company_info": {
+    "legal_company_name": "Brightwave Solutions Private Limited",
+    "trade_name": "Brightwave",
+    "business_entity_type": "Private Limited Company",
+    "country": "India",
+    "registration_number": "U74999MH2019PTC234567",
+    "incorporation_date": "2019-03-02",
+    "industry": "Information Technology",
+    "website": "",
+    "registered_address": {
+      "street": "401 Link Road, Andheri West",
+      "city": "Mumbai",
+      "state": "Maharashtra",
+      "pincode": "400053",
+      "country": "India"
+    },
+    "is_operational_same_as_registered": true,
+    "operational_address": null
+  },
+  "contact_info": {
+    "primary": {
+      "first_name": "Arjun",
+      "last_name": "Kapoor",
+      "full_name": "",
+      "designation": "Director",
+      "email": "arjun@brightwave.co.in",
+      "phone": "9820098200",
+      "department": "Management"
+    },
+    "secondary": null,
+    "signatory": {
+      "first_name": "",
+      "last_name": "",
+      "full_name": "Arjun Kapoor",
+      "designation": "Director",
+      "email": "arjun@brightwave.co.in",
+      "phone": "",
+      "department": ""
+    },
+    "confirm_authorized": true
+  },
+  "tax_details": {
+    "pan_number": "AABCB5678K",
+    "gst_status": "Registered",
+    "gstin": "27AABCB5678K1Z2",
+    "gst_state": "Maharashtra",
+    "tan_number": ""
+  },
+  "banking_details": {
+    "account_holder_name": "Brightwave Solutions Private Limited",
+    "bank_name": "Axis Bank",
+    "account_number": "912010045678123",
+    "ifsc_code": "UTIB0000123",
+    "account_type": "Current Account",
+    "bank_branch": "Andheri West, Mumbai",
+    "confirm_bank_ownership": true
+  },
+  "documents": [],
+  "declarations": {
+    "confirm_accurate": true,
+    "authorize_verification": true,
+    "agree_terms": true
+  },
+  "review_notes": "",
+  "rejection_reason": "",
+  "clarification_requests": []
+}

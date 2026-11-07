@@ -5,6 +5,7 @@ interface OnboardingLayoutProps {
   currentStep: number;
   onStepClick: (stepId: number) => void;
   completedSteps: number[];
+  headerRight?: ReactNode;
   children: ReactNode;
 }
 
@@ -12,6 +13,7 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
   currentStep,
   onStepClick,
   completedSteps,
+  headerRight,
   children,
 }) => {
   return (
@@ -27,7 +29,14 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
 
       {/* Right Form Workspace Partition - Full Screen View */}
       <main className="flex-1 min-h-screen flex flex-col justify-between relative bg-white p-6 sm:p-10 lg:p-14 xl:p-16 overflow-x-hidden">
-        {/* Subtle Decorative Geometric Arcs on right edge (matching reference image) */}
+        {/* Top Right Header Controls if supplied */}
+        {headerRight && (
+          <div className="relative z-20 w-full max-w-3xl mx-auto mb-6 flex items-center justify-between border-b border-slate-100 pb-4">
+            {headerRight}
+          </div>
+        )}
+
+        {/* Subtle Decorative Geometric Arcs on right edge */}
         <div className="pointer-events-none absolute top-10 right-0 w-80 h-80 opacity-[0.05]">
           <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full text-slate-900 stroke-current">
             <circle cx="160" cy="40" r="90" strokeWidth="2" />

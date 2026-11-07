@@ -92,6 +92,7 @@ export const FileUploadCard: FC<FileUploadCardProps> = ({
 
   return (
     <div
+      id={id}
       className={`rounded-2xl border transition-all duration-200 overflow-hidden ${
         error
           ? 'border-red-300 bg-red-50/20'
@@ -135,7 +136,7 @@ export const FileUploadCard: FC<FileUploadCardProps> = ({
         <input
           ref={fileInputRef}
           type="file"
-          id={id}
+          id={`${id}-input`}
           accept={accept}
           onChange={handleFileInputChange}
           className="hidden"

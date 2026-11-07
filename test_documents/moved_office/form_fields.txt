@@ -1,0 +1,45 @@
+Orbit Logistics — GST certificate shows another address & mobile  (expected AI decision: REVIEW)
+
+
+STEP 1 - COMPANY INFORMATION
+  Legal company name           Orbit Logistics Private Limited
+  Trade name                   Orbit Logistics
+  Business entity type         Private Limited Company
+  Country                      India
+  Registration number (CIN)    U63090MH2016PTC678901
+  Incorporation date           2016-05-27
+  Industry                     Information Technology
+  Registered address           Office 5, Viman Nagar Road
+  City                         Pune
+  State                        Maharashtra
+  Pincode                      411014
+  Operational address          Same as registered
+
+STEP 2 - CONTACT INFORMATION
+  Primary first name           Sneha
+  Primary last name            Kulkarni
+  Designation                  Director
+  Email                        sneha@orbitlogistics.in
+  Mobile                       9822012345
+  Department                   Management
+  Authorized signatory         Sneha Kulkarni
+  Signatory designation        Director
+  Signatory email              sneha@orbitlogistics.in
+
+STEP 3 - TAX & BANKING
+  PAN                          AAICO6655R
+  GST status                   Registered
+  GSTIN                        27AAICO6655R1Z4
+  GST state                    Maharashtra
+  Account holder name          Orbit Logistics Private Limited
+  Bank name                    Kotak Mahindra Bank
+  Account number               7712345678
+  IFSC                         KKBK0001777
+  Account type                 Current Account
+  Branch                       Viman Nagar, Pune
+
+STEP 4 - DOCUMENTS TO UPLOAD
+  Pan Card                     pan_card.pdf
+  Gst Certificate              gst_reg06.pdf
+  Certificate Of Incorporation certificate_of_incorporation.pdf
+  Bank Proof                   cancelled_cheque.pdf

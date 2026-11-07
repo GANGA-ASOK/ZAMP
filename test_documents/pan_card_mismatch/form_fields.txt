@@ -1,0 +1,45 @@
+Brightwave Solutions — PAN card doesn't match  (expected AI decision: REJECT)
+
+
+STEP 1 - COMPANY INFORMATION
+  Legal company name           Brightwave Solutions Private Limited
+  Trade name                   Brightwave
+  Business entity type         Private Limited Company
+  Country                      India
+  Registration number (CIN)    U74999MH2019PTC234567
+  Incorporation date           2019-03-02
+  Industry                     Information Technology
+  Registered address           401 Link Road, Andheri West
+  City                         Mumbai
+  State                        Maharashtra
+  Pincode                      400053
+  Operational address          Same as registered
+
+STEP 2 - CONTACT INFORMATION
+  Primary first name           Arjun
+  Primary last name            Kapoor
+  Designation                  Director
+  Email                        arjun@brightwave.co.in
+  Mobile                       9820098200
+  Department                   Management
+  Authorized signatory         Arjun Kapoor
+  Signatory designation        Director
+  Signatory email              arjun@brightwave.co.in
+
+STEP 3 - TAX & BANKING
+  PAN                          AABCB5678K
+  GST status                   Registered
+  GSTIN                        27AABCB5678K1Z2
+  GST state                    Maharashtra
+  Account holder name          Brightwave Solutions Private Limited
+  Bank name                    Axis Bank
+  Account number               912010045678123
+  IFSC                         UTIB0000123
+  Account type                 Current Account
+  Branch                       Andheri West, Mumbai
+
+STEP 4 - DOCUMENTS TO UPLOAD
+  Pan Card                     pan_card.pdf
+  Gst Certificate              gst_reg06.pdf
+  Certificate Of Incorporation certificate_of_incorporation.pdf
+  Bank Proof                   cancelled_cheque.pdf

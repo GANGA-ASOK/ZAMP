@@ -1,0 +1,71 @@
+{
+  "reference_number": "VND-DEMO-0006",
+  "status": "submitted",
+  "user_id": null,
+  "company_info": {
+    "legal_company_name": "Orbit Logistics Private Limited",
+    "trade_name": "Orbit Logistics",
+    "business_entity_type": "Private Limited Company",
+    "country": "India",
+    "registration_number": "U63090MH2016PTC678901",
+    "incorporation_date": "2016-05-27",
+    "industry": "Information Technology",
+    "website": "",
+    "registered_address": {
+      "street": "Office 5, Viman Nagar Road",
+      "city": "Pune",
+      "state": "Maharashtra",
+      "pincode": "411014",
+      "country": "India"
+    },
+    "is_operational_same_as_registered": true,
+    "operational_address": null
+  },
+  "contact_info": {
+    "primary": {
+      "first_name": "Sneha",
+      "last_name": "Kulkarni",
+      "full_name": "",
+      "designation": "Director",
+      "email": "sneha@orbitlogistics.in",
+      "phone": "9822012345",
+      "department": "Management"
+    },
+    "secondary": null,
+    "signatory": {
+      "first_name": "",
+      "last_name": "",
+      "full_name": "Sneha Kulkarni",
+      "designation": "Director",
+      "email": "sneha@orbitlogistics.in",
+      "phone": "",
+      "department": ""
+    },
+    "confirm_authorized": true
+  },
+  "tax_details": {
+    "pan_number": "AAICO6655R",
+    "gst_status": "Registered",
+    "gstin": "27AAICO6655R1Z4",
+    "gst_state": "Maharashtra",
+    "tan_number": ""
+  },
+  "banking_details": {
+    "account_holder_name": "Orbit Logistics Private Limited",
+    "bank_name": "Kotak Mahindra Bank",
+    "account_number": "7712345678",
+    "ifsc_code": "KKBK0001777",
+    "account_type": "Current Account",
+    "bank_branch": "Viman Nagar, Pune",
+    "confirm_bank_ownership": true
+  },
+  "documents": [],
+  "declarations": {
+    "confirm_accurate": true,
+    "authorize_verification": true,
+    "agree_terms": true
+  },
+  "review_notes": "",
+  "rejection_reason": "",
+  "clarification_requests": []
+}

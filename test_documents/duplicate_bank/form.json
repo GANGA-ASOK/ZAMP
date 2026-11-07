@@ -1,0 +1,71 @@
+{
+  "reference_number": "VND-DEMO-0005",
+  "status": "submitted",
+  "user_id": null,
+  "company_info": {
+    "legal_company_name": "Nimbus Traders Private Limited",
+    "trade_name": "Nimbus",
+    "business_entity_type": "Private Limited Company",
+    "country": "India",
+    "registration_number": "U51909KA2021PTC567890",
+    "incorporation_date": "2021-11-03",
+    "industry": "Information Technology",
+    "website": "",
+    "registered_address": {
+      "street": "7 Residency Road",
+      "city": "Bengaluru",
+      "state": "Karnataka",
+      "pincode": "560025",
+      "country": "India"
+    },
+    "is_operational_same_as_registered": true,
+    "operational_address": null
+  },
+  "contact_info": {
+    "primary": {
+      "first_name": "Vikram",
+      "last_name": "Rao",
+      "full_name": "",
+      "designation": "Director",
+      "email": "vikram@nimbustraders.in",
+      "phone": "9900112233",
+      "department": "Management"
+    },
+    "secondary": null,
+    "signatory": {
+      "first_name": "",
+      "last_name": "",
+      "full_name": "Vikram Rao",
+      "designation": "Director",
+      "email": "vikram@nimbustraders.in",
+      "phone": "",
+      "department": ""
+    },
+    "confirm_authorized": true
+  },
+  "tax_details": {
+    "pan_number": "AAHCN3344P",
+    "gst_status": "Registered",
+    "gstin": "29AAHCN3344P1Z6",
+    "gst_state": "Karnataka",
+    "tan_number": ""
+  },
+  "banking_details": {
+    "account_holder_name": "Nimbus Traders Private Limited",
+    "bank_name": "HDFC Bank",
+    "account_number": "50200012345678",
+    "ifsc_code": "HDFC0001234",
+    "account_type": "Current Account",
+    "bank_branch": "Indiranagar, Bengaluru",
+    "confirm_bank_ownership": true
+  },
+  "documents": [],
+  "declarations": {
+    "confirm_accurate": true,
+    "authorize_verification": true,
+    "agree_terms": true
+  },
+  "review_notes": "",
+  "rejection_reason": "",
+  "clarification_requests": []
+}

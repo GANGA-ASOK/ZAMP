@@ -1,0 +1,71 @@
+{
+  "reference_number": "VND-DEMO-0001",
+  "status": "submitted",
+  "user_id": null,
+  "company_info": {
+    "legal_company_name": "Acme Technologies Private Limited",
+    "trade_name": "Acme Tech",
+    "business_entity_type": "Private Limited Company",
+    "country": "India",
+    "registration_number": "U72200KA2018PTC123456",
+    "incorporation_date": "2018-06-14",
+    "industry": "Information Technology",
+    "website": "",
+    "registered_address": {
+      "street": "12 MG Road, Indiranagar",
+      "city": "Bengaluru",
+      "state": "Karnataka",
+      "pincode": "560038",
+      "country": "India"
+    },
+    "is_operational_same_as_registered": true,
+    "operational_address": null
+  },
+  "contact_info": {
+    "primary": {
+      "first_name": "Priya",
+      "last_name": "Nair",
+      "full_name": "",
+      "designation": "Director",
+      "email": "priya@acmetech.in",
+      "phone": "9845012345",
+      "department": "Management"
+    },
+    "secondary": null,
+    "signatory": {
+      "first_name": "",
+      "last_name": "",
+      "full_name": "Priya Nair",
+      "designation": "Director",
+      "email": "priya@acmetech.in",
+      "phone": "",
+      "department": ""
+    },
+    "confirm_authorized": true
+  },
+  "tax_details": {
+    "pan_number": "AAACA1234F",
+    "gst_status": "Registered",
+    "gstin": "29AAACA1234F1Z5",
+    "gst_state": "Karnataka",
+    "tan_number": ""
+  },
+  "banking_details": {
+    "account_holder_name": "Acme Technologies Pvt Ltd",
+    "bank_name": "HDFC Bank",
+    "account_number": "50200012345678",
+    "ifsc_code": "HDFC0001234",
+    "account_type": "Current Account",
+    "bank_branch": "Indiranagar, Bengaluru",
+    "confirm_bank_ownership": true
+  },
+  "documents": [],
+  "declarations": {
+    "confirm_accurate": true,
+    "authorize_verification": true,
+    "agree_terms": true
+  },
+  "review_notes": "",
+  "rejection_reason": "",
+  "clarification_requests": []
+}

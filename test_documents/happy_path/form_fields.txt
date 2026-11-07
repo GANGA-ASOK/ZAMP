@@ -1,0 +1,45 @@
+Acme Technologies — clean submission  (expected AI decision: APPROVE)
+
+
+STEP 1 - COMPANY INFORMATION
+  Legal company name           Acme Technologies Private Limited
+  Trade name                   Acme Tech
+  Business entity type         Private Limited Company
+  Country                      India
+  Registration number (CIN)    U72200KA2018PTC123456
+  Incorporation date           2018-06-14
+  Industry                     Information Technology
+  Registered address           12 MG Road, Indiranagar
+  City                         Bengaluru
+  State                        Karnataka
+  Pincode                      560038
+  Operational address          Same as registered
+
+STEP 2 - CONTACT INFORMATION
+  Primary first name           Priya
+  Primary last name            Nair
+  Designation                  Director
+  Email                        priya@acmetech.in
+  Mobile                       9845012345
+  Department                   Management
+  Authorized signatory         Priya Nair
+  Signatory designation        Director
+  Signatory email              priya@acmetech.in
+
+STEP 3 - TAX & BANKING
+  PAN                          AAACA1234F
+  GST status                   Registered
+  GSTIN                        29AAACA1234F1Z5
+  GST state                    Karnataka
+  Account holder name          Acme Technologies Pvt Ltd
+  Bank name                    HDFC Bank
+  Account number               50200012345678
+  IFSC                         HDFC0001234
+  Account type                 Current Account
+  Branch                       Indiranagar, Bengaluru
+
+STEP 4 - DOCUMENTS TO UPLOAD
+  Pan Card                     pan_card.pdf
+  Gst Certificate              gst_reg06.pdf
+  Certificate Of Incorporation certificate_of_incorporation.pdf
+  Bank Proof                   cancelled_cheque.pdf

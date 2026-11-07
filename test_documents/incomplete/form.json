@@ -1,0 +1,71 @@
+{
+  "reference_number": "VND-DEMO-0007",
+  "status": "submitted",
+  "user_id": null,
+  "company_info": {
+    "legal_company_name": "Sunrise Foods",
+    "trade_name": "Sunrise Foods",
+    "business_entity_type": "Partnership",
+    "country": "India",
+    "registration_number": "",
+    "incorporation_date": "2015-04-01",
+    "industry": "Information Technology",
+    "website": "",
+    "registered_address": {
+      "street": "B-12 Okhla Industrial Area Phase 2",
+      "city": "New Delhi",
+      "state": "Delhi",
+      "pincode": "110020",
+      "country": "India"
+    },
+    "is_operational_same_as_registered": true,
+    "operational_address": null
+  },
+  "contact_info": {
+    "primary": {
+      "first_name": "Amit",
+      "last_name": "Gupta",
+      "full_name": "",
+      "designation": "Director",
+      "email": "amit@sunrisefoods.in",
+      "phone": "9811012345",
+      "department": "Management"
+    },
+    "secondary": null,
+    "signatory": {
+      "first_name": "",
+      "last_name": "",
+      "full_name": "Amit Gupta",
+      "designation": "Director",
+      "email": "amit@sunrisefoods.in",
+      "phone": "",
+      "department": ""
+    },
+    "confirm_authorized": true
+  },
+  "tax_details": {
+    "pan_number": "AAKFS2233M",
+    "gst_status": "Registered",
+    "gstin": "07AAKFS2233M1Z9",
+    "gst_state": "Delhi",
+    "tan_number": ""
+  },
+  "banking_details": {
+    "account_holder_name": "Sunrise Foods",
+    "bank_name": "Punjab National Bank",
+    "account_number": "0123000100456789",
+    "ifsc_code": "PUNB0012300",
+    "account_type": "Current Account",
+    "bank_branch": "Okhla, New Delhi",
+    "confirm_bank_ownership": true
+  },
+  "documents": [],
+  "declarations": {
+    "confirm_accurate": true,
+    "authorize_verification": true,
+    "agree_terms": true
+  },
+  "review_notes": "",
+  "rejection_reason": "",
+  "clarification_requests": []
+}

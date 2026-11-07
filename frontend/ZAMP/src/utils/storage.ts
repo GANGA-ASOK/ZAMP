@@ -3,6 +3,46 @@ import type { VendorFormData } from '../types/vendor';
 const STORAGE_KEY = 'vendorflow_draft_data';
 const SUBMISSION_KEY = 'vendorflow_submissions';
 
+/**
+ * TEMPORARY DEVELOPMENT MECHANISM — vendor ID persistence.
+ *
+ * The vendor ID returned from the backend (MongoDB ObjectId) is stored in
+ * localStorage so the same vendor record is reused when the user refreshes
+ * the page or returns to the form.
+ *
+ * ⚠️  This is NOT a secure identity mechanism. It is a placeholder for
+ *      Phase 7 authentication (JWT / session-based identity). Any user who
+ *      inspects localStorage can see and alter this value.  In production,
+ *      the vendor ID must be derived from the authenticated session on the
+ *      server side.
+ */
+const VENDOR_ID_KEY = 'vendorflow_vendor_id';
+
+export function saveVendorId(id: string): void {
+  try {
+    localStorage.setItem(VENDOR_ID_KEY, id);
+  } catch (e) {
+    console.error('Failed to save vendor ID to localStorage', e);
+  }
+}
+
+export function loadVendorId(): string | null {
+  try {
+    return localStorage.getItem(VENDOR_ID_KEY);
+  } catch (e) {
+    console.error('Failed to load vendor ID from localStorage', e);
+    return null;
+  }
+}
+
+export function clearVendorId(): void {
+  try {
+    localStorage.removeItem(VENDOR_ID_KEY);
+  } catch (e) {
+    console.error('Failed to clear vendor ID from localStorage', e);
+  }
+}
+
 export const initialFormData: VendorFormData = {
   company: {
     legalCompanyName: '',
@@ -92,8 +132,18 @@ export function loadDraftFromStorage(): VendorFormData {
 export function clearDraftStorage(): void {
   try {
     localStorage.removeItem(STORAGE_KEY);
+    // Preserves vendor ID so vendor remains connected to their submitted application and documents
   } catch (e) {
     console.error('Failed to clear draft from localStorage', e);
+  }
+}
+
+export function clearAllVendorData(): void {
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+    clearVendorId();
+  } catch (e) {
+    console.error('Failed to clear all vendor data from localStorage', e);
   }
 }
 

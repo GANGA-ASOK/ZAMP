@@ -1,5 +1,5 @@
 import type { FC, ChangeEvent } from 'react';
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Plus, Files } from '@phosphor-icons/react';
 import { FileUploadCard } from '../components/onboarding/FileUploadCard';
 import { FilePreviewModal } from '../components/onboarding/FilePreviewModal';
@@ -12,12 +12,41 @@ import type {
   UploadedDocInfo,
   VendorFormData,
 } from '../types/vendor';
+import {
+  uploadDocument,
+  listDocuments,
+  deleteDocument,
+  replaceDocument,
+  categoryToDocKey,
+  type BackendDocumentMeta,
+} from '../services/documentService';
+import { extractErrorMessage } from '../services/vendorService';
 
 interface Step4DocumentSubmissionProps {
   formData: VendorFormData;
   errors: FormValidationErrors;
   onChange: (field: keyof DocumentSubmissionData, value: unknown) => void;
   onEditStep: (stepNumber: number) => void;
+  /** MongoDB vendor ID from backend (null if not yet created) */
+  vendorId: string | null;
+  /** Called to lazily ensure the vendor exists before uploading */
+  onVendorIdReady: () => Promise<string | null>;
+}
+
+/** Convert a backend document metadata to our frontend UploadedDocInfo shape */
+function backendMetaToDocInfo(meta: BackendDocumentMeta, key: DocumentKey): UploadedDocInfo {
+  return {
+    id: meta.document_id,
+    key,
+    fileName: meta.original_filename,
+    fileSize: meta.file_size,
+    fileType: meta.content_type,
+    progress: 100,
+    status: 'completed',
+    uploadedAt: meta.upload_timestamp
+      ? new Date(meta.upload_timestamp).toLocaleString()
+      : 'Uploaded',
+  };
 }
 
 export const Step4DocumentSubmission: FC<Step4DocumentSubmissionProps> = ({
@@ -25,8 +54,11 @@ export const Step4DocumentSubmission: FC<Step4DocumentSubmissionProps> = ({
   errors,
   onChange,
   onEditStep,
+  vendorId,
+  onVendorIdReady,
 }) => {
   const [previewDoc, setPreviewDoc] = useState<UploadedDocInfo | null>(null);
+  const [uploadErrors, setUploadErrors] = useState<Record<string, string>>({});
 
   const { documents } = formData;
   const isGstRegistered = formData.taxBanking.gstStatus === 'Registered';
@@ -37,80 +69,213 @@ export const Step4DocumentSubmission: FC<Step4DocumentSubmissionProps> = ({
     'One Person Company (OPC)',
   ].includes(formData.company.businessEntityType);
 
-  // Upload simulation handler
-  const handleFileUpload = (key: DocumentKey, file: File) => {
-    const docId = `doc-${key}-${Date.now()}`;
-    const newDoc: UploadedDocInfo = {
-      id: docId,
-      key,
+  // -------------------------------------------------------------------------
+  // Load existing documents from backend on mount (when vendorId is known)
+  // -------------------------------------------------------------------------
+
+  useEffect(() => {
+    if (!vendorId) return;
+
+    listDocuments(vendorId)
+      .then((backendDocs) => {
+        const updatedDocs = { ...documents.documents };
+        const updatedOthers: UploadedDocInfo[] = [...documents.otherFiles];
+
+        backendDocs.forEach((meta) => {
+          const docKey = categoryToDocKey(meta.document_category);
+          if (docKey && docKey !== 'otherDocuments') {
+            // Only restore if not already tracked (avoid overwriting an in-progress upload)
+            if (!updatedDocs[docKey] || updatedDocs[docKey].status !== 'uploading') {
+              updatedDocs[docKey] = backendMetaToDocInfo(meta, docKey);
+            }
+          } else if (docKey === 'otherDocuments' || !docKey) {
+            // Other / unknown category → otherFiles
+            const existing = updatedOthers.find((d) => d.id === meta.document_id);
+            if (!existing) {
+              updatedOthers.push(backendMetaToDocInfo(meta, 'otherDocuments'));
+            }
+          }
+        });
+
+        onChange('documents', updatedDocs);
+        onChange('otherFiles', updatedOthers);
+      })
+      .catch((err) => {
+        console.warn('[VendorFlow] Could not restore documents from backend:', err);
+      });
+  // We only want to run this once when vendorId first becomes available
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [vendorId]);
+
+  // -------------------------------------------------------------------------
+  // Upload handler (real backend call)
+  // -------------------------------------------------------------------------
+
+  const handleFileUpload = useCallback(
+    async (key: DocumentKey, file: File) => {
+      // Optimistically update UI to 'uploading' state
+      const tempId = `uploading-${key}-${Date.now()}`;
+      const uploading: UploadedDocInfo = {
+        id: tempId,
+        key,
+        fileName: file.name,
+        fileSize: file.size,
+        fileType: file.type || 'application/pdf',
+        progress: 0,
+        status: 'uploading',
+        previewUrl: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined,
+        uploadedAt: 'Uploading…',
+      };
+
+      onChange('documents', { ...documents.documents, [key]: uploading });
+      setUploadErrors((prev) => { const n = { ...prev }; delete n[key]; return n; });
+
+      try {
+        // Ensure we have a vendor record before uploading
+        const id = vendorId ?? await onVendorIdReady();
+        if (!id) throw new Error('No vendor record available. Please retry.');
+
+        // Check if there's an existing backend doc to replace
+        const existingDocInfo = documents.documents[key];
+        let result: BackendDocumentMeta;
+
+        if (existingDocInfo && existingDocInfo.status === 'completed' && !existingDocInfo.id.startsWith('doc-')) {
+          // Real backend doc → use PUT /replace
+          result = await replaceDocument(
+            id,
+            existingDocInfo.id,
+            file,
+            (pct) => {
+              onChange('documents', {
+                ...documents.documents,
+                [key]: { ...uploading, progress: pct },
+              });
+            }
+          );
+        } else {
+          // New upload
+          result = await uploadDocument(id, file, key, (pct) => {
+            onChange('documents', {
+              ...documents.documents,
+              [key]: { ...uploading, progress: pct },
+            });
+          });
+        }
+
+        const completed = backendMetaToDocInfo(result, key);
+        onChange('documents', { ...documents.documents, [key]: completed });
+      } catch (err) {
+        const msg = extractErrorMessage(err, 'Upload failed. Please try again.');
+        setUploadErrors((prev) => ({ ...prev, [key]: msg }));
+        // Revert to empty slot
+        const updatedDocs = { ...documents.documents };
+        delete updatedDocs[key];
+        onChange('documents', updatedDocs);
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [vendorId, onVendorIdReady, documents.documents, onChange]
+  );
+
+  // -------------------------------------------------------------------------
+  // Remove handler (delete from backend)
+  // -------------------------------------------------------------------------
+
+  const handleRemoveDoc = useCallback(
+    async (key: DocumentKey) => {
+      const docInfo = documents.documents[key];
+
+      // Remove from local state immediately for responsiveness
+      const updatedDocs = { ...documents.documents };
+      delete updatedDocs[key];
+      onChange('documents', updatedDocs);
+
+      // If the doc was actually stored in the backend, delete it
+      if (docInfo && vendorId && !docInfo.id.startsWith('doc-') && !docInfo.id.startsWith('uploading-')) {
+        deleteDocument(vendorId, docInfo.id).catch((err) => {
+          console.warn('[VendorFlow] Could not delete document from backend:', err);
+        });
+      }
+    },
+    [vendorId, documents.documents, onChange]
+  );
+
+  // -------------------------------------------------------------------------
+  // Other files upload
+  // -------------------------------------------------------------------------
+
+  const handleOtherFileUpload = async (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+    const file = e.target.files[0];
+
+    const tempId = `other-uploading-${Date.now()}`;
+    const uploading: UploadedDocInfo = {
+      id: tempId,
+      key: 'otherDocuments',
       fileName: file.name,
       fileSize: file.size,
-      fileType: file.type || 'application/pdf',
+      fileType: file.type,
       progress: 0,
       status: 'uploading',
       previewUrl: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined,
-      uploadedAt: 'Just now',
+      uploadedAt: 'Uploading…',
     };
 
-    // Update state to uploading
-    const updatedDocs = { ...documents.documents, [key]: newDoc };
-    onChange('documents', updatedDocs);
+    onChange('otherFiles', [...documents.otherFiles, uploading]);
 
-    // Simulate upload progress
-    let currentProgress = 20;
-    const interval = setInterval(() => {
-      currentProgress += 30;
-      if (currentProgress >= 100) {
-        clearInterval(interval);
-        newDoc.progress = 100;
-        newDoc.status = 'completed';
-        onChange('documents', { ...updatedDocs, [key]: { ...newDoc } });
-      } else {
-        newDoc.progress = currentProgress;
-        onChange('documents', { ...updatedDocs, [key]: { ...newDoc } });
-      }
-    }, 150);
-  };
+    try {
+      const id = vendorId ?? await onVendorIdReady();
+      if (!id) throw new Error('No vendor record available.');
 
-  const handleRemoveDoc = (key: DocumentKey) => {
-    const updatedDocs = { ...documents.documents };
-    delete updatedDocs[key];
-    onChange('documents', updatedDocs);
-  };
+      const result = await uploadDocument(id, file, 'otherDocuments', (pct) => {
+        onChange(
+          'otherFiles',
+          documents.otherFiles.map((d) =>
+            d.id === tempId ? { ...uploading, progress: pct } : d
+          )
+        );
+      });
 
-  // Multiple other supporting documents handler
-  const handleOtherFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      const file = e.target.files[0];
-      const docId = `other-doc-${Date.now()}`;
-      const newDoc: UploadedDocInfo = {
-        id: docId,
-        key: 'otherDocuments',
-        fileName: file.name,
-        fileSize: file.size,
-        fileType: file.type,
-        progress: 100,
-        status: 'completed',
-        previewUrl: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined,
-        uploadedAt: 'Just now',
-      };
-      onChange('otherFiles', [...documents.otherFiles, newDoc]);
+      const completed = backendMetaToDocInfo(result, 'otherDocuments');
+      onChange(
+        'otherFiles',
+        documents.otherFiles.map((d) => (d.id === tempId ? completed : d))
+      );
+    } catch (err) {
+      const msg = extractErrorMessage(err, 'Upload failed');
+      console.error('[VendorFlow] Other file upload failed:', msg);
+      // Remove failed upload
+      onChange(
+        'otherFiles',
+        documents.otherFiles.filter((d) => d.id !== tempId)
+      );
     }
+
+    // Reset input
+    e.target.value = '';
   };
 
-  const handleRemoveOtherDoc = (index: number) => {
+  const handleRemoveOtherDoc = async (index: number) => {
+    const docToRemove = documents.otherFiles[index];
     const updated = [...documents.otherFiles];
     updated.splice(index, 1);
     onChange('otherFiles', updated);
+
+    if (docToRemove && vendorId && !docToRemove.id.startsWith('other-uploading-')) {
+      deleteDocument(vendorId, docToRemove.id).catch((err) => {
+        console.warn('[VendorFlow] Could not delete other doc from backend:', err);
+      });
+    }
   };
+
+  // -------------------------------------------------------------------------
+  // Render
+  // -------------------------------------------------------------------------
 
   return (
     <div className="space-y-8 animate-fadeIn">
       {/* File Preview Modal */}
-      <FilePreviewModal
-        document={previewDoc}
-        onClose={() => setPreviewDoc(null)}
-      />
+      <FilePreviewModal document={previewDoc} onClose={() => setPreviewDoc(null)} />
 
       {/* Mandatory Documents Section */}
       <div className="space-y-4">
@@ -132,7 +297,7 @@ export const Step4DocumentSubmission: FC<Step4DocumentSubmissionProps> = ({
             onFileSelect={(file) => handleFileUpload('certificateOfIncorporation', file)}
             onRemove={() => handleRemoveDoc('certificateOfIncorporation')}
             onPreview={setPreviewDoc}
-            error={errors.certificateOfIncorporation}
+            error={errors.certificateOfIncorporation ?? uploadErrors.certificateOfIncorporation}
           />
 
           {/* 2. PAN Card */}
@@ -145,10 +310,10 @@ export const Step4DocumentSubmission: FC<Step4DocumentSubmissionProps> = ({
             onFileSelect={(file) => handleFileUpload('panCard', file)}
             onRemove={() => handleRemoveDoc('panCard')}
             onPreview={setPreviewDoc}
-            error={errors.panCard}
+            error={errors.panCard ?? uploadErrors.panCard}
           />
 
-          {/* 3. GST Registration Certificate */}
+          {/* 3. GST Certificate */}
           {isGstRegistered && (
             <FileUploadCard
               id="doc-gst"
@@ -159,11 +324,11 @@ export const Step4DocumentSubmission: FC<Step4DocumentSubmissionProps> = ({
               onFileSelect={(file) => handleFileUpload('gstCertificate', file)}
               onRemove={() => handleRemoveDoc('gstCertificate')}
               onPreview={setPreviewDoc}
-              error={errors.gstCertificate}
+              error={errors.gstCertificate ?? uploadErrors.gstCertificate}
             />
           )}
 
-          {/* 4. Cancelled Cheque / Bank Proof */}
+          {/* 4. Bank Proof */}
           <FileUploadCard
             id="doc-bank"
             title="Cancelled Cheque / Bank Statement"
@@ -173,7 +338,7 @@ export const Step4DocumentSubmission: FC<Step4DocumentSubmissionProps> = ({
             onFileSelect={(file) => handleFileUpload('bankProof', file)}
             onRemove={() => handleRemoveDoc('bankProof')}
             onPreview={setPreviewDoc}
-            error={errors.bankProof}
+            error={errors.bankProof ?? uploadErrors.bankProof}
           />
         </div>
       </div>
@@ -198,6 +363,7 @@ export const Step4DocumentSubmission: FC<Step4DocumentSubmissionProps> = ({
             onFileSelect={(file) => handleFileUpload('tanCertificate', file)}
             onRemove={() => handleRemoveDoc('tanCertificate')}
             onPreview={setPreviewDoc}
+            error={uploadErrors.tanCertificate}
           />
 
           {/* MSME / Udyam Certificate */}
@@ -210,6 +376,7 @@ export const Step4DocumentSubmission: FC<Step4DocumentSubmissionProps> = ({
             onFileSelect={(file) => handleFileUpload('msmeCertificate', file)}
             onRemove={() => handleRemoveDoc('msmeCertificate')}
             onPreview={setPreviewDoc}
+            error={uploadErrors.msmeCertificate}
           />
 
           {/* Other Supporting Documents (Multi-file) */}
@@ -245,20 +412,28 @@ export const Step4DocumentSubmission: FC<Step4DocumentSubmissionProps> = ({
                   >
                     <div className="flex items-center space-x-2 truncate">
                       <Files size={16} className="text-[#0875D1] shrink-0" />
-                      <span className="font-medium text-slate-800 truncate">{doc.fileName}</span>
+                      <div className="truncate">
+                        <span className="font-medium text-slate-800 truncate block">{doc.fileName}</span>
+                        {doc.status === 'uploading' && (
+                          <span className="text-blue-500">{doc.progress}% uploading…</span>
+                        )}
+                      </div>
                     </div>
                     <div className="flex items-center space-x-2 shrink-0">
-                      <button
-                        type="button"
-                        onClick={() => setPreviewDoc(doc)}
-                        className="text-[#0875D1] hover:underline cursor-pointer"
-                      >
-                        Preview
-                      </button>
+                      {doc.status === 'completed' && (
+                        <button
+                          type="button"
+                          onClick={() => setPreviewDoc(doc)}
+                          className="text-[#0875D1] hover:underline cursor-pointer"
+                        >
+                          Preview
+                        </button>
+                      )}
                       <button
                         type="button"
                         onClick={() => handleRemoveOtherDoc(idx)}
-                        className="text-red-500 hover:text-red-700 cursor-pointer"
+                        disabled={doc.status === 'uploading'}
+                        className="text-red-500 hover:text-red-700 cursor-pointer disabled:opacity-40"
                       >
                         Remove
                       </button>
@@ -275,16 +450,13 @@ export const Step4DocumentSubmission: FC<Step4DocumentSubmissionProps> = ({
 
       {/* Review Summary Accordion */}
       <div className="pt-2">
-        <ReviewSummary
-          formData={formData}
-          onEditStep={onEditStep}
-        />
+        <ReviewSummary formData={formData} onEditStep={onEditStep} />
       </div>
 
       {/* Final Declarations */}
       <div className="space-y-3.5 p-5 rounded-2xl bg-blue-50/50 border border-blue-100 text-left">
         <h4 className="text-xs font-bold uppercase tracking-wider text-[#07569B]">
-          Mandatory Declarations & Consent
+          Mandatory Declarations &amp; Consent
         </h4>
 
         <FormCheckbox

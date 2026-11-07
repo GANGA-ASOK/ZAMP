@@ -1,0 +1,45 @@
+Greenleaf Organics — payouts to a director's personal account  (expected AI decision: REVIEW)
+
+
+STEP 1 - COMPANY INFORMATION
+  Legal company name           Greenleaf Organics Private Limited
+  Trade name                   Greenleaf
+  Business entity type         Private Limited Company
+  Country                      India
+  Registration number (CIN)    U01100TN2020PTC345678
+  Incorporation date           2020-01-20
+  Industry                     Information Technology
+  Registered address           22 Anna Salai, T Nagar
+  City                         Chennai
+  State                        Tamil Nadu
+  Pincode                      600017
+  Operational address          Same as registered
+
+STEP 2 - CONTACT INFORMATION
+  Primary first name           Rahul
+  Primary last name            Mehta
+  Designation                  Director
+  Email                        rahul@greenleaforganics.in
+  Mobile                       9884012345
+  Department                   Management
+  Authorized signatory         Rahul Mehta
+  Signatory designation        Director
+  Signatory email              rahul@greenleaforganics.in
+
+STEP 3 - TAX & BANKING
+  PAN                          AAFCG4521L
+  GST status                   Registered
+  GSTIN                        33AAFCG4521L1Z8
+  GST state                    Tamil Nadu
+  Account holder name          Rahul Mehta
+  Bank name                    State Bank of India
+  Account number               30987654321
+  IFSC                         SBIN0001234
+  Account type                 Current Account
+  Branch                       T Nagar, Chennai
+
+STEP 4 - DOCUMENTS TO UPLOAD
+  Pan Card                     pan_card.pdf
+  Gst Certificate              gst_reg06.pdf
+  Certificate Of Incorporation certificate_of_incorporation.pdf
+  Bank Proof                   cancelled_cheque.pdf

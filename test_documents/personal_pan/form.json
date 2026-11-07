@@ -1,0 +1,71 @@
+{
+  "reference_number": "VND-DEMO-0004",
+  "status": "submitted",
+  "user_id": null,
+  "company_info": {
+    "legal_company_name": "Mehta Engineering Works Private Limited",
+    "trade_name": "Mehta Engineering",
+    "business_entity_type": "Private Limited Company",
+    "country": "India",
+    "registration_number": "U29100GJ2017PTC456789",
+    "incorporation_date": "2017-08-09",
+    "industry": "Information Technology",
+    "website": "",
+    "registered_address": {
+      "street": "14 Ashram Road, Navrangpura",
+      "city": "Ahmedabad",
+      "state": "Gujarat",
+      "pincode": "380009",
+      "country": "India"
+    },
+    "is_operational_same_as_registered": true,
+    "operational_address": null
+  },
+  "contact_info": {
+    "primary": {
+      "first_name": "Rajesh",
+      "last_name": "Mehta",
+      "full_name": "",
+      "designation": "Director",
+      "email": "rajesh@mehtaengg.com",
+      "phone": "9925012345",
+      "department": "Management"
+    },
+    "secondary": null,
+    "signatory": {
+      "first_name": "",
+      "last_name": "",
+      "full_name": "Rajesh Mehta",
+      "designation": "Director",
+      "email": "rajesh@mehtaengg.com",
+      "phone": "",
+      "department": ""
+    },
+    "confirm_authorized": true
+  },
+  "tax_details": {
+    "pan_number": "AAPPM7788K",
+    "gst_status": "Registered",
+    "gstin": "24AAPPM7788K1Z3",
+    "gst_state": "Gujarat",
+    "tan_number": ""
+  },
+  "banking_details": {
+    "account_holder_name": "Mehta Engineering Works Private Limited",
+    "bank_name": "ICICI Bank",
+    "account_number": "123405006789",
+    "ifsc_code": "ICIC0000456",
+    "account_type": "Current Account",
+    "bank_branch": "Navrangpura, Ahmedabad",
+    "confirm_bank_ownership": true
+  },
+  "documents": [],
+  "declarations": {
+    "confirm_accurate": true,
+    "authorize_verification": true,
+    "agree_terms": true
+  },
+  "review_notes": "",
+  "rejection_reason": "",
+  "clarification_requests": []
+}

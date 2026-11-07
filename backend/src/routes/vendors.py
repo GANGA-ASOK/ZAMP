@@ -3,12 +3,21 @@ Vendor onboarding API routes.
 
 Provides endpoints for creating, retrieving, updating, partially updating,
 submitting, and checking the status of vendor onboarding registrations.
+Includes Phase 7 RBAC and vendor ownership protection.
 """
 
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status
 
+from src.dependencies.auth import (
+    CurrentUserDep,
+    get_current_user,
+    get_current_user_optional,
+    require_vendor,
+    verify_vendor_ownership,
+)
+from src.models.user import UserModel
 from src.schemas.vendor import (
     VendorCreate,
     VendorDraftCreate,
@@ -17,6 +26,8 @@ from src.schemas.vendor import (
     VendorSubmissionResponse,
     VendorUpdate,
 )
+from src.services.application_decision_service import run_decision_in_background
+from src.services.auth_service import AuthService
 from src.services.vendor_service import (
     DuplicateVendorError,
     IncompleteRegistrationError,
@@ -50,9 +61,11 @@ VendorServiceDep = Annotated[VendorService, Depends(get_vendor_service)]
 async def create_vendor(
     payload: VendorDraftCreate | VendorCreate,
     service: VendorServiceDep,
+    current_user: UserModel | None = Depends(get_current_user_optional),
 ) -> VendorResponse:
     try:
-        return await service.create_vendor(payload)
+        user_id = current_user.user_id if current_user else None
+        return await service.create_vendor(payload, user_id=user_id)
     except DuplicateVendorError as exc:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
@@ -66,6 +79,29 @@ async def create_vendor(
 
 
 @router.get(
+    "/my-profile",
+    response_model=VendorResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Retrieve authenticated vendor's own profile",
+    description="Returns the vendor registration record associated with the authenticated vendor account.",
+)
+async def get_my_vendor_profile(
+    current_user: UserModel = Depends(require_vendor),
+    service: VendorServiceDep = None,
+) -> VendorResponse:
+    vendor = await service.get_vendor_by_user_id(current_user.user_id)
+    if not vendor:
+        auth_svc = AuthService()
+        vendor_id = auth_svc.get_or_create_vendor_profile(
+            current_user.user_id,
+            contact_name=current_user.name,
+            email=current_user.email,
+        )
+        return await service.get_vendor_by_id(vendor_id)
+    return vendor
+
+
+@router.get(
     "/{vendor_id}",
     response_model=VendorResponse,
     status_code=status.HTTP_200_OK,
@@ -75,6 +111,7 @@ async def create_vendor(
 async def get_vendor(
     vendor_id: str,
     service: VendorServiceDep,
+    _auth: UserModel = Depends(verify_vendor_ownership),
 ) -> VendorResponse:
     try:
         return await service.get_vendor_by_id(vendor_id)
@@ -101,6 +138,7 @@ async def update_vendor(
     vendor_id: str,
     payload: VendorDraftCreate | VendorCreate,
     service: VendorServiceDep,
+    _auth: UserModel = Depends(verify_vendor_ownership),
 ) -> VendorResponse:
     try:
         return await service.update_vendor(vendor_id, payload)
@@ -132,6 +170,7 @@ async def partial_update_vendor(
     vendor_id: str,
     payload: VendorUpdate,
     service: VendorServiceDep,
+    _auth: UserModel = Depends(verify_vendor_ownership),
 ) -> VendorResponse:
     try:
         return await service.partial_update_vendor(vendor_id, payload)
@@ -162,9 +201,13 @@ async def partial_update_vendor(
 async def submit_vendor(
     vendor_id: str,
     service: VendorServiceDep,
+    background_tasks: BackgroundTasks,
+    _auth: UserModel = Depends(verify_vendor_ownership),
 ) -> VendorSubmissionResponse:
     try:
-        return await service.submit_vendor(vendor_id)
+        result = await service.submit_vendor(vendor_id)
+        background_tasks.add_task(run_decision_in_background, vendor_id, "submission")
+        return result
     except InvalidVendorIdError as exc:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -195,6 +238,7 @@ async def submit_vendor(
 async def get_vendor_status(
     vendor_id: str,
     service: VendorServiceDep,
+    _auth: UserModel = Depends(verify_vendor_ownership),
 ) -> VendorStatusResponse:
     try:
         return await service.get_vendor_status(vendor_id)

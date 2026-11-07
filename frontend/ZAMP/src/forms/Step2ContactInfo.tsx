@@ -29,6 +29,7 @@ export const Step2ContactInfo: FC<Step2ContactInfoProps> = ({
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <FormInput
+            id="primaryFirstName"
             label="First Name"
             required
             placeholder="e.g. Rahul"
@@ -38,6 +39,7 @@ export const Step2ContactInfo: FC<Step2ContactInfoProps> = ({
           />
 
           <FormInput
+            id="primaryLastName"
             label="Last Name"
             required
             placeholder="e.g. Sharma"
@@ -47,6 +49,7 @@ export const Step2ContactInfo: FC<Step2ContactInfoProps> = ({
           />
 
           <FormInput
+            id="primaryDesignation"
             label="Designation / Job Title"
             required
             placeholder="e.g. Head of Procurement"
@@ -56,6 +59,7 @@ export const Step2ContactInfo: FC<Step2ContactInfoProps> = ({
           />
 
           <FormSelect
+            id="primaryDepartment"
             label="Department"
             required
             placeholder="Select department"
@@ -66,6 +70,7 @@ export const Step2ContactInfo: FC<Step2ContactInfoProps> = ({
           />
 
           <FormInput
+            id="primaryEmail"
             label="Business Email Address"
             type="email"
             required
@@ -76,6 +81,7 @@ export const Step2ContactInfo: FC<Step2ContactInfoProps> = ({
           />
 
           <FormInput
+            id="primaryMobile"
             label="Mobile Number"
             type="tel"
             required
@@ -98,6 +104,7 @@ export const Step2ContactInfo: FC<Step2ContactInfoProps> = ({
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <FormInput
+            id="signatoryName"
             label="Signatory Full Name"
             required
             placeholder="e.g. Vikramaditya Rao"
@@ -107,6 +114,7 @@ export const Step2ContactInfo: FC<Step2ContactInfoProps> = ({
           />
 
           <FormInput
+            id="signatoryDesignation"
             label="Signatory Designation"
             required
             placeholder="e.g. Managing Director"
@@ -116,6 +124,7 @@ export const Step2ContactInfo: FC<Step2ContactInfoProps> = ({
           />
 
           <FormInput
+            id="signatoryEmail"
             label="Signatory Email"
             type="email"
             required
@@ -138,6 +147,7 @@ export const Step2ContactInfo: FC<Step2ContactInfoProps> = ({
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <FormInput
+            id="secondaryName"
             label="Full Name"
             placeholder="e.g. Priya Nair"
             value={data.secondaryName}
@@ -146,6 +156,7 @@ export const Step2ContactInfo: FC<Step2ContactInfoProps> = ({
           />
 
           <FormInput
+            id="secondaryEmail"
             label="Email Address"
             type="email"
             placeholder="e.g. priya.n@company.com"
@@ -155,6 +166,7 @@ export const Step2ContactInfo: FC<Step2ContactInfoProps> = ({
           />
 
           <FormInput
+            id="secondaryPhone"
             label="Phone Number"
             type="tel"
             placeholder="e.g. +91 98765 43211"
@@ -168,7 +180,7 @@ export const Step2ContactInfo: FC<Step2ContactInfoProps> = ({
       {/* Mandatory Authorization Confirmation */}
       <div className="p-4 rounded-2xl bg-blue-50/60 border border-blue-100">
         <FormCheckbox
-          id="confirm-authorized"
+          id="confirmAuthorized"
           required
           checked={data.confirmAuthorized}
           onChange={(checked) => onChange('confirmAuthorized', checked)}

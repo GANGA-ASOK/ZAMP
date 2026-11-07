@@ -212,7 +212,8 @@ class DocumentService:
 
     @property
     def db(self) -> Database:
-        db = self._db or mongo_module.db
+        # PyMongo Database objects raise on bool(), so never use `or` here.
+        db = self._db if self._db is not None else mongo_module.db
         if db is None:
             raise RuntimeError(
                 "Database not initialised. Ensure connect_to_mongodb() has been called."
@@ -339,6 +340,36 @@ class DocumentService:
         except Exception as exc:
             logger.error("GridFS upload failed for vendor %s: %s", vendor_id, exc)
             raise StorageError(f"Failed to store document: {exc}") from exc
+
+        # 6. Synchronize with vendors collection documents array
+        doc_entry = {
+            "document_id":         str(file_id),
+            "category":            category,
+            "file_name":           safe_name,
+            "file_size":           len(file_bytes),
+            "file_type":           final_content_type,
+            "storage_path":        f"gridfs://{GRIDFS_BUCKET_NAME}/{file_id}",
+            "verification_status": DocumentVerificationStatus.UPLOADED.value,
+            "uploaded_at":         now.isoformat(),
+            "verified_at":         "",
+            "rejection_reason":    "",
+        }
+        try:
+            # If replacing an existing document of same single-value category, pull first
+            if category != DocumentCategory.OTHER.value:
+                self.vendors.update_one(
+                    {"_id": ObjectId(vendor_id)},
+                    {"$pull": {"documents": {"category": category}}},
+                )
+            self.vendors.update_one(
+                {"_id": ObjectId(vendor_id)},
+                {
+                    "$push": {"documents": doc_entry},
+                    "$set": {"updated_at": now},
+                },
+            )
+        except Exception as exc:
+            logger.warning("Failed to sync uploaded document into vendors collection: %s", exc)
 
         logger.info(
             "Document uploaded — vendor=%s category=%s file_id=%s size=%d",
@@ -471,6 +502,37 @@ class DocumentService:
                 document_id, exc,
             )
 
+        # Synchronize with vendors collection
+        new_entry = {
+            "document_id":         str(new_file_id),
+            "category":            inherited_category,
+            "file_name":           safe_name,
+            "file_size":           len(file_bytes),
+            "file_type":           detected_mime,
+            "storage_path":        f"gridfs://{GRIDFS_BUCKET_NAME}/{new_file_id}",
+            "verification_status": DocumentVerificationStatus.UPLOADED.value,
+            "uploaded_at":         now.isoformat(),
+            "verified_at":         "",
+            "rejection_reason":    "",
+        }
+        try:
+            res = self.vendors.update_one(
+                {"_id": ObjectId(vendor_id), "documents.document_id": document_id},
+                {
+                    "$set": {
+                        "documents.$": new_entry,
+                        "updated_at": now,
+                    }
+                },
+            )
+            if res.matched_count == 0:
+                self.vendors.update_one(
+                    {"_id": ObjectId(vendor_id)},
+                    {"$push": {"documents": new_entry}, "$set": {"updated_at": now}},
+                )
+        except Exception as exc:
+            logger.warning("Could not sync replaced document to vendors collection: %s", exc)
+
         logger.info(
             "Document replaced — vendor=%s old=%s new=%s",
             vendor_id, document_id, new_file_id,
@@ -499,4 +561,54 @@ class DocumentService:
         except Exception as exc:
             raise StorageError(f"Failed to delete document from GridFS: {exc}") from exc
 
+        # Synchronize deletion from vendors collection
+        try:
+            self.vendors.update_one(
+                {"_id": ObjectId(vendor_id)},
+                {
+                    "$pull": {"documents": {"document_id": document_id}},
+                    "$set": {"updated_at": _utcnow()},
+                },
+            )
+        except Exception as exc:
+            logger.warning("Could not remove document %s from vendors collection: %s", document_id, exc)
+
         logger.info("Document deleted — vendor=%s document=%s", vendor_id, document_id)
+
+    def update_document_status(
+        self,
+        vendor_id: str,
+        document_id: str,
+        verification_status: str,
+        rejection_reason: str = "",
+    ) -> None:
+        """Update verification status in both GridFS metadata and vendors collection."""
+        now = _utcnow()
+        try:
+            files_col = self.db[f"{GRIDFS_BUCKET_NAME}.files"]
+            files_col.update_one(
+                {"_id": ObjectId(document_id), "metadata.vendor_id": vendor_id},
+                {
+                    "$set": {
+                        "metadata.verification_status": verification_status,
+                        "metadata.verified_at": now.isoformat(),
+                    }
+                },
+            )
+        except Exception as exc:
+            logger.warning("Failed to update GridFS verification metadata: %s", exc)
+
+        try:
+            self.vendors.update_one(
+                {"_id": ObjectId(vendor_id), "documents.document_id": document_id},
+                {
+                    "$set": {
+                        "documents.$.verification_status": verification_status,
+                        "documents.$.verified_at": now.isoformat(),
+                        "documents.$.rejection_reason": rejection_reason,
+                        "updated_at": now,
+                    }
+                },
+            )
+        except Exception as exc:
+            logger.warning("Failed to update vendor document verification status: %s", exc)
