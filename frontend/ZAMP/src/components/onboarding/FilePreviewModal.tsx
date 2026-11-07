@@ -19,11 +19,11 @@ export const FilePreviewModal: FC<FilePreviewModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fadeIn">
-      <div className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100 flex flex-col max-h-[85vh]">
+      <div className="relative w-full max-w-2xl bg-white rounded-[32px] shadow-2xl overflow-hidden border border-slate-100 flex flex-col max-h-[85vh]">
         {/* Modal Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50">
           <div className="flex items-center space-x-3">
-            <div className="w-9 h-9 rounded-xl bg-blue-50 text-[#0875D1] flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-blue-50 text-[#1F211F] flex items-center justify-center">
               {isPdf ? <FilePdf size={20} weight="bold" /> : <FileImage size={20} weight="bold" />}
             </div>
             <div>

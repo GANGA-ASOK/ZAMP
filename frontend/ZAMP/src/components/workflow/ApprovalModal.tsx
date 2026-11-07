@@ -34,7 +34,7 @@ export const ApprovalModal: FC<ApprovalModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-fadeIn font-sans">
-      <div className="bg-white rounded-3xl shadow-2xl border border-slate-200 max-w-md w-full p-6 text-left space-y-4">
+      <div className="bg-white rounded-[32px] shadow-2xl border border-slate-200 max-w-md w-full p-6 text-left space-y-4">
         {/* Header */}
         <div className="flex items-start justify-between">
           <div className="flex items-center space-x-3">
@@ -42,7 +42,7 @@ export const ApprovalModal: FC<ApprovalModalProps> = ({
               <CheckCircle size={24} weight="fill" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-slate-900">
+              <h3 className="text-base font-semibold text-slate-900">
                 Approve Vendor Application
               </h3>
               <p className="text-xs text-slate-500 font-mono">
@@ -91,7 +91,7 @@ export const ApprovalModal: FC<ApprovalModalProps> = ({
             type="button"
             disabled={loading}
             onClick={handleConfirm}
-            className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold cursor-pointer shadow-sm shadow-emerald-600/20 flex items-center space-x-1.5"
+            className="px-4 py-2 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold cursor-pointer flex items-center space-x-1.5"
           >
             {loading && <ArrowClockwise size={14} className="animate-spin" />}
             <span>Confirm Approval</span>

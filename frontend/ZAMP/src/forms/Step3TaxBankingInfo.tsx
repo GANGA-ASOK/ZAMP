@@ -43,9 +43,9 @@ export const Step3TaxBankingInfo: FC<Step3TaxBankingInfoProps> = ({
   return (
     <div className="space-y-6 animate-fadeIn">
       {/* Card A: Tax Information */}
-      <div className="rounded-2xl border border-slate-200/90 bg-white p-5 sm:p-6 shadow-2xs hover:shadow-xs transition-shadow">
+      <div className="rounded-2xl border border-slate-200/90 bg-white p-5 sm:p-6 hover:shadow-xs transition-shadow">
         <div className="flex items-center space-x-2.5 mb-4 pb-3 border-b border-slate-100">
-          <div className="w-8 h-8 rounded-lg bg-sky-50 text-[#0875D1] flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-sky-50 text-[#1F211F] flex items-center justify-center">
             <Receipt size={18} weight="bold" />
           </div>
           <div>
@@ -144,7 +144,7 @@ export const Step3TaxBankingInfo: FC<Step3TaxBankingInfoProps> = ({
       </div>
 
       {/* Card B: Banking Information */}
-      <div className="rounded-2xl border border-slate-200/90 bg-white p-5 sm:p-6 shadow-2xs hover:shadow-xs transition-shadow">
+      <div className="rounded-2xl border border-slate-200/90 bg-white p-5 sm:p-6 hover:shadow-xs transition-shadow">
         <div className="flex items-center space-x-2.5 mb-4 pb-3 border-b border-slate-100">
           <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
             <Bank size={18} weight="bold" />

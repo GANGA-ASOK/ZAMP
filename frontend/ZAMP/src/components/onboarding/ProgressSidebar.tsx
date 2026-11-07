@@ -1,11 +1,5 @@
 import type { FC, ComponentType } from 'react';
-import {
-  Buildings,
-  User,
-  Bank,
-  FileText,
-  Check,
-} from '@phosphor-icons/react';
+import { Buildings, User, Bank, FileText, Check, ArrowUpRight } from '@phosphor-icons/react';
 
 export interface StepItem {
   id: number;
@@ -15,30 +9,10 @@ export interface StepItem {
 }
 
 export const STEPS: StepItem[] = [
-  {
-    id: 1,
-    title: 'Company Information',
-    description: "Company's basic information",
-    icon: Buildings,
-  },
-  {
-    id: 2,
-    title: 'Contact Information',
-    description: 'Primary & signatory details',
-    icon: User,
-  },
-  {
-    id: 3,
-    title: 'Tax & Banking Details',
-    description: 'Registration & payment info',
-    icon: Bank,
-  },
-  {
-    id: 4,
-    title: 'Document Submission & Review',
-    description: 'Required proofs & review',
-    icon: FileText,
-  },
+  { id: 1, title: 'Company', description: 'Legal name, entity type & address', icon: Buildings },
+  { id: 2, title: 'Contacts', description: 'Primary contact & signatory', icon: User },
+  { id: 3, title: 'Tax & banking', description: 'PAN, GSTIN and payout account', icon: Bank },
+  { id: 4, title: 'Documents', description: 'Proofs, declarations & review', icon: FileText },
 ];
 
 interface ProgressSidebarProps {
@@ -47,124 +21,95 @@ interface ProgressSidebarProps {
   completedSteps: number[];
 }
 
-export const ProgressSidebar: FC<ProgressSidebarProps> = ({
-  currentStep,
-  onStepClick,
-  completedSteps,
-}) => {
+/** Brand mark: two overlapping discs in mint and lilac. */
+export const BrandMark: FC<{ size?: number; onDark?: boolean }> = ({ size = 40, onDark = false }) => (
+  <div
+    className={`rounded-full flex items-center justify-center shrink-0 ${onDark ? 'bg-white/10' : 'bg-ink'}`}
+    style={{ width: size, height: size }}
+  >
+    <svg width={size * 0.58} height={size * 0.58} viewBox="0 0 24 24" fill="none">
+      <circle cx="9" cy="12" r="6.5" fill="#A6EF9F" />
+      <circle cx="15" cy="12" r="6.5" fill="#B3A6FB" fillOpacity="0.92" />
+    </svg>
+  </div>
+);
+
+export const ProgressSidebar: FC<ProgressSidebarProps> = ({ currentStep, onStepClick, completedSteps }) => {
+  const done = completedSteps.filter((s) => s < 5).length;
+  const pct = Math.round((Math.min(done, 4) / 4) * 100);
+
   return (
-    <aside className="relative flex flex-col justify-between bg-[#07569B] text-white p-8 sm:p-10 lg:p-12 overflow-hidden select-none h-full min-h-screen lg:h-screen">
-      {/* Decorative Geometric Outline Watermarks (matching reference image) */}
-      <div className="pointer-events-none absolute -bottom-16 -left-16 w-80 h-80 opacity-15">
-        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full text-white stroke-current">
-          <circle cx="100" cy="100" r="90" strokeWidth="1.5" />
-          <circle cx="100" cy="100" r="60" strokeWidth="1.5" />
-          <circle cx="10" cy="100" r="70" strokeWidth="1.5" />
-          <circle cx="100" cy="190" r="70" strokeWidth="1.5" />
-          <path d="M 10 100 Q 100 100 100 10" strokeWidth="1.5" />
-          <path d="M 100 190 Q 100 100 190 100" strokeWidth="1.5" />
-        </svg>
-      </div>
-
-      {/* Top Brand Header */}
-      <div className="relative z-10 flex items-center space-x-3 mb-6 lg:mb-0">
-        <div className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-xs border border-white/20 flex items-center justify-center text-white shadow-sm">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="8" cy="12" r="6" fill="#38BDF8" fillOpacity="0.8" />
-            <circle cx="16" cy="12" r="6" fill="#FFFFFF" fillOpacity="0.9" />
-            <path d="M12 7.5C13.2 8.7 14 10.3 14 12C14 13.7 13.2 15.3 12 16.5C10.8 15.3 10 13.7 10 12C10 10.3 10.8 8.7 12 7.5Z" fill="#07569B" />
-          </svg>
+    <aside className="h-full rounded-[36px] bg-ink text-white p-6 sm:p-8 flex flex-col gap-8 select-none overflow-hidden">
+      {/* Brand */}
+      <div className="flex items-center gap-3">
+        <BrandMark onDark />
+        <div>
+          <p className="text-xl font-medium tracking-tight leading-none">VendorFlow</p>
+          <p className="text-xs text-white/50 mt-1">Vendor onboarding</p>
         </div>
-        <span className="text-2xl font-bold tracking-tight text-white font-sans">
-          VendorFlow
-        </span>
       </div>
 
-      {/* Middle: Vertical Step Progress List */}
-      <nav aria-label="Registration Progress" className="relative z-10 my-auto py-6">
-        <div className="space-y-8 relative">
-          {STEPS.map((step, index) => {
+      {/* Timeline */}
+      <nav aria-label="Registration progress" className="relative flex-1">
+        <p className="text-[13px] text-white/50 mb-5">Your application</p>
+        <ol className="relative">
+          <span className="absolute left-[11px] top-3 bottom-3 w-px bg-white/15" aria-hidden />
+          {STEPS.map((step) => {
             const isCurrent = step.id === currentStep;
-            const isCompleted = completedSteps.includes(step.id);
+            const isCompleted = completedSteps.includes(step.id) && !isCurrent;
             const isClickable = isCompleted || step.id <= currentStep;
-            const IconComponent = step.icon;
-            const isLast = index === STEPS.length - 1;
-
+            const Icon = step.icon;
             return (
-              <div key={step.id} className="relative flex items-start group">
-                {/* Connecting Vertical Line linking bottom of node to top of next */}
-                {!isLast && (
-                  <div
-                    className={`absolute left-5 top-10 w-0.5 h-8 transition-colors duration-300 ${
-                      isCompleted ? 'bg-sky-400' : 'bg-white/20'
-                    }`}
-                  />
-                )}
-
-                {/* Step Node */}
+              <li key={step.id} className="relative pb-7 last:pb-0">
                 <button
                   type="button"
                   onClick={() => isClickable && onStepClick(step.id)}
                   disabled={!isClickable}
-                  className={`relative z-10 flex items-start space-x-4 text-left transition-all duration-200 outline-hidden ${
-                    isClickable ? 'cursor-pointer' : 'cursor-not-allowed opacity-60'
+                  className={`relative flex items-start gap-4 text-left w-full outline-hidden ${
+                    isClickable ? 'cursor-pointer' : 'cursor-not-allowed'
                   }`}
                 >
-                  {/* Circle Node Icon */}
-                  <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 shrink-0 ${
+                  <span
+                    className={`relative z-10 mt-0.5 shrink-0 flex items-center justify-center rounded-full transition-all duration-300 ${
                       isCurrent
-                        ? 'bg-white text-[#07569B] shadow-lg shadow-black/20 ring-4 ring-white/30 scale-105'
+                        ? 'w-[23px] h-[23px] bg-mint text-ink ring-[6px] ring-mint/15'
                         : isCompleted
-                        ? 'bg-sky-400 text-white shadow-xs'
-                        : 'bg-white/10 text-white/70 border border-white/20'
+                        ? 'w-[23px] h-[23px] bg-white text-ink'
+                        : 'w-[23px] h-[23px] bg-ink border border-white/35'
                     }`}
                   >
-                    {isCompleted ? (
-                      <Check size={18} weight="bold" />
-                    ) : (
-                      <IconComponent
-                        size={18}
-                        weight={isCurrent ? 'bold' : 'regular'}
-                      />
-                    )}
-                  </div>
-
-                  {/* Step Details */}
-                  <div className="pt-0.5 pr-2">
-                    <p
-                      className={`text-sm font-semibold transition-colors duration-200 ${
-                        isCurrent
-                          ? 'text-white'
-                          : isCompleted
-                          ? 'text-white/90 group-hover:text-white'
-                          : 'text-white/60'
-                      }`}
-                    >
+                    {isCompleted ? <Check size={12} weight="bold" /> : isCurrent ? <Icon size={12} weight="bold" /> : null}
+                  </span>
+                  <span className="min-w-0">
+                    <span className={`block text-[11px] tabular ${isCurrent ? 'text-mint' : 'text-white/40'}`}>
+                      Step {step.id}
+                    </span>
+                    <span className={`block text-lg leading-tight ${isCurrent ? 'text-white' : isCompleted ? 'text-white/85' : 'text-white/45'}`}>
                       {step.title}
-                    </p>
-                    <p
-                      className={`text-xs mt-0.5 transition-colors duration-200 ${
-                        isCurrent
-                          ? 'text-sky-200'
-                          : isCompleted
-                          ? 'text-sky-300/80'
-                          : 'text-white/40'
-                      }`}
-                    >
-                      {step.description}
-                    </p>
-                  </div>
+                    </span>
+                    <span className={`block text-xs mt-0.5 ${isCurrent ? 'text-white/60' : 'text-white/35'}`}>{step.description}</span>
+                  </span>
                 </button>
-              </div>
+              </li>
             );
           })}
-        </div>
+        </ol>
       </nav>
 
-      {/* Bottom Footer Copyright */}
-      <div className="relative z-10 pt-6 mt-auto text-xs text-white/50 border-t border-white/10">
-        <p>© 2026 VendorFlow. All rights reserved.</p>
+      {/* Progress tile */}
+      <div className="rounded-[26px] bg-mint text-ink p-5">
+        <div className="flex items-center justify-between">
+          <span className="text-[13px] text-ink/70">Completed</span>
+          <ArrowUpRight size={16} />
+        </div>
+        <p className="text-4xl font-light tracking-tight mt-1 tabular">
+          {Math.min(done, 4)}
+          <span className="text-ink/45">/4</span>
+        </p>
+        <div className="mt-4 h-5 rounded-full border border-ink/80 overflow-hidden flex">
+          <div className="h-full hatch border-r border-ink/80 transition-all duration-500" style={{ width: `${pct}%` }} />
+        </div>
+        <p className="text-[11px] text-ink/60 mt-2">{pct === 100 ? 'Ready to submit' : 'Auto-saved as you go'}</p>
       </div>
     </aside>
   );

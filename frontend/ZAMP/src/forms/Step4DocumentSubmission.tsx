@@ -391,7 +391,7 @@ export const Step4DocumentSubmission: FC<Step4DocumentSubmissionProps> = ({
                 </p>
               </div>
 
-              <label className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-[#0875D1] bg-sky-50 hover:bg-sky-100 border border-sky-200/60 transition-colors cursor-pointer">
+              <label className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-[#1F211F] bg-sky-50 hover:bg-sky-100 border border-sky-200/60 transition-colors cursor-pointer">
                 <Plus size={14} weight="bold" />
                 <span>Add Document</span>
                 <input
@@ -411,7 +411,7 @@ export const Step4DocumentSubmission: FC<Step4DocumentSubmissionProps> = ({
                     className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs"
                   >
                     <div className="flex items-center space-x-2 truncate">
-                      <Files size={16} className="text-[#0875D1] shrink-0" />
+                      <Files size={16} className="text-[#1F211F] shrink-0" />
                       <div className="truncate">
                         <span className="font-medium text-slate-800 truncate block">{doc.fileName}</span>
                         {doc.status === 'uploading' && (
@@ -424,7 +424,7 @@ export const Step4DocumentSubmission: FC<Step4DocumentSubmissionProps> = ({
                         <button
                           type="button"
                           onClick={() => setPreviewDoc(doc)}
-                          className="text-[#0875D1] hover:underline cursor-pointer"
+                          className="text-[#1F211F] hover:underline cursor-pointer"
                         >
                           Preview
                         </button>
@@ -455,7 +455,7 @@ export const Step4DocumentSubmission: FC<Step4DocumentSubmissionProps> = ({
 
       {/* Final Declarations */}
       <div className="space-y-3.5 p-5 rounded-2xl bg-blue-50/50 border border-blue-100 text-left">
-        <h4 className="text-xs font-bold uppercase tracking-wider text-[#07569B]">
+        <h4 className="text-xs font-semibold uppercase tracking-wider text-[#1F211F]">
           Mandatory Declarations &amp; Consent
         </h4>
 

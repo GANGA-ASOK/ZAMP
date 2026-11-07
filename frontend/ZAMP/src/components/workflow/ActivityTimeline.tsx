@@ -68,21 +68,21 @@ export const ActivityTimeline: FC<ActivityTimelineProps> = ({
     switch (actor.toLowerCase()) {
       case 'admin':
         return (
-          <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200/60 inline-flex items-center space-x-1">
+          <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200/60 inline-flex items-center space-x-1">
             <ShieldCheck size={11} weight="fill" />
             <span>Admin</span>
           </span>
         );
       case 'vendor':
         return (
-          <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200/60 inline-flex items-center space-x-1">
+          <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200/60 inline-flex items-center space-x-1">
             <User size={11} weight="bold" />
             <span>Vendor</span>
           </span>
         );
       default:
         return (
-          <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200 inline-flex items-center space-x-1">
+          <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200 inline-flex items-center space-x-1">
             <Sparkle size={11} weight="fill" />
             <span>System</span>
           </span>
@@ -104,11 +104,11 @@ export const ActivityTimeline: FC<ActivityTimelineProps> = ({
         return (
           <div key={ev.id || idx} className="relative group">
             {/* Timeline node */}
-            <div className="absolute -left-6 top-1 w-5 h-5 rounded-full bg-white border-2 border-slate-300 group-hover:border-[#07569B] flex items-center justify-center transition-colors shadow-2xs">
-              <div className="w-2 h-2 rounded-full bg-slate-400 group-hover:bg-[#07569B]" />
+            <div className="absolute -left-6 top-1 w-5 h-5 rounded-full bg-white border-2 border-slate-300 group-hover:border-[#1F211F] flex items-center justify-center transition-colors">
+              <div className="w-2 h-2 rounded-full bg-slate-400 group-hover:bg-[#1F211F]" />
             </div>
 
-            <div className="bg-slate-50/70 hover:bg-white rounded-2xl p-3.5 border border-slate-200/80 transition-all text-xs space-y-1.5 shadow-2xs">
+            <div className="bg-slate-50/70 hover:bg-white rounded-2xl p-3.5 border border-slate-200/80 transition-all text-xs space-y-1.5">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="flex items-center space-x-2">
                   <div className="p-1 rounded-lg bg-white border border-slate-200/80 text-slate-700">

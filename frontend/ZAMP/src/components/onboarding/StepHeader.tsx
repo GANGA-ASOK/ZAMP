@@ -19,38 +19,34 @@ export const StepHeader: FC<StepHeaderProps> = ({
   onFillDemo,
 }) => {
   return (
-    <div className="mb-6 select-none">
-      <div className="flex items-center justify-between mb-2">
-        <span className="text-xs font-semibold tracking-wider text-slate-400 uppercase">
-          Step {stepNumber}/{totalSteps}
+    <div className="mb-8 select-none">
+      <div className="flex items-center justify-between mb-4">
+        <span className="inline-flex items-center gap-2 text-[13px] text-slate-500">
+          <span className="px-3 py-1 rounded-full border border-slate-300 text-ink tabular">
+            Step {stepNumber} of {totalSteps}
+          </span>
         </span>
 
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center gap-2">
           {onFillDemo && (
             <button
               type="button"
               onClick={onFillDemo}
-              className="inline-flex items-center space-x-1 text-xs text-[#0875D1] hover:text-[#07569B] bg-sky-50 hover:bg-sky-100/80 px-2.5 py-1 rounded-lg transition-colors cursor-pointer border border-sky-200/60"
-              title="Pre-populate with sample vendor data for quick testing"
+              className="inline-flex items-center gap-1 text-xs text-ink px-3 py-1 rounded-full border border-slate-300 hover:bg-paper cursor-pointer"
             >
               <Lightning size={13} weight="fill" />
-              <span>Fill Sample Data</span>
+              <span>Fill sample data</span>
             </button>
           )}
-
-          <div className="inline-flex items-center space-x-1 text-xs text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/50">
-            <CheckCircle size={13} weight="fill" />
-            <span>{isSaved ? 'Auto-saved' : 'Saving...'}</span>
-          </div>
+          <span className="inline-flex items-center gap-1.5 text-xs text-slate-500">
+            <CheckCircle size={14} weight="fill" className={isSaved ? 'text-emerald-500' : 'text-slate-300'} />
+            {isSaved ? 'Saved' : 'Saving…'}
+          </span>
         </div>
       </div>
 
-      <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 font-sans">
-        {title}
-      </h1>
-      <p className="mt-1.5 text-sm text-slate-500 leading-relaxed max-w-lg">
-        {subtitle}
-      </p>
+      <h1 className="text-3xl sm:text-[40px] leading-[1.1] font-normal tracking-tight text-ink">{title}</h1>
+      <p className="mt-2 text-[15px] text-slate-500 leading-relaxed max-w-xl">{subtitle}</p>
     </div>
   );
 };

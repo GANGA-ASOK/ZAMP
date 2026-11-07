@@ -58,17 +58,17 @@ export const TestCasePicker: FC<TestCasePickerProps> = ({ onLoad }) => {
   };
 
   return (
-    <div className="mb-5 rounded-2xl border border-dashed border-sky-300 bg-sky-50/60 p-3 text-xs space-y-2">
+    <div className="mb-8 rounded-[28px] bg-lilac/45 p-3 pl-4 text-[13px] space-y-2.5">
       <div className="flex flex-wrap items-center gap-2">
-        <span className="inline-flex items-center gap-1 font-semibold text-[#07569B]">
-          <Flask size={14} weight="fill" />
+        <span className="inline-flex items-center gap-2 text-ink">
+          <span className="w-8 h-8 rounded-full bg-ink text-white flex items-center justify-center"><Flask size={14} weight="fill" /></span>
           Test case
         </span>
         <select
           value={selected}
           disabled={loading || cases.length === 0}
           onChange={(e) => handleChange(e.target.value)}
-          className="flex-1 min-w-[220px] px-2.5 py-1.5 rounded-lg border border-sky-200 bg-white text-slate-800 focus:outline-none focus:border-[#07569B] cursor-pointer disabled:opacity-60"
+          className="flex-1 min-w-[220px] px-4 py-2.5 rounded-full border-0 bg-white text-ink focus:outline-none focus:ring-2 focus:ring-ink/15 cursor-pointer disabled:opacity-60"
         >
           <option value="" disabled>
             {cases.length ? 'Select a case to pre-fill the form and upload its documents…' : 'Loading test cases…'}
@@ -103,10 +103,10 @@ export const TestCasePicker: FC<TestCasePickerProps> = ({ onLoad }) => {
       )}
 
       {loaded && !loading && (
-        <div className="rounded-xl bg-white border border-sky-200 p-2.5 space-y-1.5">
+        <div className="rounded-[22px] bg-white p-4 space-y-2">
           <div className="flex flex-wrap items-center gap-2">
             <span className="font-semibold text-slate-800">{loaded.title}</span>
-            <span className={`px-2 py-0.5 rounded-full border text-[10px] font-bold uppercase ${EXPECTED_STYLE[loaded.expected]}`}>
+            <span className={`px-2 py-0.5 rounded-full border text-[10px] font-semibold uppercase ${EXPECTED_STYLE[loaded.expected]}`}>
               Expected AI decision: {EXPECTED_LABEL[loaded.expected]}
             </span>
           </div>

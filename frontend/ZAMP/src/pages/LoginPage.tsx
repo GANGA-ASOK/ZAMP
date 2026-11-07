@@ -1,114 +1,162 @@
 import type { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ShieldCheck, Buildings, ArrowRight, Sparkle } from '@phosphor-icons/react';
+import { ArrowRight, ArrowUpRight, Buildings, ShieldCheck, Sparkle } from '@phosphor-icons/react';
+import { BrandMark } from '../components/onboarding/ProgressSidebar';
+
+const PIPELINE = [
+  { title: 'Parse', text: 'Nemotron reads every document' },
+  { title: 'Extract', text: 'Name, PAN, GSTIN, mobile, address' },
+  { title: 'Cross-check', text: 'Form vs documents vs other vendors' },
+  { title: 'Decide', text: 'Approve, review or reject — with reasons' },
+];
+
+const ATTRIBUTES = ['Name', 'PAN', 'GSTIN', 'CIN', 'Mobile', 'Address', 'Account', 'IFSC', 'Holder'];
 
 export const LoginPage: FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-[#EEF3F8] py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center relative overflow-hidden font-sans">
-      {/* Background Ambient Orbs */}
-      <div className="pointer-events-none absolute -top-40 -left-40 w-96 h-96 bg-blue-200/50 rounded-full blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-40 -right-40 w-96 h-96 bg-sky-200/50 rounded-full blur-3xl" />
-
-      <div className="relative z-10 w-full max-w-4xl">
-        {/* Brand Header */}
-        <div className="text-center mb-10 select-none">
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/70 text-[#07569B] text-xs font-semibold mb-4 shadow-2xs">
-            <Sparkle size={14} weight="fill" className="text-[#0875D1]" />
-            <span>Enterprise Vendor Onboarding</span>
+    <div className="min-h-screen bg-canvas font-sans text-ink px-4 py-8 sm:px-8 lg:py-14">
+      <div className="mx-auto max-w-6xl">
+        {/* Top bar */}
+        <header className="flex items-center justify-between mb-8 animate-rise">
+          <div className="flex items-center gap-3">
+            <BrandMark size={44} />
+            <div>
+              <p className="text-xl font-medium tracking-tight leading-none">VendorFlow</p>
+              <p className="text-xs text-slate-500 mt-1">AI vendor onboarding</p>
+            </div>
           </div>
+          <span className="hidden sm:inline-flex items-center gap-2 text-[13px] px-4 py-2 rounded-full border border-ink/25">
+            <Sparkle size={14} weight="fill" className="text-lilac-deep" /> Powered by NVIDIA Nemotron
+          </span>
+        </header>
 
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 font-sans">
-            Welcome to <span className="text-[#07569B]">VendorFlow</span>
-          </h1>
-          <p className="mt-2.5 text-base sm:text-lg text-slate-600 max-w-xl mx-auto leading-relaxed">
-            Streamlining vendor registration and onboarding through intelligent automation.
-          </p>
-        </div>
-
-        {/* Main Interaction Card */}
-        <div className="bg-white rounded-3xl shadow-2xl shadow-slate-200/80 border border-slate-200/70 p-6 sm:p-10 lg:p-12 relative overflow-hidden">
-          {/* Subtle watermark outline */}
-          <div className="pointer-events-none absolute -top-12 -right-12 w-64 h-64 opacity-5">
-            <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full text-slate-900 stroke-current">
-              <circle cx="100" cy="100" r="90" strokeWidth="2" />
-              <circle cx="100" cy="100" r="50" strokeWidth="2" />
-            </svg>
-          </div>
-
-          <div className="text-center mb-8">
-            <h2 className="text-xl font-bold text-slate-900">
-              How would you like to proceed?
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-500 mt-1">
-              Select your role to access the portal
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
-            {/* Option 1: Admin */}
-            <div className="group rounded-2xl border-2 border-slate-200 hover:border-[#0875D1] bg-white p-6 sm:p-7 flex flex-col justify-between transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/5">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          {/* Statistics card */}
+          <section className="rounded-[36px] bg-ink text-white p-7 sm:p-9 flex flex-col min-h-[340px] animate-rise">
+            <div className="flex items-start justify-between gap-4">
               <div>
-                <div className="w-12 h-12 rounded-2xl bg-slate-100 group-hover:bg-blue-50 text-slate-700 group-hover:text-[#0875D1] flex items-center justify-center transition-colors mb-5 shadow-2xs">
-                  <ShieldCheck size={26} weight="bold" />
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 mb-1">
-                  Admin
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
-                  Access the vendor management and verification dashboard.
+                <h1 className="text-[28px] sm:text-[34px] leading-tight font-normal tracking-tight">
+                  Onboard vendors you can trust
+                </h1>
+                <p className="text-white/55 mt-2 text-[15px] max-w-sm">
+                  Every submission is cross-checked against its own documents before anyone pays it.
                 </p>
               </div>
+            </div>
 
-              <div className="pt-6 mt-6 border-t border-slate-100">
+            <div className="mt-auto pt-10 flex items-end justify-between gap-6">
+              <div>
+                <p className="text-white/55 text-sm inline-flex items-center gap-2">
+                  Attributes cross-checked
+                  <span className="w-6 h-6 rounded-full bg-mint text-ink flex items-center justify-center">
+                    <ArrowUpRight size={12} weight="bold" />
+                  </span>
+                </p>
+                <p className="text-6xl sm:text-7xl font-light tracking-tight mt-2 tabular">9</p>
+              </div>
+              {/* Stacked bars, after the reference's statistics card */}
+              <div className="flex items-end gap-2.5 h-36">
+                {[
+                  { label: 'Form', mint: 62, lilac: 38 },
+                  { label: 'Docs', mint: 78, lilac: 22 },
+                  { label: 'Match', mint: 92, lilac: 8 },
+                ].map((b) => (
+                  <div key={b.label} className="w-16 sm:w-20 h-full rounded-[18px] hatch-light flex flex-col justify-end overflow-hidden relative">
+                    <span className="absolute top-2 inset-x-0 text-center text-[11px] text-white/70">{b.label}</span>
+                    <div className="bg-mint rounded-t-[16px]" style={{ height: `${b.mint * 0.75}%` }} />
+                    <div className="bg-lilac -mt-3 rounded-[16px]" style={{ height: `${b.lilac * 0.75 + 12}%` }} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Entry cards */}
+          <div className="flex flex-col gap-5">
+            <section className="rounded-[36px] bg-paper p-6 sm:p-7 animate-rise" style={{ animationDelay: '60ms' }}>
+              <div className="flex items-center gap-4">
+                <span className="w-14 h-14 rounded-full bg-ink text-white flex items-center justify-center shrink-0">
+                  <Buildings size={24} />
+                </span>
+                <div className="flex-1">
+                  <h2 className="text-2xl font-normal tracking-tight">New vendor</h2>
+                  <p className="text-sm text-slate-500">Register your company in four short steps</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => navigate('/vendor')}
+                className="mt-5 w-full flex items-center justify-between rounded-[20px] bg-[#d9ddd6] hover:bg-mint transition-colors px-5 py-3.5 cursor-pointer group"
+              >
+                <span className="text-[15px]">Start registration</span>
+                <span className="w-9 h-9 rounded-full bg-ink text-white flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
+                  <ArrowRight size={16} />
+                </span>
+              </button>
+            </section>
+
+            <section className="rounded-[36px] bg-white p-6 sm:p-7 flex-1 animate-rise" style={{ animationDelay: '120ms' }}>
+              <div className="flex items-center gap-4">
+                <span className="w-14 h-14 rounded-full bg-mint text-ink flex items-center justify-center shrink-0">
+                  <ShieldCheck size={24} />
+                </span>
+                <div className="flex-1">
+                  <h2 className="text-2xl font-normal tracking-tight">Admin portal</h2>
+                  <p className="text-sm text-slate-500">Review AI decisions and approve vendors</p>
+                </div>
                 <button
                   type="button"
                   onClick={() => navigate('/admin')}
-                  className="w-full py-2.5 px-4 rounded-xl border border-slate-200 hover:border-slate-300 bg-slate-50 hover:bg-slate-100 text-slate-800 text-sm font-semibold transition-all duration-150 flex items-center justify-center space-x-2 cursor-pointer shadow-2xs"
+                  className="w-12 h-12 rounded-full border border-ink/70 hover:bg-ink hover:text-white transition-colors flex items-center justify-center cursor-pointer shrink-0"
+                  aria-label="Open admin portal"
                 >
-                  <span>Login as Admin</span>
-                  <ArrowRight size={15} weight="bold" />
+                  <ArrowRight size={18} />
                 </button>
               </div>
-            </div>
 
-            {/* Option 2: New Vendor */}
-            <div className="group rounded-2xl border-2 border-[#0875D1]/40 hover:border-[#0875D1] bg-linear-to-b from-blue-50/40 to-white p-6 sm:p-7 flex flex-col justify-between transition-all duration-200 hover:shadow-xl hover:shadow-blue-500/10 ring-2 ring-[#0875D1]/10">
-              <div>
-                <div className="flex items-center justify-between mb-5">
-                  <div className="w-12 h-12 rounded-2xl bg-[#07569B] text-white flex items-center justify-center shadow-md shadow-blue-900/20 group-hover:scale-105 transition-transform">
-                    <Buildings size={26} weight="bold" />
+              <div className="mt-6 grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-5">
+                {/* Pipeline timeline */}
+                <ol className="relative pl-1">
+                  <span className="absolute left-[7px] top-2 bottom-2 w-px bg-slate-300" aria-hidden />
+                  {PIPELINE.map((p, i) => (
+                    <li key={p.title} className="relative flex gap-4 pb-4 last:pb-0">
+                      <span
+                        className={`relative z-10 mt-1 w-[13px] h-[13px] rounded-full shrink-0 ${
+                          i === PIPELINE.length - 1 ? 'bg-ink' : 'bg-white border border-slate-400'
+                        }`}
+                      />
+                      <span>
+                        <span className="block text-[15px] leading-tight">{p.title}</span>
+                        <span className="block text-[13px] text-slate-500">{p.text}</span>
+                      </span>
+                    </li>
+                  ))}
+                </ol>
+                <div className="flex sm:flex-col gap-3">
+                  <div className="flex-1 rounded-[22px] bg-mint p-4 min-w-[130px]">
+                    <p className="text-xs text-ink/65">Outcomes</p>
+                    <p className="text-3xl font-light tabular">3</p>
+                    <p className="text-[11px] text-ink/60">approve · review · reject</p>
                   </div>
-                  <span className="text-[11px] font-bold text-[#0875D1] bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-200/60 uppercase tracking-wider">
-                    Registration
-                  </span>
+                  <div className="flex-1 rounded-[22px] bg-lilac p-4 min-w-[130px]">
+                    <p className="text-xs text-ink/65">Pipeline stages</p>
+                    <p className="text-3xl font-light tabular">9</p>
+                    <p className="text-[11px] text-ink/60">shown live per run</p>
+                  </div>
                 </div>
-                <h3 className="text-lg font-bold text-slate-900 mb-1">
-                  New Vendor
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
-                  Register your organization and submit your details for vendor onboarding.
-                </p>
               </div>
-
-              <div className="pt-6 mt-6 border-t border-blue-100/60">
-                <button
-                  type="button"
-                  onClick={() => navigate('/vendor')}
-                  className="w-full py-2.5 px-4 rounded-xl bg-[#0875D1] hover:bg-[#0764B5] active:scale-[0.98] text-white text-sm font-semibold transition-all duration-150 flex items-center justify-center space-x-2 cursor-pointer shadow-md shadow-blue-500/20"
-                >
-                  <span>Register as Vendor</span>
-                  <ArrowRight size={15} weight="bold" />
-                </button>
-              </div>
-            </div>
+            </section>
           </div>
+        </div>
 
-          {/* Footer Note */}
-          <div className="mt-10 pt-6 border-t border-slate-100 text-center text-xs text-slate-400">
-            Protected by enterprise-grade 256-bit encryption • © 2026 VendorFlow Inc.
-          </div>
+        <div className="mt-5 flex flex-wrap gap-2 justify-center">
+          {ATTRIBUTES.map((a) => (
+            <span key={a} className="text-xs px-3 py-1.5 rounded-full border border-ink/20 text-slate-600">
+              {a}
+            </span>
+          ))}
         </div>
       </div>
     </div>

@@ -17,39 +17,23 @@ export const OnboardingLayout: FC<OnboardingLayoutProps> = ({
   children,
 }) => {
   return (
-    <div className="min-h-screen w-full flex flex-col lg:flex-row bg-white font-sans antialiased text-slate-800">
-      {/* Left Sidebar Partition - Full Height & Sticky in Viewport */}
-      <div className="w-full lg:w-[380px] xl:w-[420px] shrink-0 bg-[#07569B] lg:sticky lg:top-0 lg:h-screen z-20 shadow-xl shadow-blue-950/10">
-        <ProgressSidebar
-          currentStep={currentStep}
-          onStepClick={onStepClick}
-          completedSteps={completedSteps}
-        />
+    <div className="min-h-screen w-full bg-canvas font-sans antialiased text-ink p-3 sm:p-5 lg:p-6">
+      <div className="mx-auto max-w-[1400px] flex flex-col lg:flex-row gap-3 sm:gap-5 lg:gap-6">
+        {/* Progress card */}
+        <div className="w-full lg:w-[340px] xl:w-[380px] shrink-0 lg:sticky lg:top-6 lg:h-[calc(100vh-3rem)]">
+          <ProgressSidebar currentStep={currentStep} onStepClick={onStepClick} completedSteps={completedSteps} />
+        </div>
+
+        {/* Workspace card */}
+        <main className="flex-1 min-w-0 min-h-[calc(100vh-3rem)] flex flex-col rounded-[36px] bg-white p-5 sm:p-9 lg:p-12 animate-rise">
+          {headerRight && (
+            <div className="w-full max-w-3xl mx-auto mb-7 flex flex-wrap items-center justify-between gap-3 rounded-[24px] bg-paper px-4 py-3">
+              {headerRight}
+            </div>
+          )}
+          <div className="w-full max-w-3xl mx-auto flex-1 flex flex-col justify-between">{children}</div>
+        </main>
       </div>
-
-      {/* Right Form Workspace Partition - Full Screen View */}
-      <main className="flex-1 min-h-screen flex flex-col justify-between relative bg-white p-6 sm:p-10 lg:p-14 xl:p-16 overflow-x-hidden">
-        {/* Top Right Header Controls if supplied */}
-        {headerRight && (
-          <div className="relative z-20 w-full max-w-3xl mx-auto mb-6 flex items-center justify-between border-b border-slate-100 pb-4">
-            {headerRight}
-          </div>
-        )}
-
-        {/* Subtle Decorative Geometric Arcs on right edge */}
-        <div className="pointer-events-none absolute top-10 right-0 w-80 h-80 opacity-[0.05]">
-          <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full text-slate-900 stroke-current">
-            <circle cx="160" cy="40" r="90" strokeWidth="2" />
-            <circle cx="160" cy="40" r="50" strokeWidth="2" />
-            <path d="M 70 40 Q 160 40 160 130" strokeWidth="2" />
-            <path d="M 160 130 Q 160 220 250 220" strokeWidth="2" />
-          </svg>
-        </div>
-
-        <div className="relative z-10 w-full max-w-3xl mx-auto flex-1 flex flex-col justify-between">
-          {children}
-        </div>
-      </main>
     </div>
   );
 };

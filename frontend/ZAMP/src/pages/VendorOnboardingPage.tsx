@@ -589,11 +589,11 @@ export const VendorOnboardingPage: FC = () => {
   const headerRight = (
     <div className="w-full flex items-center justify-between gap-3 text-xs">
       <div className="flex items-center space-x-2">
-        <span className="font-mono text-[11px] font-bold text-[#07569B] bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-100">
+        <span className="font-mono text-[11px] font-semibold text-[#1F211F] bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-100">
           {referenceNumber || 'DRAFT REGISTRATION'}
         </span>
         <span
-          className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border inline-flex items-center space-x-1 ${getStatusBadgeStyle(
+          className={`px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider border inline-flex items-center space-x-1 ${getStatusBadgeStyle(
             applicationStatus
           )}`}
         >
@@ -607,9 +607,9 @@ export const VendorOnboardingPage: FC = () => {
           <button
             type="button"
             onClick={() => setActiveView((prev) => (prev === 'documents' ? 'form' : 'documents'))}
-            className={`px-3 py-1.5 rounded-xl border text-xs font-semibold cursor-pointer shadow-2xs flex items-center space-x-1.5 transition-colors ${
+            className={`px-3 py-1.5 rounded-xl border text-xs font-semibold cursor-pointer flex items-center space-x-1.5 transition-colors ${
               activeView === 'documents'
-                ? 'bg-[#07569B] text-white border-[#07569B]'
+                ? 'bg-[#1F211F] text-white border-[#1F211F]'
                 : 'border-slate-200 bg-white hover:bg-slate-50 text-slate-700'
             }`}
           >
@@ -623,7 +623,7 @@ export const VendorOnboardingPage: FC = () => {
           <button
             type="button"
             onClick={() => setShowTimeline((prev) => !prev)}
-            className="px-2.5 py-1.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-semibold cursor-pointer shadow-2xs flex items-center space-x-1"
+            className="px-2.5 py-1.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-semibold cursor-pointer flex items-center space-x-1"
           >
             <Clock size={13} weight="bold" />
             <span>{showTimeline ? 'Hide History' : 'View History'}</span>
@@ -637,9 +637,9 @@ export const VendorOnboardingPage: FC = () => {
         <button
           type="button"
           onClick={() => navigate('/admin')}
-          className="px-3 py-1.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold cursor-pointer shadow-2xs flex items-center space-x-1"
+          className="px-3 py-1.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold cursor-pointer flex items-center space-x-1"
         >
-          <ShieldCheck size={14} weight="bold" className="text-[#07569B]" />
+          <ShieldCheck size={14} weight="bold" className="text-[#1F211F]" />
           <span>Admin Portal</span>
         </button>
       </div>
@@ -655,16 +655,16 @@ export const VendorOnboardingPage: FC = () => {
     >
       {/* Activity Timeline Drawer / Expansion */}
       {showTimeline && (
-        <div className="mb-6 bg-white border border-slate-200 rounded-3xl p-6 shadow-xl shadow-slate-200/50 animate-fadeIn text-left">
+        <div className="mb-6 bg-white border border-slate-200 rounded-[32px] p-6 animate-fadeIn text-left">
           <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
             <div className="flex items-center space-x-2">
-              <Clock size={18} weight="bold" className="text-[#07569B]" />
-              <h3 className="text-sm font-bold text-slate-900">Application Progression History</h3>
+              <Clock size={18} weight="bold" className="text-[#1F211F]" />
+              <h3 className="text-sm font-semibold text-slate-900">Application Progression History</h3>
             </div>
             <button
               type="button"
               onClick={() => setShowTimeline(false)}
-              className="text-slate-400 hover:text-slate-600 text-xs font-bold cursor-pointer"
+              className="text-slate-400 hover:text-slate-600 text-xs font-semibold cursor-pointer"
             >
               ✕
             </button>
@@ -675,12 +675,12 @@ export const VendorOnboardingPage: FC = () => {
 
       {/* APPROVED BANNER */}
       {applicationStatus === 'approved' && (
-        <div className="mb-6 bg-emerald-50 border border-emerald-200/90 rounded-3xl p-6 shadow-sm text-left flex items-start space-x-4">
+        <div className="mb-6 bg-emerald-50 border border-emerald-200/90 rounded-[32px] p-6 shadow-sm text-left flex items-start space-x-4">
           <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
             <CheckCircle size={28} weight="fill" />
           </div>
           <div>
-            <h3 className="text-base font-bold text-emerald-950">Application Approved!</h3>
+            <h3 className="text-base font-semibold text-emerald-950">Application Approved!</h3>
             <p className="text-xs text-emerald-800 mt-1 leading-relaxed">
               Your vendor registration has completed compliance checks and is officially approved. Welcome to the ZAMP Vendor Network.
             </p>
@@ -690,12 +690,12 @@ export const VendorOnboardingPage: FC = () => {
 
       {/* REJECTED BANNER */}
       {applicationStatus === 'rejected' && (
-        <div className="mb-6 bg-rose-50 border border-rose-200/90 rounded-3xl p-6 shadow-sm text-left flex items-start space-x-4">
+        <div className="mb-6 bg-rose-50 border border-rose-200/90 rounded-[32px] p-6 shadow-sm text-left flex items-start space-x-4">
           <div className="w-12 h-12 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center shrink-0">
             <XCircle size={28} weight="fill" />
           </div>
           <div>
-            <h3 className="text-base font-bold text-rose-950">Application Rejected</h3>
+            <h3 className="text-base font-semibold text-rose-950">Application Rejected</h3>
             <p className="text-xs text-rose-800 mt-1 leading-relaxed">
               Unfortunately, your onboarding application was not approved during administrative review.
             </p>
@@ -723,13 +723,13 @@ export const VendorOnboardingPage: FC = () => {
 
       {/* UNDER REVIEW / SUBMITTED BANNER */}
       {(applicationStatus === 'submitted' || applicationStatus === 'under_review' || applicationStatus === 'resubmitted') && (
-        <div className="mb-6 bg-blue-50/70 border border-blue-200/80 rounded-3xl p-5 shadow-xs text-left flex items-center justify-between">
+        <div className="mb-6 bg-blue-50/70 border border-blue-200/80 rounded-[32px] p-5 shadow-xs text-left flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-9 h-9 rounded-xl bg-blue-100 text-[#07569B] flex items-center justify-center shrink-0">
+            <div className="w-9 h-9 rounded-xl bg-blue-100 text-[#1F211F] flex items-center justify-center shrink-0">
               <Clock size={20} weight="bold" />
             </div>
             <div>
-              <h4 className="text-xs font-bold text-slate-900 capitalize">
+              <h4 className="text-xs font-semibold text-slate-900 capitalize">
                 Application Status: {applicationStatus.replace(/_/g, ' ')}
               </h4>
               <p className="text-[11px] text-slate-500 mt-0.5">
@@ -741,7 +741,7 @@ export const VendorOnboardingPage: FC = () => {
           <button
             type="button"
             onClick={() => vendorId && syncWorkflowState(vendorId)}
-            className="px-3 py-1.5 rounded-xl border border-blue-200 bg-white hover:bg-slate-50 text-[#07569B] text-xs font-semibold cursor-pointer shadow-2xs shrink-0"
+            className="px-3 py-1.5 rounded-xl border border-blue-200 bg-white hover:bg-slate-50 text-[#1F211F] text-xs font-semibold cursor-pointer shrink-0"
           >
             Check Status
           </button>
@@ -767,7 +767,7 @@ export const VendorOnboardingPage: FC = () => {
                 <WarningCircle size={20} weight="fill" />
               </div>
               <div>
-                <h3 className="text-sm font-bold text-red-800">
+                <h3 className="text-sm font-semibold text-red-800">
                   {validationBanner.summary}
                 </h3>
                 {activeMissingField && (
@@ -817,7 +817,7 @@ export const VendorOnboardingPage: FC = () => {
                       onClick={() => handleJumpToField(item.key, item.step)}
                       className={`inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg text-xs font-medium cursor-pointer transition-all ${
                         isActive
-                          ? 'bg-red-600 text-white shadow-2xs ring-2 ring-red-400'
+                          ? 'bg-red-600 text-white ring-2 ring-red-400'
                           : 'bg-white border border-red-200 text-red-700 hover:bg-red-100/60'
                       }`}
                       title={item.reason}

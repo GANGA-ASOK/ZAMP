@@ -49,7 +49,7 @@ export const RejectionModal: FC<RejectionModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-fadeIn font-sans">
-      <div className="bg-white rounded-3xl shadow-2xl border border-slate-200 max-w-md w-full p-6 text-left space-y-4">
+      <div className="bg-white rounded-[32px] shadow-2xl border border-slate-200 max-w-md w-full p-6 text-left space-y-4">
         {/* Header */}
         <div className="flex items-start justify-between">
           <div className="flex items-center space-x-3">
@@ -57,7 +57,7 @@ export const RejectionModal: FC<RejectionModalProps> = ({
               <XCircle size={24} weight="fill" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-slate-900">
+              <h3 className="text-base font-semibold text-slate-900">
                 Reject Vendor Application
               </h3>
               <p className="text-xs text-slate-500 font-mono">
@@ -117,7 +117,7 @@ export const RejectionModal: FC<RejectionModalProps> = ({
             type="button"
             disabled={loading}
             onClick={handleConfirm}
-            className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold cursor-pointer shadow-sm shadow-rose-600/20 flex items-center space-x-1.5 disabled:opacity-50"
+            className="px-4 py-2 rounded-full bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold cursor-pointer flex items-center space-x-1.5 disabled:opacity-50"
           >
             {loading && <ArrowClockwise size={14} className="animate-spin" />}
             <span>Confirm Rejection</span>

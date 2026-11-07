@@ -38,7 +38,7 @@ export const ReviewSummary: FC<ReviewSummaryProps> = ({
   const uploadedDocCount = Object.keys(documents.documents).length + documents.otherFiles.length;
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-2xs">
+    <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden">
       <div className="p-4 sm:p-5 bg-slate-50/80 border-b border-slate-200/80 flex items-center justify-between">
         <div>
           <h3 className="text-sm font-semibold text-slate-800">
@@ -48,7 +48,7 @@ export const ReviewSummary: FC<ReviewSummaryProps> = ({
             Verify all details before submitting for official verification
           </p>
         </div>
-        <span className="text-xs font-medium text-[#0875D1] bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200/60">
+        <span className="text-xs font-medium text-[#1F211F] bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200/60">
           Ready to review
         </span>
       </div>
@@ -61,7 +61,7 @@ export const ReviewSummary: FC<ReviewSummaryProps> = ({
             className="p-4 flex items-center justify-between cursor-pointer hover:bg-slate-50/50 transition-colors select-none"
           >
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#0875D1] flex items-center justify-center">
+              <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#1F211F] flex items-center justify-center">
                 <Buildings size={18} weight="bold" />
               </div>
               <div>
@@ -81,7 +81,7 @@ export const ReviewSummary: FC<ReviewSummaryProps> = ({
                   e.stopPropagation();
                   onEditStep(1);
                 }}
-                className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg text-xs font-medium text-[#0875D1] hover:bg-blue-50 border border-blue-200/60 transition-colors cursor-pointer"
+                className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg text-xs font-medium text-[#1F211F] hover:bg-blue-50 border border-blue-200/60 transition-colors cursor-pointer"
               >
                 <PencilSimple size={13} weight="bold" />
                 <span>Edit</span>
@@ -161,7 +161,7 @@ export const ReviewSummary: FC<ReviewSummaryProps> = ({
                   e.stopPropagation();
                   onEditStep(2);
                 }}
-                className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg text-xs font-medium text-[#0875D1] hover:bg-blue-50 border border-blue-200/60 transition-colors cursor-pointer"
+                className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg text-xs font-medium text-[#1F211F] hover:bg-blue-50 border border-blue-200/60 transition-colors cursor-pointer"
               >
                 <PencilSimple size={13} weight="bold" />
                 <span>Edit</span>
@@ -219,7 +219,7 @@ export const ReviewSummary: FC<ReviewSummaryProps> = ({
             className="p-4 flex items-center justify-between cursor-pointer hover:bg-slate-50/50 transition-colors select-none"
           >
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 rounded-lg bg-sky-50 text-[#0875D1] flex items-center justify-center">
+              <div className="w-8 h-8 rounded-lg bg-sky-50 text-[#1F211F] flex items-center justify-center">
                 <Receipt size={18} weight="bold" />
               </div>
               <div>
@@ -239,7 +239,7 @@ export const ReviewSummary: FC<ReviewSummaryProps> = ({
                   e.stopPropagation();
                   onEditStep(3);
                 }}
-                className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg text-xs font-medium text-[#0875D1] hover:bg-blue-50 border border-blue-200/60 transition-colors cursor-pointer"
+                className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg text-xs font-medium text-[#1F211F] hover:bg-blue-50 border border-blue-200/60 transition-colors cursor-pointer"
               >
                 <PencilSimple size={13} weight="bold" />
                 <span>Edit</span>
@@ -313,7 +313,7 @@ export const ReviewSummary: FC<ReviewSummaryProps> = ({
                   e.stopPropagation();
                   onEditStep(3);
                 }}
-                className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg text-xs font-medium text-[#0875D1] hover:bg-blue-50 border border-blue-200/60 transition-colors cursor-pointer"
+                className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg text-xs font-medium text-[#1F211F] hover:bg-blue-50 border border-blue-200/60 transition-colors cursor-pointer"
               >
                 <PencilSimple size={13} weight="bold" />
                 <span>Edit</span>

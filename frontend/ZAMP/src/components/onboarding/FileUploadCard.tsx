@@ -99,7 +99,7 @@ export const FileUploadCard: FC<FileUploadCardProps> = ({
           : isUploaded
           ? 'border-emerald-200/80 bg-emerald-50/15'
           : isDragOver
-          ? 'border-[#0875D1] bg-blue-50/40 shadow-xs'
+          ? 'border-[#1F211F] bg-blue-50/40 shadow-xs'
           : 'border-slate-200 bg-white hover:border-slate-300'
       }`}
     >
@@ -146,7 +146,7 @@ export const FileUploadCard: FC<FileUploadCardProps> = ({
           /* Uploaded File Item */
           <div className="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-50/80 rounded-xl border border-slate-200/80 gap-3">
             <div className="flex items-center space-x-3 overflow-hidden">
-              <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center shrink-0 text-[#0875D1] shadow-2xs">
+              <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center shrink-0 text-[#1F211F]">
                 {isPdf ? <FilePdf size={22} weight="bold" /> : <FileImage size={22} weight="bold" />}
               </div>
               <div className="truncate">
@@ -163,7 +163,7 @@ export const FileUploadCard: FC<FileUploadCardProps> = ({
               <button
                 type="button"
                 onClick={() => onPreview(docInfo)}
-                className="inline-flex items-center space-x-1 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 hover:text-[#0875D1] hover:bg-white transition-colors cursor-pointer border border-transparent hover:border-slate-200"
+                className="inline-flex items-center space-x-1 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 hover:text-[#1F211F] hover:bg-white transition-colors cursor-pointer border border-transparent hover:border-slate-200"
                 title="Preview document"
               >
                 <Eye size={15} />
@@ -173,7 +173,7 @@ export const FileUploadCard: FC<FileUploadCardProps> = ({
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="inline-flex items-center space-x-1 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 hover:text-[#0875D1] hover:bg-white transition-colors cursor-pointer border border-transparent hover:border-slate-200"
+                className="inline-flex items-center space-x-1 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 hover:text-[#1F211F] hover:bg-white transition-colors cursor-pointer border border-transparent hover:border-slate-200"
                 title="Replace file"
               >
                 <ArrowsClockwise size={15} />
@@ -197,11 +197,11 @@ export const FileUploadCard: FC<FileUploadCardProps> = ({
               <span className="font-medium text-slate-700 truncate max-w-xs">
                 Uploading {docInfo.fileName}...
               </span>
-              <span className="font-semibold text-[#0875D1]">{docInfo.progress}%</span>
+              <span className="font-semibold text-[#1F211F]">{docInfo.progress}%</span>
             </div>
             <div className="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
               <div
-                className="bg-[#0875D1] h-1.5 rounded-full transition-all duration-200 ease-out"
+                className="bg-[#1F211F] h-1.5 rounded-full transition-all duration-200 ease-out"
                 style={{ width: `${docInfo.progress}%` }}
               />
             </div>
@@ -215,15 +215,15 @@ export const FileUploadCard: FC<FileUploadCardProps> = ({
             onClick={() => fileInputRef.current?.click()}
             className={`border-2 border-dashed rounded-xl p-5 text-center cursor-pointer transition-all duration-200 flex flex-col items-center justify-center ${
               isDragOver
-                ? 'border-[#0875D1] bg-blue-50/60'
-                : 'border-slate-300 hover:border-[#0875D1]/80 hover:bg-slate-50/60'
+                ? 'border-[#1F211F] bg-blue-50/60'
+                : 'border-slate-300 hover:border-[#1F211F]/80 hover:bg-slate-50/60'
             }`}
           >
             <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 mb-2 group-hover:scale-105 transition-transform">
               <CloudArrowUp size={22} weight="bold" />
             </div>
             <p className="text-xs font-medium text-slate-700">
-              <span className="text-[#0875D1] font-semibold underline underline-offset-2">
+              <span className="text-[#1F211F] font-semibold underline underline-offset-2">
                 Click to upload
               </span>{' '}
               or drag and drop

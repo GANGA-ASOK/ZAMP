@@ -236,14 +236,14 @@ export const VendorDocumentManager: FC<VendorDocumentManagerProps> = ({
   return (
     <div className="space-y-6 text-left">
       {/* Header & Metrics Card */}
-      <div className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-xl shadow-slate-200/50 space-y-4">
+      <div className="bg-white rounded-[32px] p-6 border border-slate-200/90 space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
           <div>
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 rounded-xl bg-blue-100 text-[#07569B] flex items-center justify-center font-bold">
+              <div className="w-8 h-8 rounded-xl bg-blue-100 text-[#1F211F] flex items-center justify-center font-semibold">
                 <FilePdf size={18} weight="fill" />
               </div>
-              <h3 className="text-base font-bold text-slate-900">
+              <h3 className="text-base font-semibold text-slate-900">
                 Documents & Verification Hub
               </h3>
             </div>
@@ -256,7 +256,7 @@ export const VendorDocumentManager: FC<VendorDocumentManagerProps> = ({
             type="button"
             onClick={handleRefreshAi}
             disabled={refreshingAi || loading}
-            className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-semibold cursor-pointer transition-colors"
+            className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full border border-slate-300 hover:border-ink bg-transparent text-slate-700 text-xs font-semibold cursor-pointer transition-colors"
           >
             <ArrowsClockwise size={13} className={refreshingAi ? 'animate-spin' : ''} />
             <span>Refresh Status</span>
@@ -266,20 +266,20 @@ export const VendorDocumentManager: FC<VendorDocumentManagerProps> = ({
         {/* Progress & Compliance Summary */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80">
-            <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
+            <span className="text-[10px] uppercase font-semibold text-slate-400 block tracking-wider">
               Mandatory Documents
             </span>
             <div className="flex items-center justify-between mt-1">
-              <span className="text-lg font-bold text-slate-900">
+              <span className="text-lg font-semibold text-slate-900">
                 {mandatoryUploaded} of {mandatoryCount} Uploaded
               </span>
               {isAllMandatoryUploaded ? (
-                <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">
+                <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-semibold">
                   <Check size={11} weight="bold" />
                   <span>Complete</span>
                 </span>
               ) : (
-                <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold">
+                <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-semibold">
                   <span>{mandatoryCount - mandatoryUploaded} Missing</span>
                 </span>
               )}
@@ -287,11 +287,11 @@ export const VendorDocumentManager: FC<VendorDocumentManagerProps> = ({
           </div>
 
           <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80">
-            <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
+            <span className="text-[10px] uppercase font-semibold text-slate-400 block tracking-wider">
               Total Stored Files
             </span>
             <div className="flex items-center justify-between mt-1">
-              <span className="text-lg font-bold text-slate-900">
+              <span className="text-lg font-semibold text-slate-900">
                 {documents.length} File{documents.length === 1 ? '' : 's'}
               </span>
               <span className="text-[11px] text-slate-500 font-mono">
@@ -301,20 +301,20 @@ export const VendorDocumentManager: FC<VendorDocumentManagerProps> = ({
           </div>
 
           <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80">
-            <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
+            <span className="text-[10px] uppercase font-semibold text-slate-400 block tracking-wider">
               AI Verification Health
             </span>
             <div className="flex items-center justify-between mt-1">
-              <span className="text-lg font-bold text-slate-900">
+              <span className="text-lg font-semibold text-slate-900">
                 {aiInsights ? `${aiInsights.confidence_score}% Confidence` : 'Pending'}
               </span>
               <span
-                className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${
+                className={`px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase ${
                   aiInsights?.recommendation === 'Approve'
                     ? 'bg-emerald-100 text-emerald-800'
                     : aiInsights?.recommendation === 'Clarification Required'
                     ? 'bg-amber-100 text-amber-800'
-                    : 'bg-blue-100 text-[#07569B]'
+                    : 'bg-blue-100 text-[#1F211F]'
                 }`}
               >
                 {aiInsights?.recommendation || 'Auditing'}
@@ -328,7 +328,7 @@ export const VendorDocumentManager: FC<VendorDocumentManagerProps> = ({
           <div className="p-3 rounded-2xl bg-indigo-50/70 border border-indigo-200/80 text-xs flex items-start space-x-2 text-indigo-950">
             <Sparkle size={16} weight="bold" className="text-indigo-600 shrink-0 mt-0.5" />
             <div>
-              <span className="font-bold text-indigo-900">NVIDIA AI Auditor Insight:</span>{' '}
+              <span className="font-semibold text-indigo-900">NVIDIA AI Auditor Insight:</span>{' '}
               <span className="text-indigo-900/90 leading-relaxed">{aiInsights.summary_explanation}</span>
             </div>
           </div>
@@ -341,7 +341,7 @@ export const VendorDocumentManager: FC<VendorDocumentManagerProps> = ({
               <CheckCircle size={16} weight="bold" className="text-emerald-600 shrink-0" />
               <span>{actionSuccess}</span>
             </div>
-            <button onClick={() => setActionSuccess(null)} className="text-slate-400 hover:text-slate-600 font-bold ml-2">✕</button>
+            <button onClick={() => setActionSuccess(null)} className="text-slate-400 hover:text-slate-600 font-semibold ml-2">✕</button>
           </div>
         )}
 
@@ -351,7 +351,7 @@ export const VendorDocumentManager: FC<VendorDocumentManagerProps> = ({
               <WarningCircle size={16} weight="bold" className="text-rose-600 shrink-0" />
               <span>{actionError}</span>
             </div>
-            <button onClick={() => setActionError(null)} className="text-slate-400 hover:text-slate-600 font-bold ml-2">✕</button>
+            <button onClick={() => setActionError(null)} className="text-slate-400 hover:text-slate-600 font-semibold ml-2">✕</button>
           </div>
         )}
       </div>
@@ -369,12 +369,12 @@ export const VendorDocumentManager: FC<VendorDocumentManagerProps> = ({
           return (
             <div
               key={cfg.key}
-              className={`bg-white rounded-3xl p-5 border transition-all ${
+              className={`bg-white rounded-[32px] p-5 border transition-all ${
                 isUploaded
-                  ? 'border-emerald-200/80 shadow-md shadow-emerald-900/5'
+                  ? 'border-emerald-200/80'
                   : cfg.isMandatory
                   ? 'border-amber-200/80 shadow-sm'
-                  : 'border-slate-200/80 shadow-2xs'
+                  : 'border-slate-200/80'
               }`}
             >
               <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
@@ -391,9 +391,9 @@ export const VendorDocumentManager: FC<VendorDocumentManagerProps> = ({
 
                   <div className="space-y-1">
                     <div className="flex items-center space-x-2 flex-wrap">
-                      <h4 className="text-sm font-bold text-slate-900">{cfg.label}</h4>
+                      <h4 className="text-sm font-semibold text-slate-900">{cfg.label}</h4>
                       {cfg.isMandatory ? (
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-rose-50 text-rose-700 border border-rose-200">
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider bg-rose-50 text-rose-700 border border-rose-200">
                           Mandatory
                         </span>
                       ) : (
@@ -403,7 +403,7 @@ export const VendorDocumentManager: FC<VendorDocumentManagerProps> = ({
                       )}
 
                       {isUploaded && (
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200 inline-flex items-center space-x-1">
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200 inline-flex items-center space-x-1">
                           <CheckCircle size={11} weight="fill" />
                           <span>Uploaded</span>
                         </span>
@@ -434,7 +434,7 @@ export const VendorDocumentManager: FC<VendorDocumentManagerProps> = ({
                   />
 
                   {isUploading ? (
-                    <div className="flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-blue-50 text-[#07569B] text-xs font-semibold">
+                    <div className="flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-blue-50 text-[#1F211F] text-xs font-semibold">
                       <ArrowClockwise size={14} className="animate-spin" />
                       <span>{uploadProgress > 0 ? `${uploadProgress}%` : 'Uploading...'}</span>
                     </div>
@@ -442,7 +442,7 @@ export const VendorDocumentManager: FC<VendorDocumentManagerProps> = ({
                     <button
                       type="button"
                       onClick={() => fileInputRefs.current[cfg.key]?.click()}
-                      className="inline-flex items-center space-x-1 px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold cursor-pointer shadow-2xs transition-colors"
+                      className="inline-flex items-center space-x-1 px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold cursor-pointer transition-colors"
                     >
                       <ArrowsClockwise size={13} weight="bold" />
                       <span>Replace</span>
@@ -451,7 +451,7 @@ export const VendorDocumentManager: FC<VendorDocumentManagerProps> = ({
                     <button
                       type="button"
                       onClick={() => fileInputRefs.current[cfg.key]?.click()}
-                      className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl bg-[#07569B] hover:bg-[#064780] text-white text-xs font-semibold cursor-pointer shadow-xs transition-colors"
+                      className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full bg-[#1F211F] hover:bg-[#3A3D39] text-white text-xs font-semibold cursor-pointer shadow-xs transition-colors"
                     >
                       <UploadSimple size={14} weight="bold" />
                       <span>Upload File</span>
@@ -464,7 +464,7 @@ export const VendorDocumentManager: FC<VendorDocumentManagerProps> = ({
               {isUploading && (
                 <div className="mt-3 w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
                   <div
-                    className="bg-[#07569B] h-1.5 rounded-full transition-all duration-300"
+                    className="bg-[#1F211F] h-1.5 rounded-full transition-all duration-300"
                     style={{ width: `${Math.max(5, uploadProgress)}%` }}
                   />
                 </div>
@@ -499,7 +499,7 @@ export const VendorDocumentManager: FC<VendorDocumentManagerProps> = ({
                         <div className="flex items-center space-x-2 shrink-0">
                           {/* Verification badge */}
                           <span
-                            className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                            className={`px-2.5 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider ${
                               vStatus === 'completed'
                                 ? 'bg-emerald-100 text-emerald-800'
                                 : vStatus === 'flagged'
@@ -517,7 +517,7 @@ export const VendorDocumentManager: FC<VendorDocumentManagerProps> = ({
                             href={downloadUrl}
                             target="_blank"
                             rel="noreferrer"
-                            className="p-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 cursor-pointer shadow-2xs"
+                            className="p-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 cursor-pointer"
                             title="Download file"
                           >
                             <DownloadSimple size={14} weight="bold" />
@@ -528,7 +528,7 @@ export const VendorDocumentManager: FC<VendorDocumentManagerProps> = ({
                             <button
                               type="button"
                               onClick={() => handleDeleteDoc(doc.document_id, doc.original_filename)}
-                              className="p-1.5 rounded-xl border border-rose-200 bg-white hover:bg-rose-50 text-rose-600 cursor-pointer shadow-2xs"
+                              className="p-1.5 rounded-xl border border-rose-200 bg-white hover:bg-rose-50 text-rose-600 cursor-pointer"
                               title="Delete document"
                             >
                               <Trash size={14} weight="bold" />

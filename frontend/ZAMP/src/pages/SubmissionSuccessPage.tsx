@@ -58,20 +58,20 @@ Your application is currently being analyzed by VendorFlow's intelligent verific
   };
 
   return (
-    <div className="min-h-screen bg-[#EEF3F8] py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center relative overflow-hidden font-sans">
+    <div className="min-h-screen bg-[#D8DFD7] py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center relative overflow-hidden font-sans">
       {/* Background Ambient Orbs */}
       <div className="pointer-events-none absolute -top-40 -left-40 w-96 h-96 bg-blue-200/50 rounded-full blur-3xl" />
       <div className="pointer-events-none absolute -bottom-40 -right-40 w-96 h-96 bg-emerald-200/40 rounded-full blur-3xl" />
 
       <div className="relative z-10 w-full max-w-2xl">
-        <div className="bg-white rounded-3xl shadow-2xl shadow-slate-200/80 border border-slate-200/70 p-6 sm:p-10 relative overflow-hidden text-center">
+        <div className="bg-white rounded-[32px] border border-slate-200/70 p-6 sm:p-10 relative overflow-hidden text-center">
           {/* Success Icon */}
-          <div className="w-18 h-18 sm:w-20 sm:h-20 rounded-full bg-emerald-50 border-4 border-emerald-100 flex items-center justify-center mx-auto text-emerald-500 shadow-lg shadow-emerald-500/10 mb-6">
+          <div className="w-18 h-18 sm:w-20 sm:h-20 rounded-full bg-emerald-50 border-4 border-emerald-100 flex items-center justify-center mx-auto text-emerald-500 mb-6">
             <CheckCircle size={44} weight="fill" />
           </div>
 
           {/* Heading and Subtitle */}
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-medium text-slate-900 tracking-tight">
             Your application has been submitted successfully!
           </h1>
           <p className="mt-2 text-sm sm:text-base text-slate-600 max-w-lg mx-auto leading-relaxed">
@@ -84,13 +84,13 @@ Your application is currently being analyzed by VendorFlow's intelligent verific
               Application Reference Number
             </span>
             <div className="flex items-center space-x-3">
-              <span className="text-xl sm:text-2xl font-mono font-bold text-[#07569B] tracking-wider">
+              <span className="text-xl sm:text-2xl font-mono font-semibold text-[#1F211F] tracking-wider">
                 {submission.referenceNumber}
               </span>
               <button
                 type="button"
                 onClick={handleCopyReference}
-                className="p-2 rounded-xl bg-white border border-slate-200 hover:border-slate-300 text-slate-600 hover:text-[#0875D1] transition-all cursor-pointer shadow-2xs"
+                className="p-2 rounded-xl bg-white border border-slate-200 hover:border-slate-300 text-slate-600 hover:text-[#1F211F] transition-all cursor-pointer"
                 title="Copy Reference"
               >
                 {copied ? <Check size={16} weight="bold" className="text-emerald-500" /> : <Copy size={16} />}
@@ -109,8 +109,8 @@ Your application is currently being analyzed by VendorFlow's intelligent verific
 
           {/* Verification Pipeline Timeline */}
           <div className="text-left bg-slate-50/60 rounded-2xl p-5 border border-slate-200/70 mb-8 max-w-md mx-auto">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3 flex items-center space-x-1.5">
-              <Sparkle size={14} className="text-[#0875D1]" />
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-3 flex items-center space-x-1.5">
+              <Sparkle size={14} className="text-[#1F211F]" />
               <span>What Happens Next?</span>
             </h4>
             <div className="space-y-3 text-xs">
@@ -125,7 +125,7 @@ Your application is currently being analyzed by VendorFlow's intelligent verific
               </div>
 
               <div className="flex items-start space-x-2.5">
-                <div className="w-4 h-4 rounded-full bg-[#0875D1] text-white flex items-center justify-center mt-0.5 shrink-0">
+                <div className="w-4 h-4 rounded-full bg-[#1F211F] text-white flex items-center justify-center mt-0.5 shrink-0">
                   <Clock size={10} weight="bold" />
                 </div>
                 <div>
@@ -136,7 +136,7 @@ Your application is currently being analyzed by VendorFlow's intelligent verific
 
               <div className="flex items-start space-x-2.5 opacity-60">
                 <div className="w-4 h-4 rounded-full bg-slate-300 text-white flex items-center justify-center mt-0.5 shrink-0">
-                  <span className="text-[9px] font-bold">3</span>
+                  <span className="text-[9px] font-semibold">3</span>
                 </div>
                 <div>
                   <span className="font-semibold text-slate-700">3. Final Onboarding Decision</span>
@@ -151,7 +151,7 @@ Your application is currently being analyzed by VendorFlow's intelligent verific
             <button
               type="button"
               onClick={handleDownloadReceipt}
-              className="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-sm font-semibold transition-colors flex items-center justify-center space-x-2 cursor-pointer shadow-2xs"
+              className="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-sm font-semibold transition-colors flex items-center justify-center space-x-2 cursor-pointer"
             >
               <DownloadSimple size={16} weight="bold" />
               <span>Download Receipt</span>
@@ -160,7 +160,7 @@ Your application is currently being analyzed by VendorFlow's intelligent verific
             <button
               type="button"
               onClick={() => navigate('/login')}
-              className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-[#0875D1] hover:bg-[#0764B5] text-white text-sm font-semibold transition-all flex items-center justify-center space-x-2 cursor-pointer shadow-md shadow-blue-500/20"
+              className="w-full sm:w-auto px-6 py-2.5 rounded-full bg-[#1F211F] hover:bg-[#3A3D39] text-white text-sm font-semibold transition-all flex items-center justify-center space-x-2 cursor-pointer"
             >
               <span>Return to Home</span>
               <ArrowRight size={15} weight="bold" />

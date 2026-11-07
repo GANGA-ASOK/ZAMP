@@ -108,7 +108,7 @@ export const NotificationDrawer: FC<NotificationDrawerProps> = ({
       case 'resubmission':
         return <FileArrowUp size={16} weight="bold" className="text-indigo-500" />;
       default:
-        return <Info size={16} weight="fill" className="text-[#07569B]" />;
+        return <Info size={16} weight="fill" className="text-[#1F211F]" />;
     }
   };
 
@@ -118,13 +118,13 @@ export const NotificationDrawer: FC<NotificationDrawerProps> = ({
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className="relative p-2 rounded-xl border border-slate-200/90 bg-white hover:bg-slate-50 text-slate-700 transition-colors cursor-pointer shadow-2xs"
+        className="relative p-2 rounded-xl border border-slate-200/90 bg-white hover:bg-slate-50 text-slate-700 transition-colors cursor-pointer"
         title="Notifications"
         aria-label="Open notifications"
       >
         <Bell size={18} weight="bold" />
         {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-rose-500 text-white text-[10px] font-bold flex items-center justify-center animate-pulse">
+          <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-rose-500 text-white text-[10px] font-semibold flex items-center justify-center animate-pulse">
             {unreadCount > 9 ? '9+' : unreadCount}
           </span>
         )}
@@ -132,15 +132,15 @@ export const NotificationDrawer: FC<NotificationDrawerProps> = ({
 
       {/* Popover Card */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-3xl shadow-2xl shadow-slate-300/80 border border-slate-200 z-50 overflow-hidden text-left animate-fadeIn">
+        <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-[32px] shadow-2xl shadow-slate-300/80 border border-slate-200 z-50 overflow-hidden text-left animate-fadeIn">
           {/* Header */}
           <div className="p-4 border-b border-slate-100 flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+              <h3 className="text-xs font-semibold text-slate-900 uppercase tracking-wider">
                 Notifications
               </h3>
               {unreadCount > 0 && (
-                <span className="px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 font-bold text-[10px] border border-rose-200">
+                <span className="px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 font-semibold text-[10px] border border-rose-200">
                   {unreadCount} new
                 </span>
               )}
@@ -151,7 +151,7 @@ export const NotificationDrawer: FC<NotificationDrawerProps> = ({
                 <button
                   type="button"
                   onClick={handleMarkAllRead}
-                  className="text-[11px] font-semibold text-[#07569B] hover:text-[#053e70] cursor-pointer flex items-center space-x-1"
+                  className="text-[11px] font-semibold text-[#1F211F] hover:text-[#053e70] cursor-pointer flex items-center space-x-1"
                 >
                   <Check size={12} weight="bold" />
                   <span>Mark all read</span>
@@ -214,7 +214,7 @@ export const NotificationDrawer: FC<NotificationDrawerProps> = ({
                         <h4
                           className={`text-xs ${
                             !notif.is_read
-                              ? 'font-bold text-slate-900'
+                              ? 'font-semibold text-slate-900'
                               : 'font-semibold text-slate-700'
                           }`}
                         >
@@ -233,7 +233,7 @@ export const NotificationDrawer: FC<NotificationDrawerProps> = ({
                       <button
                         type="button"
                         onClick={(e) => handleMarkRead(notif.id, e)}
-                        className="w-2 h-2 rounded-full bg-[#07569B] hover:scale-125 transition-transform mt-1 shrink-0 cursor-pointer"
+                        className="w-2 h-2 rounded-full bg-[#1F211F] hover:scale-125 transition-transform mt-1 shrink-0 cursor-pointer"
                         title="Mark as read"
                       />
                     )}

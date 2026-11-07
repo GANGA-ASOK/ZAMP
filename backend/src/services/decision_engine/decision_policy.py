@@ -92,7 +92,10 @@ def decide(
     confidence = round(max(0.5, min(0.99, confidence)) * 100, 1)
 
     headline = _headline(outcome, critical, major, warning, coverage)
-    reasons = [f for f in findings if f.get("severity") in ("critical", "major", "warning")]
+    reasons = sorted(
+        (f for f in findings if f.get("severity") in ("critical", "major", "warning")),
+        key=lambda f: -SEVERITY_ORDER.get(f.get("severity", "info"), 0),
+    )
     passed = [f for f in findings if f.get("severity") in ("pass", "info")]
 
     return {

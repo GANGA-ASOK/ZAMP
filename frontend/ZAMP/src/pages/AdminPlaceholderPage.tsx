@@ -2,10 +2,7 @@ import type { FC } from 'react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  ShieldCheck,
-  ArrowLeft,
   Sparkle,
-  Buildings,
   FileText,
   CheckCircle,
   XCircle,
@@ -14,7 +11,6 @@ import {
   MagnifyingGlass,
   Cpu,
   FilePdf,
-  ArrowsClockwise,
   DownloadSimple,
   ChatCircleDots,
   SortAscending,
@@ -47,6 +43,7 @@ import { ApprovalModal } from '../components/workflow/ApprovalModal';
 import { RejectionModal } from '../components/workflow/RejectionModal';
 import { ClarificationModal } from '../components/workflow/ClarificationModal';
 import { AIDecisionPanel } from '../components/ai/AIDecisionPanel';
+import { AdminDashboardHeader } from '../components/admin/AdminDashboardHeader';
 
 const AI_CHIP: Record<string, string> = {
   approve: 'bg-emerald-50 text-emerald-700 border-emerald-200',
@@ -113,6 +110,13 @@ export const AdminPlaceholderPage: FC = () => {
   useEffect(() => {
     loadData();
   }, [statusFilter, sortBy, sortOrder]);
+
+  // Deep link: /admin?app=<applicationId> opens that application directly.
+  useEffect(() => {
+    const appId = new URLSearchParams(window.location.search).get('app');
+    if (appId) handleSelectApplication(appId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Load application detail
   const handleSelectApplication = async (applicationId: string) => {
@@ -334,66 +338,21 @@ export const AdminPlaceholderPage: FC = () => {
   const vendor = appDetail?.vendor;
 
   return (
-    <div className="min-h-screen bg-[#EEF3F8] py-8 px-4 sm:px-6 lg:px-8 font-sans">
-      <div className="max-w-7xl mx-auto space-y-6">
-        {/* Top Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-3xl shadow-xl shadow-slate-200/70 border border-slate-200/80">
-          <div className="flex items-center space-x-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-[#07569B] text-white flex items-center justify-center shadow-md shadow-blue-900/20">
-              <ShieldCheck size={28} weight="bold" />
-            </div>
-            <div>
-              <div className="flex items-center space-x-2">
-                <h1 className="text-xl font-bold text-slate-900">
-                  ZAMP Enterprise Admin Portal
-                </h1>
-                <span className="text-[11px] font-semibold text-blue-800 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-200 inline-flex items-center space-x-1">
-                  <Sparkle size={12} weight="fill" className="text-blue-600" />
-                  <span>Phase 9: Approval Workflow</span>
-                </span>
-              </div>
-              <p className="text-xs text-slate-500 mt-0.5">
-                Vendor application review, AI verification findings, clarifications, and approval decisions
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center space-x-2.5 self-start sm:self-auto">
-            {/* Admin Notifications */}
-            <NotificationDrawer
-              recipientType="admin"
-              onSelectApplication={(id) => handleSelectApplication(id)}
-            />
-
-            <button
-              type="button"
-              onClick={loadData}
-              className="inline-flex items-center space-x-1.5 px-3 py-2 rounded-xl border border-slate-200 hover:border-slate-300 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-semibold transition-colors cursor-pointer shadow-2xs"
-              title="Refresh Queue"
-            >
-              <ArrowsClockwise size={14} weight="bold" className={loading ? 'animate-spin' : ''} />
-              <span>Refresh</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => navigate('/vendor')}
-              className="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-[#0875D1] hover:bg-[#0764B5] text-white text-xs font-semibold transition-colors cursor-pointer shadow-sm shadow-blue-500/20"
-            >
-              <Buildings size={14} weight="bold" />
-              <span>Vendor Portal</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => navigate('/login')}
-              className="inline-flex items-center space-x-1.5 px-3 py-2 rounded-xl border border-slate-200 hover:border-slate-300 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-semibold transition-colors cursor-pointer"
-            >
-              <ArrowLeft size={14} weight="bold" />
-              <span>Exit</span>
-            </button>
-          </div>
-        </div>
+    <div className="min-h-screen bg-canvas py-6 sm:py-8 px-3 sm:px-6 lg:px-8 font-sans text-ink">
+      <div className="max-w-[1400px] mx-auto space-y-5">
+        <AdminDashboardHeader
+          loading={loading}
+          statusCounts={statusCounts}
+          applications={applications}
+          statusFilter={statusFilter}
+          onFilter={setStatusFilter}
+          onRefresh={loadData}
+          onVendorPortal={() => navigate('/vendor')}
+          onExit={() => navigate('/login')}
+          notifications={
+            <NotificationDrawer recipientType="admin" onSelectApplication={(id) => handleSelectApplication(id)} />
+          }
+        />
 
         {/* Global Feedback Banner */}
         {statusMessage && (
@@ -414,57 +373,25 @@ export const AdminPlaceholderPage: FC = () => {
             </div>
             <button
               onClick={() => setStatusMessage(null)}
-              className="text-slate-400 hover:text-slate-600 cursor-pointer ml-4 font-bold"
+              className="text-slate-400 hover:text-slate-600 cursor-pointer ml-4 font-semibold"
             >
               ✕
             </button>
           </div>
         )}
 
-        {/* Metrics Bar with all 7 Statuses */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2.5">
-          {[
-            { label: 'All', key: 'all', count: statusCounts.all ?? applications.length },
-            { label: 'Submitted', key: 'submitted', count: statusCounts.submitted ?? 0 },
-            { label: 'Under Review', key: 'under_review', count: statusCounts.under_review ?? 0 },
-            { label: 'Clarification', key: 'clarification_required', count: statusCounts.clarification_required ?? 0 },
-            { label: 'Resubmitted', key: 'resubmitted', count: statusCounts.resubmitted ?? 0 },
-            { label: 'Approved', key: 'approved', count: statusCounts.approved ?? 0 },
-            { label: 'Rejected', key: 'rejected', count: statusCounts.rejected ?? 0 },
-          ].map((m) => {
-            const active = statusFilter === m.key;
-            return (
-              <button
-                key={m.key}
-                type="button"
-                onClick={() => setStatusFilter(m.key)}
-                className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer ${
-                  active
-                    ? 'bg-white border-[#07569B] shadow-md shadow-blue-900/10 ring-2 ring-[#07569B]/20'
-                    : 'bg-white/80 hover:bg-white border-slate-200/80 hover:border-slate-300 shadow-2xs'
-                }`}
-              >
-                <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider truncate">
-                  {m.label}
-                </p>
-                <p className="text-xl font-bold text-slate-900 mt-1">{m.count}</p>
-              </button>
-            );
-          })}
-        </div>
-
         {/* Main Grid: Applications Table (Left) + Detail Review Drawer (Right) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           {/* Applications List Table */}
           <div
-            className={`bg-white rounded-3xl shadow-xl shadow-slate-200/70 border border-slate-200/80 overflow-hidden transition-all ${
+            className={`bg-white rounded-[32px] overflow-hidden transition-all ${
               selectedAppId ? 'lg:col-span-5' : 'lg:col-span-12'
             }`}
           >
             {/* Search & Sort Header */}
             <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
-                <h2 className="text-sm font-bold text-slate-900">
+                <h2 className="text-sm font-semibold text-slate-900">
                   Applications ({applications.length})
                 </h2>
                 <p className="text-[11px] text-slate-400 mt-0.5">
@@ -485,7 +412,7 @@ export const AdminPlaceholderPage: FC = () => {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && loadData()}
-                    className="w-full pl-8 pr-3 py-1.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#07569B] bg-slate-50/50"
+                    className="w-full pl-8 pr-3 py-1.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#1F211F] bg-slate-50/50"
                   />
                 </div>
 
@@ -503,7 +430,7 @@ export const AdminPlaceholderPage: FC = () => {
                 <button
                   type="button"
                   onClick={() => setSortOrder((o) => (o === 'desc' ? 'asc' : 'desc'))}
-                  className="p-1.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100 cursor-pointer shadow-2xs"
+                  className="p-1.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100 cursor-pointer"
                   title={`Sort ${sortOrder === 'desc' ? 'Ascending' : 'Descending'}`}
                 >
                   {sortOrder === 'desc' ? <SortDescending size={14} /> : <SortAscending size={14} />}
@@ -513,7 +440,7 @@ export const AdminPlaceholderPage: FC = () => {
 
             {loading ? (
               <div className="p-12 text-center text-slate-400">
-                <ArrowClockwise size={24} className="animate-spin mx-auto mb-2 text-[#07569B]" />
+                <ArrowClockwise size={24} className="animate-spin mx-auto mb-2 text-[#1F211F]" />
                 <p className="text-xs">Loading application queue...</p>
               </div>
             ) : applications.length === 0 ? (
@@ -549,7 +476,7 @@ export const AdminPlaceholderPage: FC = () => {
                           }`}
                         >
                           <td className="px-3.5 py-3">
-                            <span className="font-mono text-[11px] font-bold text-[#07569B] block">
+                            <span className="font-mono text-[11px] font-semibold text-[#1F211F] block">
                               {item.reference_number || 'DRAFT'}
                             </span>
                             <span className="font-semibold text-slate-800 text-xs line-clamp-1 mt-0.5">
@@ -589,7 +516,7 @@ export const AdminPlaceholderPage: FC = () => {
                             {item.ai_decision ? (
                               <span
                                 title={item.ai_decision.headline}
-                                className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border whitespace-nowrap ${AI_CHIP[item.ai_decision.outcome] || ''}`}
+                                className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider border whitespace-nowrap ${AI_CHIP[item.ai_decision.outcome] || ''}`}
                               >
                                 {item.ai_decision.label} · {item.ai_decision.risk_score}
                               </span>
@@ -600,7 +527,7 @@ export const AdminPlaceholderPage: FC = () => {
 
                           <td className="px-3.5 py-3">
                             <span
-                              className={`inline-flex items-center space-x-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${getStatusBadge(
+                              className={`inline-flex items-center space-x-1 px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider border ${getStatusBadge(
                                 item.status
                               )}`}
                             >
@@ -620,30 +547,30 @@ export const AdminPlaceholderPage: FC = () => {
           {selectedAppId && (
             <div className="lg:col-span-7 space-y-5">
               {loadingDetail ? (
-                <div className="bg-white p-12 rounded-3xl shadow-xl shadow-slate-200/70 border border-slate-200/80 text-center">
-                  <ArrowClockwise size={28} className="animate-spin mx-auto mb-2 text-[#07569B]" />
+                <div className="bg-white p-12 rounded-[32px] text-center">
+                  <ArrowClockwise size={28} className="animate-spin mx-auto mb-2 text-[#1F211F]" />
                   <p className="text-xs text-slate-500">Loading comprehensive application file...</p>
                 </div>
               ) : appDetail && vendor ? (
                 <div className="space-y-5">
                   {/* Review Top Banner & Decision Action Bar */}
-                  <div className="bg-white p-6 rounded-3xl shadow-xl shadow-slate-200/70 border border-slate-200/80 space-y-4">
+                  <div className="bg-white p-6 rounded-[32px] space-y-4">
                     {/* Header Row */}
                     <div className="flex items-start justify-between border-b border-slate-100 pb-4">
                       <div>
                         <div className="flex items-center space-x-2">
-                          <span className="font-mono text-xs font-bold text-[#07569B] bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-100">
+                          <span className="font-mono text-xs font-semibold text-[#1F211F] bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-100">
                             {vendor.reference_number || 'DRAFT'}
                           </span>
                           <span
-                            className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${getStatusBadge(
+                            className={`text-[10px] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${getStatusBadge(
                               vendor.status
                             )}`}
                           >
                             {vendor.status?.replace(/_/g, ' ')}
                           </span>
                         </div>
-                        <h2 className="text-lg font-bold text-slate-900 mt-1.5">
+                        <h2 className="text-lg font-semibold text-slate-900 mt-1.5">
                           {vendor.company_info?.legal_company_name ||
                             vendor.company_info?.legal_name ||
                             'Company Name Not Set'}
@@ -673,7 +600,7 @@ export const AdminPlaceholderPage: FC = () => {
                             type="button"
                             disabled={actionLoading}
                             onClick={handleMoveToUnderReview}
-                            className="px-3.5 py-1.5 rounded-xl border border-blue-200 bg-blue-50 hover:bg-blue-100 text-[#07569B] text-xs font-semibold cursor-pointer shadow-2xs disabled:opacity-50"
+                            className="px-3.5 py-1.5 rounded-xl border border-blue-200 bg-blue-50 hover:bg-blue-100 text-[#1F211F] text-xs font-semibold cursor-pointer disabled:opacity-50"
                           >
                             Move to Under Review
                           </button>
@@ -683,7 +610,7 @@ export const AdminPlaceholderPage: FC = () => {
                           type="button"
                           disabled={actionLoading || vendor.status === 'approved' || vendor.status === 'rejected'}
                           onClick={() => setIsClarificationOpen(true)}
-                          className="px-3.5 py-1.5 rounded-xl border border-amber-300 bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs font-semibold cursor-pointer shadow-2xs disabled:opacity-50"
+                          className="px-3.5 py-1.5 rounded-xl border border-amber-300 bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs font-semibold cursor-pointer disabled:opacity-50"
                         >
                           Request Clarification
                         </button>
@@ -694,7 +621,7 @@ export const AdminPlaceholderPage: FC = () => {
                           type="button"
                           disabled={actionLoading || vendor.status === 'approved' || vendor.status === 'rejected'}
                           onClick={() => setIsRejectionOpen(true)}
-                          className="px-3.5 py-1.5 rounded-xl border border-rose-300 bg-rose-50 hover:bg-rose-100 text-rose-800 text-xs font-semibold cursor-pointer shadow-2xs disabled:opacity-50"
+                          className="px-3.5 py-1.5 rounded-xl border border-rose-300 bg-rose-50 hover:bg-rose-100 text-rose-800 text-xs font-semibold cursor-pointer disabled:opacity-50"
                         >
                           Reject
                         </button>
@@ -703,7 +630,7 @@ export const AdminPlaceholderPage: FC = () => {
                           type="button"
                           disabled={actionLoading || vendor.status === 'approved' || vendor.status === 'rejected'}
                           onClick={() => setIsApprovalOpen(true)}
-                          className="px-4 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold cursor-pointer shadow-sm shadow-emerald-600/20 disabled:opacity-50 flex items-center space-x-1.5"
+                          className="px-4 py-1.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold cursor-pointer disabled:opacity-50 flex items-center space-x-1.5"
                         >
                           <CheckCircle size={14} weight="bold" />
                           <span>Approve Application</span>
@@ -713,7 +640,7 @@ export const AdminPlaceholderPage: FC = () => {
                   </div>
 
                   {/* Tab Navigation for Detailed Inspection */}
-                  <div className="flex items-center space-x-1 bg-white p-1.5 rounded-2xl border border-slate-200 shadow-2xs overflow-x-auto text-xs font-semibold">
+                  <div className="flex items-center space-x-1 bg-white p-1.5 rounded-2xl border border-slate-200 overflow-x-auto text-xs font-semibold">
                     {[
                       { key: 'ai', label: 'AI Decision' },
                       { key: 'info', label: 'Vendor Info' },
@@ -730,7 +657,7 @@ export const AdminPlaceholderPage: FC = () => {
                           onClick={() => setDetailTab(t.key as any)}
                           className={`px-3.5 py-1.5 rounded-xl transition-all cursor-pointer whitespace-nowrap ${
                             active
-                              ? 'bg-[#07569B] text-white shadow-xs'
+                              ? 'bg-[#1F211F] text-white shadow-xs'
                               : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                           }`}
                         >
@@ -756,10 +683,10 @@ export const AdminPlaceholderPage: FC = () => {
 
                   {/* TAB 1: VENDOR INFORMATION */}
                   {detailTab === 'info' && (
-                    <div className="bg-white p-6 rounded-3xl shadow-xl shadow-slate-200/70 border border-slate-200/80 space-y-6 text-xs text-left">
+                    <div className="bg-white p-6 rounded-[32px] space-y-6 text-xs text-left">
                       {/* Company Info */}
                       <div>
-                        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3 border-b border-slate-100 pb-2">
+                        <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-3 border-b border-slate-100 pb-2">
                           Company & Incorporation Details
                         </h4>
                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -777,7 +704,7 @@ export const AdminPlaceholderPage: FC = () => {
                           </div>
                           <div>
                             <span className="text-[10px] text-slate-400 uppercase font-semibold block">Registration / CIN</span>
-                            <span className="font-mono font-bold text-slate-800">{vendor.company_info?.registration_number || '—'}</span>
+                            <span className="font-mono font-semibold text-slate-800">{vendor.company_info?.registration_number || '—'}</span>
                           </div>
                           <div>
                             <span className="text-[10px] text-slate-400 uppercase font-semibold block">Incorporation Date</span>
@@ -813,12 +740,12 @@ export const AdminPlaceholderPage: FC = () => {
 
                       {/* Contact Details */}
                       <div>
-                        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3 border-b border-slate-100 pb-2">
+                        <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-3 border-b border-slate-100 pb-2">
                           Key Contact Persons
                         </h4>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80">
-                            <span className="text-[10px] uppercase font-bold text-slate-400 block">Primary Contact</span>
+                            <span className="text-[10px] uppercase font-semibold text-slate-400 block">Primary Contact</span>
                             <p className="font-semibold text-slate-900 mt-1">
                               {vendor.contact_info?.primary?.first_name} {vendor.contact_info?.primary?.last_name}
                             </p>
@@ -828,7 +755,7 @@ export const AdminPlaceholderPage: FC = () => {
                           </div>
 
                           <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80">
-                            <span className="text-[10px] uppercase font-bold text-slate-400 block">Authorized Signatory</span>
+                            <span className="text-[10px] uppercase font-semibold text-slate-400 block">Authorized Signatory</span>
                             <p className="font-semibold text-slate-900 mt-1">
                               {vendor.contact_info?.signatory?.full_name || vendor.contact_info?.signatory?.first_name || '—'}
                             </p>
@@ -840,17 +767,17 @@ export const AdminPlaceholderPage: FC = () => {
 
                       {/* Tax & Banking Details */}
                       <div>
-                        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3 border-b border-slate-100 pb-2">
+                        <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-3 border-b border-slate-100 pb-2">
                           Tax & Banking Information (Authorized Admin Access)
                         </h4>
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                           <div>
                             <span className="text-[10px] text-slate-400 uppercase font-semibold block">PAN Number</span>
-                            <span className="font-mono font-bold text-slate-800">{vendor.tax_details?.pan_number || '—'}</span>
+                            <span className="font-mono font-semibold text-slate-800">{vendor.tax_details?.pan_number || '—'}</span>
                           </div>
                           <div>
                             <span className="text-[10px] text-slate-400 uppercase font-semibold block">GSTIN</span>
-                            <span className="font-mono font-bold text-slate-800">{vendor.tax_details?.gstin || '—'}</span>
+                            <span className="font-mono font-semibold text-slate-800">{vendor.tax_details?.gstin || '—'}</span>
                           </div>
                           <div>
                             <span className="text-[10px] text-slate-400 uppercase font-semibold block">GST Status</span>
@@ -858,7 +785,7 @@ export const AdminPlaceholderPage: FC = () => {
                           </div>
                           <div>
                             <span className="text-[10px] text-slate-400 uppercase font-semibold block">TAN Number</span>
-                            <span className="font-mono font-bold text-slate-800">{vendor.tax_details?.tan_number || '—'}</span>
+                            <span className="font-mono font-semibold text-slate-800">{vendor.tax_details?.tan_number || '—'}</span>
                           </div>
                         </div>
 
@@ -873,11 +800,11 @@ export const AdminPlaceholderPage: FC = () => {
                           </div>
                           <div>
                             <span className="text-[10px] text-slate-400 uppercase font-semibold block">Account Number</span>
-                            <span className="font-mono font-bold text-slate-800">{vendor.banking_details?.account_number || '—'}</span>
+                            <span className="font-mono font-semibold text-slate-800">{vendor.banking_details?.account_number || '—'}</span>
                           </div>
                           <div>
                             <span className="text-[10px] text-slate-400 uppercase font-semibold block">IFSC Code</span>
-                            <span className="font-mono font-bold text-slate-800">{vendor.banking_details?.ifsc_code || '—'}</span>
+                            <span className="font-mono font-semibold text-slate-800">{vendor.banking_details?.ifsc_code || '—'}</span>
                           </div>
                         </div>
                       </div>
@@ -886,14 +813,14 @@ export const AdminPlaceholderPage: FC = () => {
 
                   {/* TAB 2: UPLOADED DOCUMENTS & AI VERIFICATION RESULTS */}
                   {detailTab === 'documents' && (
-                    <div className="bg-white p-6 rounded-3xl shadow-xl shadow-slate-200/70 border border-slate-200/80 space-y-6 text-left">
+                    <div className="bg-white p-6 rounded-[32px] space-y-6 text-left">
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
                         <div className="flex items-center space-x-2.5">
                           <div className="w-9 h-9 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0">
                             <Cpu size={20} weight="bold" />
                           </div>
                           <div>
-                            <h3 className="text-sm font-bold text-slate-900">
+                            <h3 className="text-sm font-semibold text-slate-900">
                               Documents & AI Verification Hub
                             </h3>
                             <p className="text-[11px] text-slate-500">
@@ -922,14 +849,14 @@ export const AdminPlaceholderPage: FC = () => {
 
                       {/* UPLOADED DOCUMENTS LIST */}
                       <div>
-                        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3 border-b border-slate-100 pb-2">
+                        <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-3 border-b border-slate-100 pb-2">
                           Uploaded Files ({vendor.documents?.length || 0})
                         </h4>
 
                         {(!vendor.documents || vendor.documents.length === 0) ? (
                           <div className="p-8 text-center bg-slate-50/60 rounded-2xl border border-dashed border-slate-200 space-y-2">
                             <FilePdf size={28} className="mx-auto text-slate-300" />
-                            <p className="text-xs text-slate-700 font-bold">No documents uploaded for this vendor.</p>
+                            <p className="text-xs text-slate-700 font-semibold">No documents uploaded for this vendor.</p>
                             <p className="text-[11px] text-slate-500 max-w-md mx-auto">
                               Based on entity type ({vendor.company_info?.business_entity_type || 'Vendor'}), this application requires PAN Card, Bank Proof, and applicable registration certificates.
                             </p>
@@ -950,16 +877,16 @@ export const AdminPlaceholderPage: FC = () => {
                                   {/* Header */}
                                   <div className="flex items-start justify-between gap-3">
                                     <div className="flex items-start space-x-3">
-                                      <div className="w-9 h-9 rounded-xl bg-blue-100/70 text-[#07569B] flex items-center justify-center shrink-0 mt-0.5">
+                                      <div className="w-9 h-9 rounded-xl bg-blue-100/70 text-[#1F211F] flex items-center justify-center shrink-0 mt-0.5">
                                         <FilePdf size={20} weight="fill" />
                                       </div>
                                       <div>
                                         <div className="flex items-center space-x-2">
-                                          <h4 className="text-xs font-bold text-slate-900">
+                                          <h4 className="text-xs font-semibold text-slate-900">
                                             {doc.category?.replace(/_/g, ' ').toUpperCase() || 'DOCUMENT'}
                                           </h4>
                                           <span
-                                            className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider inline-flex items-center space-x-1 ${
+                                            className={`px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider inline-flex items-center space-x-1 ${
                                               verifResult?.verification_status === 'completed' || doc.verification_status === 'completed'
                                                 ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
                                                 : verifResult?.verification_status === 'flagged' || doc.verification_status === 'flagged'
@@ -988,7 +915,7 @@ export const AdminPlaceholderPage: FC = () => {
                                         href={downloadUrl}
                                         target="_blank"
                                         rel="noreferrer"
-                                        className="inline-flex items-center space-x-1 px-2.5 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-[11px] font-semibold transition-colors cursor-pointer shadow-2xs"
+                                        className="inline-flex items-center space-x-1 px-2.5 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-[11px] font-semibold transition-colors cursor-pointer"
                                         title="Download file from GridFS"
                                       >
                                         <DownloadSimple size={12} weight="bold" />
@@ -1000,7 +927,7 @@ export const AdminPlaceholderPage: FC = () => {
                                         type="button"
                                         disabled={isVerifying}
                                         onClick={() => handleVerifyDocument(docId)}
-                                        className="inline-flex items-center space-x-1 px-3 py-1.5 rounded-xl bg-[#07569B] hover:bg-[#064780] text-white text-[11px] font-semibold transition-colors cursor-pointer disabled:opacity-50 shadow-xs"
+                                        className="inline-flex items-center space-x-1 px-3 py-1.5 rounded-full bg-[#1F211F] hover:bg-[#3A3D39] text-white text-[11px] font-semibold transition-colors cursor-pointer disabled:opacity-50 shadow-xs"
                                       >
                                         {isVerifying ? (
                                           <>
@@ -1043,21 +970,21 @@ export const AdminPlaceholderPage: FC = () => {
                                       {/* Cross-document consistency checks */}
                                       {verifResult.consistency_findings && verifResult.consistency_findings.length > 0 && (
                                         <div>
-                                          <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                                          <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-1.5">
                                             Cross-Document Consistency Audits
                                           </p>
                                           <div className="space-y-1.5">
                                             {verifResult.consistency_findings.map((f: ConsistencyFinding, fIdx: number) => (
                                               <div
                                                 key={fIdx}
-                                                className="p-2.5 rounded-xl bg-white border border-slate-200/90 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2 shadow-2xs"
+                                                className="p-2.5 rounded-xl bg-white border border-slate-200/90 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2"
                                               >
                                                 <div>
                                                   <span className="font-semibold text-slate-800">{f.field_name}</span>
                                                   <p className="text-[11px] text-slate-500 mt-0.5">{f.explanation}</p>
                                                 </div>
                                                 <span
-                                                  className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase shrink-0 ${
+                                                  className={`px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase shrink-0 ${
                                                     f.status === 'match'
                                                       ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
                                                       : f.status === 'mismatch'
@@ -1076,7 +1003,7 @@ export const AdminPlaceholderPage: FC = () => {
                                       {/* Deterministic checks */}
                                       {verifResult.field_validations && verifResult.field_validations.length > 0 && (
                                         <div>
-                                          <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                                          <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-1.5">
                                             Format & Checksum Verifications
                                           </p>
                                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-xs">
@@ -1103,7 +1030,7 @@ export const AdminPlaceholderPage: FC = () => {
                                       {/* Extracted Fields */}
                                       {verifResult.extracted_fields && Object.keys(verifResult.extracted_fields).length > 0 && (
                                         <div className="p-2.5 rounded-xl bg-slate-100/70 border border-slate-200/60 text-[11px] font-mono">
-                                          <span className="text-[10px] uppercase font-bold text-slate-500 font-sans block mb-1">
+                                          <span className="text-[10px] uppercase font-semibold text-slate-500 font-sans block mb-1">
                                             Extracted Attributes (Nemotron 3.5 Parse)
                                           </span>
                                           <div className="flex flex-wrap gap-2">
@@ -1131,10 +1058,10 @@ export const AdminPlaceholderPage: FC = () => {
 
                   {/* TAB 3: CLARIFICATION REQUESTS */}
                   {detailTab === 'clarifications' && (
-                    <div className="bg-white p-6 rounded-3xl shadow-xl shadow-slate-200/70 border border-slate-200/80 space-y-4 text-left">
+                    <div className="bg-white p-6 rounded-[32px] space-y-4 text-left">
                       <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                         <div>
-                          <h3 className="text-sm font-bold text-slate-900">
+                          <h3 className="text-sm font-semibold text-slate-900">
                             Clarification Requests ({appDetail.clarifications?.length || 0})
                           </h3>
                           <p className="text-[11px] text-slate-500">
@@ -1144,7 +1071,7 @@ export const AdminPlaceholderPage: FC = () => {
                         <button
                           type="button"
                           onClick={() => setIsClarificationOpen(true)}
-                          className="px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold cursor-pointer shadow-sm shadow-amber-600/20"
+                          className="px-3 py-1.5 rounded-full bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold cursor-pointer"
                         >
                           + Request Clarification
                         </button>
@@ -1171,7 +1098,7 @@ export const AdminPlaceholderPage: FC = () => {
                                     : 'General Application Clarification'}
                                 </span>
                                 <span
-                                  className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase border ${
+                                  className={`px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase border ${
                                     item.status === 'resolved'
                                       ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
                                       : 'bg-amber-50 text-amber-800 border-amber-300'
@@ -1182,13 +1109,13 @@ export const AdminPlaceholderPage: FC = () => {
                               </div>
 
                               <div className="p-3 rounded-xl bg-white border border-slate-200/80">
-                                <span className="text-[10px] font-bold uppercase text-slate-400 block">Admin Message:</span>
+                                <span className="text-[10px] font-semibold uppercase text-slate-400 block">Admin Message:</span>
                                 <p className="text-slate-800 font-medium mt-0.5">{item.clarification_message}</p>
                               </div>
 
                               {item.vendor_response && (
                                 <div className="p-3 rounded-xl bg-blue-50/60 border border-blue-200/80">
-                                  <span className="text-[10px] font-bold uppercase text-blue-700 block">Vendor Response:</span>
+                                  <span className="text-[10px] font-semibold uppercase text-blue-700 block">Vendor Response:</span>
                                   <p className="text-slate-800 font-medium mt-0.5">{item.vendor_response}</p>
                                   {item.replaced_document_id && (
                                     <span className="text-[10px] font-mono text-blue-800 block mt-1">
@@ -1206,9 +1133,9 @@ export const AdminPlaceholderPage: FC = () => {
 
                   {/* TAB 4: INTERNAL ADMIN REVIEW NOTES */}
                   {detailTab === 'comments' && (
-                    <div className="bg-white p-6 rounded-3xl shadow-xl shadow-slate-200/70 border border-slate-200/80 space-y-4 text-left">
+                    <div className="bg-white p-6 rounded-[32px] space-y-4 text-left">
                       <div className="border-b border-slate-100 pb-3">
-                        <h3 className="text-sm font-bold text-slate-900">
+                        <h3 className="text-sm font-semibold text-slate-900">
                           Internal Compliance Notes ({appDetail.comments?.length || 0})
                         </h3>
                         <p className="text-[11px] text-slate-500">
@@ -1223,13 +1150,13 @@ export const AdminPlaceholderPage: FC = () => {
                           placeholder="Add an internal note or observation..."
                           value={newComment}
                           onChange={(e) => setNewComment(e.target.value)}
-                          className="w-full p-3 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#07569B] bg-slate-50/50 resize-none"
+                          className="w-full p-3 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#1F211F] bg-slate-50/50 resize-none"
                         />
                         <div className="flex justify-end">
                           <button
                             type="submit"
                             disabled={commentLoading || !newComment.trim()}
-                            className="px-3.5 py-1.5 rounded-xl bg-[#07569B] hover:bg-[#064780] text-white text-xs font-semibold cursor-pointer shadow-xs disabled:opacity-50"
+                            className="px-3.5 py-1.5 rounded-full bg-[#1F211F] hover:bg-[#3A3D39] text-white text-xs font-semibold cursor-pointer shadow-xs disabled:opacity-50"
                           >
                             {commentLoading ? 'Saving...' : 'Add Note'}
                           </button>
@@ -1269,9 +1196,9 @@ export const AdminPlaceholderPage: FC = () => {
 
                   {/* TAB 5: APPLICATION ACTIVITY TIMELINE */}
                   {detailTab === 'timeline' && (
-                    <div className="bg-white p-6 rounded-3xl shadow-xl shadow-slate-200/70 border border-slate-200/80 space-y-4 text-left">
+                    <div className="bg-white p-6 rounded-[32px] space-y-4 text-left">
                       <div className="border-b border-slate-100 pb-3">
-                        <h3 className="text-sm font-bold text-slate-900">
+                        <h3 className="text-sm font-semibold text-slate-900">
                           Application Activity Timeline ({appDetail.activity?.length || 0})
                         </h3>
                         <p className="text-[11px] text-slate-500">

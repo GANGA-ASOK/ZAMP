@@ -23,15 +23,15 @@ export const FormInput: FC<FormInputProps> = ({
   const inputId = id || label.toLowerCase().replace(/[^a-z0-9]/g, '-');
 
   return (
-    <div className="w-full flex flex-col space-y-1.5 text-left">
-      <label htmlFor={inputId} className="text-sm font-medium text-slate-700 flex items-center justify-between">
+    <div className="w-full flex flex-col space-y-2 text-left">
+      <label htmlFor={inputId} className="text-[13px] font-medium text-slate-600 flex items-center justify-between px-1">
         <span>
-          {label} {required && <span className="text-red-500 font-semibold">*</span>}
+          {label} {required && <span className="text-rose-500">*</span>}
         </span>
-        {!required && <span className="text-xs text-slate-400 font-normal">Optional</span>}
+        {!required && <span className="text-[11px] text-slate-400 font-normal px-2 py-0.5 rounded-full border border-slate-200">Optional</span>}
       </label>
 
-      <div className="relative rounded-xl shadow-xs">
+      <div className="relative rounded-2xl">
         {leftIcon && (
           <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
             {leftIcon}
@@ -40,12 +40,12 @@ export const FormInput: FC<FormInputProps> = ({
 
         <input
           id={inputId}
-          className={`w-full rounded-xl border bg-white px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 transition-all duration-150 focus:outline-hidden focus:ring-2 ${
+          className={`w-full rounded-2xl border px-4 py-3 text-sm text-slate-800 placeholder-slate-400 transition-all duration-150 focus:outline-hidden focus:ring-2 ${
             leftIcon ? 'pl-10' : ''
           } ${rightElement ? 'pr-11' : ''} ${
             error
-              ? 'border-red-300 focus:border-red-500 focus:ring-red-200/50'
-              : 'border-slate-200 hover:border-slate-300 focus:border-[#0875D1] focus:ring-[#0875D1]/20'
+              ? 'border-rose-300 bg-rose-50/60 focus:bg-white focus:border-rose-500 focus:ring-rose-200/60'
+              : 'border-transparent bg-paper hover:bg-[#e7eae5] focus:bg-white focus:border-ink focus:ring-ink/10'
           } ${className}`}
           {...props}
         />
@@ -58,9 +58,9 @@ export const FormInput: FC<FormInputProps> = ({
       </div>
 
       {error ? (
-        <p className="text-xs font-medium text-red-500 animate-fadeIn">{error}</p>
+        <p className="text-xs font-medium text-rose-600 animate-fadeIn px-1">{error}</p>
       ) : helperText ? (
-        <p className="text-xs text-slate-500">{helperText}</p>
+        <p className="text-xs text-slate-500 px-1">{helperText}</p>
       ) : null}
     </div>
   );

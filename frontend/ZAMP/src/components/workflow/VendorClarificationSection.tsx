@@ -160,17 +160,17 @@ export const VendorClarificationSection: FC<VendorClarificationSectionProps> = (
       />
 
       {/* Main Alert Banner */}
-      <div className="bg-amber-50 border border-amber-200/90 rounded-3xl p-6 shadow-sm shadow-amber-900/5 space-y-3">
+      <div className="bg-amber-50 border border-amber-200/90 rounded-[32px] p-6 space-y-3">
         <div className="flex items-start space-x-3.5">
           <div className="w-10 h-10 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 mt-0.5">
             <WarningCircle size={24} weight="fill" />
           </div>
           <div className="flex-1">
             <div className="flex items-center space-x-2">
-              <h2 className="text-base font-bold text-amber-950">
+              <h2 className="text-base font-semibold text-amber-950">
                 Action Required: Clarification Requested
               </h2>
-              <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-amber-200/70 text-amber-900">
+              <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-200/70 text-amber-900">
                 {pendingClarifications.length} Pending
               </span>
             </div>
@@ -201,7 +201,7 @@ export const VendorClarificationSection: FC<VendorClarificationSectionProps> = (
           </div>
           <button
             onClick={() => setStatusMessage(null)}
-            className="text-slate-400 hover:text-slate-600 cursor-pointer ml-4 font-bold"
+            className="text-slate-400 hover:text-slate-600 cursor-pointer ml-4 font-semibold"
           >
             ✕
           </button>
@@ -210,7 +210,7 @@ export const VendorClarificationSection: FC<VendorClarificationSectionProps> = (
 
       {/* Pending Clarification Cards */}
       <div className="space-y-4">
-        <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+        <h3 className="text-xs font-semibold text-slate-700 uppercase tracking-wider">
           Pending Clarifications ({pendingClarifications.length})
         </h3>
 
@@ -228,7 +228,7 @@ export const VendorClarificationSection: FC<VendorClarificationSectionProps> = (
             return (
               <div
                 key={item.id}
-                className="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm space-y-4"
+                className="bg-white rounded-[32px] p-5 border border-slate-200 shadow-sm space-y-4"
               >
                 {/* Header row */}
                 <div className="flex items-start justify-between border-b border-slate-100 pb-3">
@@ -236,7 +236,7 @@ export const VendorClarificationSection: FC<VendorClarificationSectionProps> = (
                     <span className="p-1 rounded-lg bg-amber-50 text-amber-700">
                       <ChatCircleText size={16} weight="bold" />
                     </span>
-                    <span className="text-xs font-bold text-slate-900">
+                    <span className="text-xs font-semibold text-slate-900">
                       {item.related_document_name
                         ? `Document: ${item.related_document_name}`
                         : item.related_field
@@ -256,7 +256,7 @@ export const VendorClarificationSection: FC<VendorClarificationSectionProps> = (
 
                 {/* Admin Message */}
                 <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs text-slate-800 space-y-1">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 block">
                     Admin Request:
                   </span>
                   <p className="leading-relaxed font-medium">{item.clarification_message}</p>
@@ -280,7 +280,7 @@ export const VendorClarificationSection: FC<VendorClarificationSectionProps> = (
                       type="button"
                       disabled={isUploadingThis}
                       onClick={() => handleSelectReplacementFile(item)}
-                      className="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-[#07569B] border border-blue-200 text-xs font-semibold cursor-pointer shadow-2xs flex items-center space-x-1.5 shrink-0 disabled:opacity-50"
+                      className="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-[#1F211F] border border-blue-200 text-xs font-semibold cursor-pointer flex items-center space-x-1.5 shrink-0 disabled:opacity-50"
                     >
                       {isUploadingThis ? (
                         <>
@@ -316,7 +316,7 @@ export const VendorClarificationSection: FC<VendorClarificationSectionProps> = (
                     onChange={(e) =>
                       setResponseTexts((prev) => ({ ...prev, [item.id]: e.target.value }))
                     }
-                    className="w-full p-3 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#07569B] bg-slate-50/40 resize-none"
+                    className="w-full p-3 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#1F211F] bg-slate-50/40 resize-none"
                   />
 
                   <div className="flex justify-end">
@@ -324,7 +324,7 @@ export const VendorClarificationSection: FC<VendorClarificationSectionProps> = (
                       type="button"
                       disabled={isSubmittingThis}
                       onClick={() => handleSubmitResponse(item.id)}
-                      className="px-4 py-1.5 rounded-xl bg-[#07569B] hover:bg-[#064780] text-white text-xs font-semibold cursor-pointer shadow-sm shadow-blue-900/10 flex items-center space-x-1.5 disabled:opacity-50"
+                      className="px-4 py-1.5 rounded-full bg-[#1F211F] hover:bg-[#3A3D39] text-white text-xs font-semibold cursor-pointer flex items-center space-x-1.5 disabled:opacity-50"
                     >
                       {isSubmittingThis && <ArrowClockwise size={13} className="animate-spin" />}
                       <span>Save Response</span>
@@ -340,7 +340,7 @@ export const VendorClarificationSection: FC<VendorClarificationSectionProps> = (
       {/* Resolved Clarifications History */}
       {resolvedClarifications.length > 0 && (
         <div className="space-y-3 pt-2">
-          <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+          <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
             Resolved Clarifications ({resolvedClarifications.length})
           </h3>
           <div className="space-y-2.5">
@@ -353,7 +353,7 @@ export const VendorClarificationSection: FC<VendorClarificationSectionProps> = (
                   <span className="font-semibold text-slate-700">
                     {item.related_document_name || item.related_field || 'General Inquiry'}
                   </span>
-                  <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-bold border border-emerald-200">
+                  <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-semibold border border-emerald-200">
                     Resolved
                   </span>
                 </div>
@@ -369,13 +369,13 @@ export const VendorClarificationSection: FC<VendorClarificationSectionProps> = (
       )}
 
       {/* Resubmit Application Box */}
-      <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-xl shadow-slate-200/50 space-y-4">
+      <div className="bg-white rounded-[32px] p-6 border border-slate-200 space-y-4">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0">
             <FileArrowUp size={22} weight="bold" />
           </div>
           <div>
-            <h3 className="text-base font-bold text-slate-900">
+            <h3 className="text-base font-semibold text-slate-900">
               Resubmit Application for Compliance Review
             </h3>
             <p className="text-xs text-slate-500">
@@ -393,7 +393,7 @@ export const VendorClarificationSection: FC<VendorClarificationSectionProps> = (
             placeholder="e.g. Uploaded revised GST certificate with matched trade name."
             value={resubmissionNotes}
             onChange={(e) => setResubmissionNotes(e.target.value)}
-            className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#07569B] bg-slate-50/50"
+            className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#1F211F] bg-slate-50/50"
           />
         </div>
 
@@ -402,7 +402,7 @@ export const VendorClarificationSection: FC<VendorClarificationSectionProps> = (
             type="button"
             disabled={resubmitting || pendingClarifications.length > 0}
             onClick={handleResubmit}
-            className="px-6 py-2.5 rounded-xl bg-[#0875D1] hover:bg-[#0764B5] text-white text-xs font-semibold cursor-pointer shadow-md shadow-blue-500/20 flex items-center space-x-2 disabled:opacity-40 disabled:cursor-not-allowed"
+            className="px-6 py-2.5 rounded-full bg-[#1F211F] hover:bg-[#3A3D39] text-white text-xs font-semibold cursor-pointer flex items-center space-x-2 disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {resubmitting ? (
               <>

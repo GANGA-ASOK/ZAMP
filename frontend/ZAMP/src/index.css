@@ -1,24 +1,182 @@
 @import "tailwindcss";
 
-@layer base {
-  :root {
-    --primary: #07569b;
-    --primary-hover: #06457d;
-    --primary-dark: #043560;
-    --accent: #0875d1;
-    --accent-light: #e8f3fc;
-    --bg-page: #eef3f8;
-    --card-bg: #ffffff;
-    --text-primary: #1e293b;
-    --text-secondary: #64748b;
-    --text-muted: #94a3b8;
-    --border-color: #e2e8f0;
-  }
+/*
+ * VendorFlow design system — sage / ink / mint / lilac.
+ *
+ * Soft sage canvas, large rounded cards (white, paper, ink), mint and lilac
+ * accents, diagonal hatching, thin outlined pills and round icon buttons.
+ *
+ * Tailwind's stock palettes are remapped so every existing utility class
+ * (slate-*, emerald-*, blue-*, amber-*, rose-* …) renders in this system:
+ *   slate          → warm green-grey neutrals
+ *   emerald/green  → mint      (verified / approve)
+ *   blue/sky/indigo/violet/purple → lilac (info / in progress)
+ *   amber/yellow/orange → sand (needs review / warning)
+ *   rose/red/pink  → coral     (conflict / reject)
+ */
+@theme {
+  --font-sans: "Outfit", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 
+  --color-canvas: #d8dfd7;
+  --color-paper: #eef0ec;
+  --color-ink: #1f211f;
+  --color-ink-soft: #2c2f2b;
+  --color-mint: #a6ef9f;
+  --color-mint-deep: #7fdc77;
+  --color-lilac: #b3a6fb;
+  --color-lilac-deep: #9787f2;
+  --color-sand: #f2d98c;
+  --color-coral: #f4a593;
+
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-3xl: 2rem;
+
+  --shadow-xl: 0 18px 40px -28px rgb(31 33 31 / 0.22);
+  --shadow-2xl: 0 30px 60px -36px rgb(31 33 31 / 0.3);
+  --shadow-lg: 0 12px 28px -20px rgb(31 33 31 / 0.25);
+  --shadow-md: 0 6px 16px -10px rgb(31 33 31 / 0.25);
+
+  /* Neutrals */
+  --color-slate-50: #f4f6f3;
+  --color-slate-100: #eceeea;
+  --color-slate-200: #dde2db;
+  --color-slate-300: #c6cdc4;
+  --color-slate-400: #9ca59a;
+  --color-slate-500: #737b71;
+  --color-slate-600: #575e56;
+  --color-slate-700: #3d433c;
+  --color-slate-800: #2a2e29;
+  --color-slate-900: #1f211f;
+  --color-slate-950: #141514;
+
+  /* Mint (success) */
+  --color-emerald-50: #effbed;
+  --color-emerald-100: #dff8da;
+  --color-emerald-200: #c6f3c0;
+  --color-emerald-300: #a6ef9f;
+  --color-emerald-400: #8fe387;
+  --color-emerald-500: #6fd067;
+  --color-emerald-600: #3f9a39;
+  --color-emerald-700: #2f772b;
+  --color-emerald-800: #255c22;
+  --color-emerald-900: #1b4219;
+  --color-emerald-950: #112b10;
+  --color-green-50: #effbed;
+  --color-green-100: #dff8da;
+  --color-green-500: #6fd067;
+  --color-green-600: #3f9a39;
+  --color-green-700: #2f772b;
+
+  /* Lilac (info / progress) */
+  --color-blue-50: #f4f2fe;
+  --color-blue-100: #e9e4fd;
+  --color-blue-200: #d6cefc;
+  --color-blue-300: #c0b5fb;
+  --color-blue-400: #a99af7;
+  --color-blue-500: #8f7df0;
+  --color-blue-600: #725fdb;
+  --color-blue-700: #5947b8;
+  --color-blue-800: #45378f;
+  --color-blue-900: #342a6b;
+  --color-blue-950: #221b47;
+  --color-sky-50: #f4f2fe;
+  --color-sky-100: #e9e4fd;
+  --color-sky-200: #d6cefc;
+  --color-sky-300: #c0b5fb;
+  --color-sky-400: #a99af7;
+  --color-sky-500: #8f7df0;
+  --color-sky-600: #725fdb;
+  --color-sky-700: #5947b8;
+  --color-sky-800: #45378f;
+  --color-sky-900: #342a6b;
+  --color-indigo-50: #f4f2fe;
+  --color-indigo-100: #e9e4fd;
+  --color-indigo-200: #d6cefc;
+  --color-indigo-300: #c0b5fb;
+  --color-indigo-400: #a99af7;
+  --color-indigo-500: #8f7df0;
+  --color-indigo-600: #725fdb;
+  --color-indigo-700: #5947b8;
+  --color-indigo-800: #45378f;
+  --color-indigo-900: #342a6b;
+  --color-indigo-950: #221b47;
+  --color-violet-50: #f4f2fe;
+  --color-violet-100: #e9e4fd;
+  --color-violet-500: #8f7df0;
+  --color-violet-700: #5947b8;
+  --color-purple-50: #f4f2fe;
+  --color-purple-100: #e9e4fd;
+  --color-purple-500: #8f7df0;
+  --color-purple-700: #5947b8;
+  --color-teal-50: #effbed;
+  --color-teal-600: #3f9a39;
+  --color-teal-700: #2f772b;
+
+  /* Sand (review / warning) */
+  --color-amber-50: #fdf8ea;
+  --color-amber-100: #faefcd;
+  --color-amber-200: #f5e2a3;
+  --color-amber-300: #efd078;
+  --color-amber-400: #e6bd50;
+  --color-amber-500: #d6a332;
+  --color-amber-600: #b08321;
+  --color-amber-700: #87631a;
+  --color-amber-800: #674b16;
+  --color-amber-900: #4c3712;
+  --color-amber-950: #30230b;
+  --color-yellow-50: #fdf8ea;
+  --color-yellow-100: #faefcd;
+  --color-yellow-500: #d6a332;
+  --color-yellow-700: #87631a;
+  --color-orange-50: #fdf8ea;
+  --color-orange-100: #faefcd;
+  --color-orange-500: #d6a332;
+  --color-orange-700: #87631a;
+
+  /* Coral (conflict / reject) */
+  --color-rose-50: #fdf2ef;
+  --color-rose-100: #fbe3dd;
+  --color-rose-200: #f7c9bd;
+  --color-rose-300: #f1a995;
+  --color-rose-400: #ea8a73;
+  --color-rose-500: #dc6a52;
+  --color-rose-600: #c0503a;
+  --color-rose-700: #9b3f2e;
+  --color-rose-800: #773125;
+  --color-rose-900: #57251c;
+  --color-rose-950: #3a1912;
+  --color-red-50: #fdf2ef;
+  --color-red-100: #fbe3dd;
+  --color-red-200: #f7c9bd;
+  --color-red-300: #f1a995;
+  --color-red-400: #ea8a73;
+  --color-red-500: #dc6a52;
+  --color-red-600: #c0503a;
+  --color-red-700: #9b3f2e;
+  --color-red-800: #773125;
+  --color-red-900: #57251c;
+  --color-pink-50: #fdf2ef;
+  --color-pink-500: #dc6a52;
+
+  --animate-fadeIn: fadeIn 0.25s ease-out;
+  --animate-rise: rise 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+@layer base {
   body {
-    background-color: var(--bg-page);
-    color: var(--text-primary);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
     min-height: 100vh;
     margin: 0;
     padding: 0;
@@ -26,7 +184,11 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Custom scrollbar */
+  ::selection {
+    background: var(--color-mint);
+    color: var(--color-ink);
+  }
+
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -35,10 +197,31 @@
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
+    background: #b9c1b7;
     border-radius: 9999px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
+    background: #9ca59a;
+  }
+}
+
+@layer utilities {
+  /* Diagonal hatching, as on the reference's bar and gauge fills */
+  .hatch {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      rgb(31 33 31 / 0.55) 0 1.5px,
+      transparent 1.5px 7px
+    );
+  }
+  .hatch-light {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      rgb(255 255 255 / 0.16) 0 1.5px,
+      transparent 1.5px 7px
+    );
+  }
+  .tabular {
+    font-variant-numeric: tabular-nums;
   }
 }

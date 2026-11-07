@@ -34,12 +34,12 @@ export const FormCheckbox: FC<FormCheckboxProps> = ({
             className="sr-only"
           />
           <div
-            className={`w-5 h-5 rounded-lg border transition-all duration-200 flex items-center justify-center ${
+            className={`w-5 h-5 rounded-md border transition-all duration-200 flex items-center justify-center ${
               checked
-                ? 'bg-[#0875D1] border-[#0875D1] text-white shadow-xs'
+                ? 'bg-mint border-ink text-ink'
                 : error
-                ? 'border-red-400 bg-red-50/50 group-hover:border-red-500'
-                : 'border-slate-300 bg-white group-hover:border-slate-400'
+                ? 'border-rose-400 bg-rose-50 group-hover:border-rose-500'
+                : 'border-slate-400 bg-white group-hover:border-ink'
             }`}
           >
             {checked && <Check size={14} weight="bold" />}
@@ -47,11 +47,11 @@ export const FormCheckbox: FC<FormCheckboxProps> = ({
         </div>
 
         <span className="text-sm text-slate-700 leading-snug select-none group-hover:text-slate-900 transition-colors">
-          {label} {required && <span className="text-red-500 font-semibold">*</span>}
+          {label} {required && <span className="text-rose-500">*</span>}
         </span>
       </label>
 
-      {error && <p className="text-xs font-medium text-red-500 pl-8 animate-fadeIn">{error}</p>}
+      {error && <p className="text-xs font-medium text-rose-600 pl-8 animate-fadeIn">{error}</p>}
     </div>
   );
 };

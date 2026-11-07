@@ -81,7 +81,7 @@ export const ClarificationModal: FC<ClarificationModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-fadeIn font-sans">
-      <div className="bg-white rounded-3xl shadow-2xl border border-slate-200 max-w-lg w-full p-6 text-left space-y-4">
+      <div className="bg-white rounded-[32px] shadow-2xl border border-slate-200 max-w-lg w-full p-6 text-left space-y-4">
         {/* Header */}
         <div className="flex items-start justify-between">
           <div className="flex items-center space-x-3">
@@ -89,7 +89,7 @@ export const ClarificationModal: FC<ClarificationModalProps> = ({
               <WarningCircle size={24} weight="fill" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-slate-900">
+              <h3 className="text-base font-semibold text-slate-900">
                 Request Clarification / Document Correction
               </h3>
               <p className="text-xs text-slate-500 font-mono">
@@ -130,7 +130,7 @@ export const ClarificationModal: FC<ClarificationModalProps> = ({
                   onClick={() => setTargetType(t.id as any)}
                   className={`p-2.5 rounded-xl border text-xs font-semibold flex items-center justify-center space-x-1.5 transition-all cursor-pointer ${
                     active
-                      ? 'bg-blue-50 border-[#07569B] text-[#07569B] shadow-2xs'
+                      ? 'bg-blue-50 border-[#1F211F] text-[#1F211F]'
                       : 'bg-slate-50/70 border-slate-200 text-slate-600 hover:bg-slate-100'
                   }`}
                 >
@@ -154,7 +154,7 @@ export const ClarificationModal: FC<ClarificationModalProps> = ({
               <select
                 value={selectedDocId}
                 onChange={(e) => setSelectedDocId(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#07569B] bg-slate-50/50"
+                className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#1F211F] bg-slate-50/50"
               >
                 {documents.map((doc) => (
                   <option key={doc.id} value={doc.id}>
@@ -174,7 +174,7 @@ export const ClarificationModal: FC<ClarificationModalProps> = ({
             <select
               value={selectedField}
               onChange={(e) => setSelectedField(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#07569B] bg-slate-50/50"
+              className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#1F211F] bg-slate-50/50"
             >
               <option value="company_info.legal_name">Legal Company Name</option>
               <option value="company_info.registration_number">Company Registration / CIN</option>
@@ -190,7 +190,7 @@ export const ClarificationModal: FC<ClarificationModalProps> = ({
                 placeholder="Field name or description"
                 value={customField}
                 onChange={(e) => setCustomField(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#07569B]"
+                className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#1F211F]"
               />
             )}
           </div>
@@ -210,7 +210,7 @@ export const ClarificationModal: FC<ClarificationModalProps> = ({
               if (error) setError('');
             }}
             className={`w-full p-3 rounded-xl border text-xs focus:outline-none bg-slate-50/50 resize-none ${
-              error ? 'border-amber-400 focus:border-amber-500' : 'border-slate-200 focus:border-[#07569B]'
+              error ? 'border-amber-400 focus:border-amber-500' : 'border-slate-200 focus:border-[#1F211F]'
             }`}
           />
           {error && (
@@ -231,7 +231,7 @@ export const ClarificationModal: FC<ClarificationModalProps> = ({
             placeholder="Optional internal reminder or context"
             value={internalNotes}
             onChange={(e) => setInternalNotes(e.target.value)}
-            className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#07569B] bg-slate-50/50"
+            className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#1F211F] bg-slate-50/50"
           />
         </div>
 
@@ -249,7 +249,7 @@ export const ClarificationModal: FC<ClarificationModalProps> = ({
             type="button"
             disabled={loading}
             onClick={handleConfirm}
-            className="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold cursor-pointer shadow-sm shadow-amber-600/20 flex items-center space-x-1.5 disabled:opacity-50"
+            className="px-4 py-2 rounded-full bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold cursor-pointer flex items-center space-x-1.5 disabled:opacity-50"
           >
             {loading && <ArrowClockwise size={14} className="animate-spin" />}
             <span>Send Request</span>
