@@ -1,0 +1,9 @@
+# SSH / server keys — never commit
+*.ppk
+*.pem
+*.key
+id_rsa*
+
+# Environment secrets
+.env
+!frontend/ZAMP/.env

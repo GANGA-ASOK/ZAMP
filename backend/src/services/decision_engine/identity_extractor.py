@@ -138,8 +138,15 @@ def _clean_markdown(text: str) -> list[str]:
     lines: list[str] = []
     text = re.sub(r"<br\s*/?>", "\n", text or "", flags=re.IGNORECASE)  # Nemotron Parse emits <br> in cells
     text = re.sub(r"</?[a-zA-Z][^>\n]{0,40}>", " ", text)  # drop any other inline HTML tags
+    # Nemotron Parse emits card-like layouts (e.g. PAN cards) as LaTeX tabular:
+    # rows end in '\\' and cells are separated by '&'. Convert to pipe rows.
+    text = re.sub(r"\\multicolumn\{\d+\}\{[^}]*\}\{([^}]*)\}", r"\1", text)
+    text = re.sub(r"\\(?:begin|end)\{tabular\}(?:\{[^}]*\})?|\\hline", "\n", text)
+    is_latex_row = re.compile(r"(?<!\\)&|\\\\\s*$")
     for raw in text.splitlines():
         line = raw.strip()
+        if is_latex_row.search(line):
+            line = "| " + " | ".join(re.split(r"(?<!\\)&", re.sub(r"\\\\\s*$", "", line))) + " |"
         if not line or set(line) <= set("|-: "):
             continue
         line = re.sub(r"[*_`#>]+", "", line).strip()
@@ -263,6 +270,8 @@ class RuleBasedIdentityExtractor:
             mm = re.search(r"certif(?:y|ies)\s+that\s+(.+?)\s+(?:is|has\s+been)\s+incorporated", flat, re.IGNORECASE | re.DOTALL)
             if mm:
                 entity = " ".join(mm.group(1).split())
+        if not entity and document_category == "pan_card":
+            entity = cls._unlabelled_pan_holder(lines)
         if document_category == "bank_proof" and fields["account_holder_name"]:
             entity = fields["account_holder_name"]
         fields["entity_name"] = cls._clean_name(entity)
@@ -278,6 +287,28 @@ class RuleBasedIdentityExtractor:
             fields["incorporation_date"] = dm.group(1) if dm else fields["incorporation_date"]
         fields["state"] = state_from_gstin(gstin) or None
         return fields
+
+    @staticmethod
+    def _unlabelled_pan_holder(lines: list[str]) -> str | None:
+        """
+        Older PAN cards print holder name, father's name and DOB as bare lines
+        (no 'Name' label) right after the INCOME TAX DEPARTMENT / GOVT. OF INDIA
+        header. The holder's name is the first all-Latin text line after it.
+        """
+        header = re.compile(r"income\s+tax|govt\.?\s+of\s+india|government\s+of\s+india", re.IGNORECASE)
+        header_rows = [i for i, l in enumerate(lines[:8]) if header.search(l)]
+        if not header_rows:
+            return None
+        start = header_rows[-1] + 1  # the header can span several rows
+        for line in lines[start:start + 4]:
+            value = line.split(":")[0].strip()  # flattened table rows look like 'NAME: ...'
+            if header.search(value):
+                continue
+            if PAN_RE.search(value.upper()) or DATE_RE.search(value) or re.search(r"account\s+number|signature", value, re.IGNORECASE):
+                return None  # reached the DOB / PAN line: no name above it
+            if re.fullmatch(r"[A-Za-z][A-Za-z .']{1,80}", value):
+                return value
+        return None
 
     @staticmethod
     def _clean_name(value: str | None) -> str | None:

@@ -60,7 +60,7 @@ from src.services.nvidia_super_vl_service import NvidiaSuperVLService
 logger = logging.getLogger(__name__)
 
 ENGINE_VERSION = "2.0.0"
-EXTRACTOR_VERSION = "identity-v2"
+EXTRACTOR_VERSION = "identity-v3"
 
 STAGES: list[tuple[str, str]] = [
     ("intake", "Load application"),
