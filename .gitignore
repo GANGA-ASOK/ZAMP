@@ -7,3 +7,8 @@ id_rsa*
 # Environment secrets
 .env
 !frontend/ZAMP/.env
+
+# Personal sample documents at the project root (real PAN card / photos).
+# The test-case copies in backend/src/scripts/demo_assets and test_documents stay tracked.
+/images*.pdf
+/images*.jpg
