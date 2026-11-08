@@ -1,0 +1,71 @@
+{
+  "reference_number": "VND-DEMO-0009",
+  "status": "submitted",
+  "user_id": null,
+  "company_info": {
+    "legal_company_name": "Kumar Digital Services Private Limited",
+    "trade_name": "Kumar Digital",
+    "business_entity_type": "Private Limited Company",
+    "country": "India",
+    "registration_number": "U72900DL2020PTC890123",
+    "incorporation_date": "2020-02-11",
+    "industry": "Information Technology",
+    "website": "",
+    "registered_address": {
+      "street": "F-21 Connaught Place",
+      "city": "New Delhi",
+      "state": "Delhi",
+      "pincode": "110001",
+      "country": "India"
+    },
+    "is_operational_same_as_registered": true,
+    "operational_address": null
+  },
+  "contact_info": {
+    "primary": {
+      "first_name": "Rohit",
+      "last_name": "Kumar",
+      "full_name": "",
+      "designation": "Director",
+      "email": "rohit@kumardigital.in",
+      "phone": "9810098100",
+      "department": "Management"
+    },
+    "secondary": null,
+    "signatory": {
+      "first_name": "",
+      "last_name": "",
+      "full_name": "Rohit Kumar",
+      "designation": "Director",
+      "email": "rohit@kumardigital.in",
+      "phone": "",
+      "department": ""
+    },
+    "confirm_authorized": true
+  },
+  "tax_details": {
+    "pan_number": "AAHCK4471B",
+    "gst_status": "Registered",
+    "gstin": "07AAHCK4471B1Z6",
+    "gst_state": "Delhi",
+    "tan_number": ""
+  },
+  "banking_details": {
+    "account_holder_name": "Kumar Digital Services Private Limited",
+    "bank_name": "ICICI Bank",
+    "account_number": "012305008899",
+    "ifsc_code": "ICIC0000123",
+    "account_type": "Current Account",
+    "bank_branch": "Connaught Place, New Delhi",
+    "confirm_bank_ownership": true
+  },
+  "documents": [],
+  "declarations": {
+    "confirm_accurate": true,
+    "authorize_verification": true,
+    "agree_terms": true
+  },
+  "review_notes": "",
+  "rejection_reason": "",
+  "clarification_requests": []
+}

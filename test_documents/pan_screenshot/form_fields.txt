@@ -1,0 +1,45 @@
+Kumar Digital — PAN card is a screenshot of someone else's card  (expected AI decision: REVIEW)
+
+
+STEP 1 - COMPANY INFORMATION
+  Legal company name           Kumar Digital Services Private Limited
+  Trade name                   Kumar Digital
+  Business entity type         Private Limited Company
+  Country                      India
+  Registration number (CIN)    U72900DL2020PTC890123
+  Incorporation date           2020-02-11
+  Industry                     Information Technology
+  Registered address           F-21 Connaught Place
+  City                         New Delhi
+  State                        Delhi
+  Pincode                      110001
+  Operational address          Same as registered
+
+STEP 2 - CONTACT INFORMATION
+  Primary first name           Rohit
+  Primary last name            Kumar
+  Designation                  Director
+  Email                        rohit@kumardigital.in
+  Mobile                       9810098100
+  Department                   Management
+  Authorized signatory         Rohit Kumar
+  Signatory designation        Director
+  Signatory email              rohit@kumardigital.in
+
+STEP 3 - TAX & BANKING
+  PAN                          AAHCK4471B
+  GST status                   Registered
+  GSTIN                        07AAHCK4471B1Z6
+  GST state                    Delhi
+  Account holder name          Kumar Digital Services Private Limited
+  Bank name                    ICICI Bank
+  Account number               012305008899
+  IFSC                         ICIC0000123
+  Account type                 Current Account
+  Branch                       Connaught Place, New Delhi
+
+STEP 4 - DOCUMENTS TO UPLOAD
+  Pan Card                     pan_card.jpg
+  Gst Certificate              gst_reg06.pdf
+  Certificate Of Incorporation certificate_of_incorporation.pdf
+  Bank Proof                   cancelled_cheque.pdf

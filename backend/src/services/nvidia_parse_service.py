@@ -122,6 +122,15 @@ class NvidiaParseService:
                         content = (message.get("content") or "").strip()
                         if not content and message.get("tool_calls"):
                             content = self._text_from_tool_calls(message["tool_calls"])
+                        if not content and attempt < max_retries:
+                            # Nemotron Parse intermittently returns an empty result for
+                            # a readable scan; a retry almost always succeeds.
+                            logger.warning(
+                                "NVIDIA Parse returned no text for page %d (attempt %d/%d). Retrying...",
+                                page.page_number, attempt, max_retries,
+                            )
+                            await asyncio.sleep(backoff)
+                            continue
                         tables = self._extract_tables_from_markdown(content)
                         return ParsedPageResult(
                             page_number=page.page_number,

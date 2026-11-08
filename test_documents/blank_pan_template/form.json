@@ -1,0 +1,71 @@
+{
+  "reference_number": "VND-DEMO-0008",
+  "status": "submitted",
+  "user_id": null,
+  "company_info": {
+    "legal_company_name": "Zenith Packaging Private Limited",
+    "trade_name": "Zenith Packaging",
+    "business_entity_type": "Private Limited Company",
+    "country": "India",
+    "registration_number": "U21012TG2019PTC789012",
+    "incorporation_date": "2019-09-16",
+    "industry": "Information Technology",
+    "website": "",
+    "registered_address": {
+      "street": "Plot 8, IDA Cherlapally",
+      "city": "Hyderabad",
+      "state": "Telangana",
+      "pincode": "500051",
+      "country": "India"
+    },
+    "is_operational_same_as_registered": true,
+    "operational_address": null
+  },
+  "contact_info": {
+    "primary": {
+      "first_name": "Kiran",
+      "last_name": "Reddy",
+      "full_name": "",
+      "designation": "Director",
+      "email": "kiran@zenithpack.in",
+      "phone": "9849012345",
+      "department": "Management"
+    },
+    "secondary": null,
+    "signatory": {
+      "first_name": "",
+      "last_name": "",
+      "full_name": "Kiran Reddy",
+      "designation": "Director",
+      "email": "kiran@zenithpack.in",
+      "phone": "",
+      "department": ""
+    },
+    "confirm_authorized": true
+  },
+  "tax_details": {
+    "pan_number": "AAACZ8890H",
+    "gst_status": "Registered",
+    "gstin": "36AAACZ8890H1Z2",
+    "gst_state": "Telangana",
+    "tan_number": ""
+  },
+  "banking_details": {
+    "account_holder_name": "Zenith Packaging Private Limited",
+    "bank_name": "Axis Bank",
+    "account_number": "919020034567812",
+    "ifsc_code": "UTIB0000456",
+    "account_type": "Current Account",
+    "bank_branch": "Cherlapally, Hyderabad",
+    "confirm_bank_ownership": true
+  },
+  "documents": [],
+  "declarations": {
+    "confirm_accurate": true,
+    "authorize_verification": true,
+    "agree_terms": true
+  },
+  "review_notes": "",
+  "rejection_reason": "",
+  "clarification_requests": []
+}

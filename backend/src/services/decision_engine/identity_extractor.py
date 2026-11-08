@@ -89,7 +89,7 @@ NAME_LABELS: dict[str, list[str]] = {
         r"name\s+of\s+(?:the\s+)?(?:deductor|assessee|taxpayer)",
         r"name",
     ],
-    "trade_name": [r"trade\s+name", r"brand\s+name"],
+    "trade_name": [r"trade\s+name,?\s+if\s+any", r"trade\s+name", r"brand\s+name"],  # REG-06: "Trade Name, if any"
     "account_holder_name": [
         r"account\s+holder(?:'?s)?\s+name",
         r"name\s+of\s+(?:the\s+)?account\s+holder",
@@ -213,7 +213,9 @@ class RuleBasedIdentityExtractor:
         # --- Structured identifiers -------------------------------------
         gstin = _first(GSTIN_RE, upper)
         fields["gstin"] = gstin
-        cin = _first(CIN_RE, upper) or _first(LLPIN_RE, upper)
+        # LLPIN looks like 'AAA-0000'; every Indian cheque prints 'CTS-2010', which is not one.
+        llpin = next((m for m in LLPIN_RE.findall(upper) if not m.startswith("CTS-")), None)
+        cin = _first(CIN_RE, upper) or llpin
         fields["cin"] = cin
         fields["udyam_number"] = _first(UDYAM_RE, upper)
         fields["ifsc_code"] = _first(IFSC_RE, upper)
@@ -264,6 +266,8 @@ class RuleBasedIdentityExtractor:
         # --- Names --------------------------------------------------------
         for key in ("trade_name", "account_holder_name", "bank_name", "incorporation_date"):
             fields[key] = _labelled_value(lines, NAME_LABELS[key])
+        if not fields["account_holder_name"] and document_category == "bank_proof":
+            fields["account_holder_name"] = cls._cheque_signatory_name(lines)
 
         entity = _labelled_value(lines, NAME_LABELS["entity_name"])
         if not entity and document_category == "certificate_of_incorporation":
@@ -287,6 +291,22 @@ class RuleBasedIdentityExtractor:
             fields["incorporation_date"] = dm.group(1) if dm else fields["incorporation_date"]
         fields["state"] = state_from_gstin(gstin) or None
         return fields
+
+    @staticmethod
+    def _cheque_signatory_name(lines: list[str]) -> str | None:
+        """
+        Cheques print the account name above the signature line, unlabelled:
+        "For ACME TECHNOLOGIES PVT LTD / Authorised Signatories" on company
+        accounts, or just the holder's name above "Please sign above".
+        """
+        sig = re.compile(r"authori[sz]ed\s+signator|please\s+sign\s+above", re.IGNORECASE)
+        for i, line in enumerate(lines):
+            if sig.search(line):
+                for prev in reversed(lines[max(0, i - 3):i]):
+                    name = re.sub(r"^\s*for\s+", "", prev, flags=re.IGNORECASE).strip(" .:")
+                    if re.fullmatch(r"[A-Za-z][A-Za-z .&'()-]{2,80}", name) and not re.search(r"account|a/c|ifsc|bearer|rupees|^pay$|^rs$", name, re.IGNORECASE):
+                        return name
+        return None
 
     @staticmethod
     def _unlabelled_pan_holder(lines: list[str]) -> str | None:

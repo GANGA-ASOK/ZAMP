@@ -156,9 +156,11 @@ class VerificationService:
                 parsed_text = "\n\n--- Page Break ---\n\n".join([p.text for p in parsed_pages if p.text])
 
             # 6. Extract fields & cross-document reasoning via Nemotron 3.5 Super VL
+            # Born-digital PDFs carry an exact text layer: prefer it over OCR so a noisy
+            # OCR read can't change the extracted values. Scans fall back to OCR.
             super_vl_output = await self.super_vl_service.extract_and_verify(
                 document_category=category,
-                parsed_text=parsed_text,
+                parsed_text=embedded_text if len(embedded_text.strip()) >= 20 else parsed_text,
                 vendor_data=raw_vendor,
             )
 

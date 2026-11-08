@@ -32,13 +32,32 @@ export const TestCasePicker: FC<TestCasePickerProps> = ({ onLoad }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  const fetchCases = () => {
+    setUnavailable(false);
     listTestCases()
       .then(setCases)
       .catch(() => setUnavailable(true));
-  }, []);
+  };
 
-  if (unavailable) return null;
+  useEffect(fetchCases, []);
+
+  // Never disappear silently (e.g. backend restarting): say so and offer a retry.
+  if (unavailable) {
+    return (
+      <div className="mb-8 rounded-[28px] bg-lilac/45 p-3 pl-4 text-[13px] flex flex-wrap items-center gap-2 text-slate-600">
+        <span className="w-8 h-8 rounded-full bg-ink text-white flex items-center justify-center"><Flask size={14} weight="fill" /></span>
+        <WarningCircle size={14} weight="bold" className="text-amber-700" />
+        Test cases couldn't be loaded.
+        <button
+          type="button"
+          onClick={fetchCases}
+          className="px-3 py-1 rounded-full bg-white text-ink hover:bg-slate-50 cursor-pointer font-medium"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
 
   const handleChange = async (key: string) => {
     setSelected(key);

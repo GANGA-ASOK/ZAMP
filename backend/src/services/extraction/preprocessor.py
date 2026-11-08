@@ -153,6 +153,13 @@ class DocumentPreprocessor:
                 if img.width > max_dim or img.height > max_dim:
                     img.thumbnail((max_dim, max_dim), Image.Resampling.LANCZOS)
 
+                # Upscale small phone photos / screenshots: OCR often returns nothing
+                # for a document that is only a few hundred pixels across.
+                min_long_side = 1600
+                if max(img.width, img.height) < min_long_side:
+                    scale = min_long_side / max(img.width, img.height)
+                    img = img.resize((round(img.width * scale), round(img.height * scale)), Image.Resampling.LANCZOS)
+
                 buf = io.BytesIO()
                 img.save(buf, format="JPEG", quality=90)
                 jpeg_bytes = buf.getvalue()

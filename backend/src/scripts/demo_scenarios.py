@@ -13,22 +13,44 @@ script (src/scripts/seed_demo_scenarios.py).
     5. duplicate_bank      → reject    bank account already belongs to another vendor
     6. moved_office        → review    GST certificate shows another address and mobile
     7. incomplete          → review    GST certificate missing, bank proof is an unreadable scan
+    8. blank_pan_template  → review    PAN card upload is a blank sample template (scanned image)
+    9. pan_screenshot      → review    PAN card is a blurry screenshot of someone else's card (reject if OCR reads it)
 """
 
 from __future__ import annotations
 
 import copy
 import io
+import re
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
 from typing import Any
+
+from src.scripts.document_renderer import CancelledCheque, GstCertificate, IncCertificate, PanCard
 
 # ---------------------------------------------------------------------------
 # File builders
 # ---------------------------------------------------------------------------
 
 
-def make_pdf(text: str) -> bytes:
-    """A one-page PDF with selectable text (like a digitally issued certificate)."""
+ASSET_DIR = Path(__file__).parent / "demo_assets"
+
+
+def asset(name: str) -> bytes:
+    """A real image file shipped with the demo (e.g. a photographed / screenshotted document)."""
+    return (ASSET_DIR / name).read_bytes()
+
+
+def make_pdf(text) -> bytes:
+    """
+    Render a test document. Document specs (PanCard, GstCertificate, ...) are drawn
+    in their real-world layout; plain strings fall back to a simple text page.
+    """
+    if isinstance(text, bytes):
+        return text  # an image asset, uploaded as-is
+    if hasattr(text, "render"):
+        return text.render()
+
     import pymupdf as fitz
 
     doc = fitz.open()
@@ -128,56 +150,26 @@ def _vendor(
 # ---------------------------------------------------------------------------
 
 
-def pan_card(name: str, pan: str, date: str) -> str:
-    return f"""
-INCOME TAX DEPARTMENT
-GOVT. OF INDIA
-Permanent Account Number Card
-PAN: {pan}
-Name: {name}
-Date of Incorporation/Formation: {date}
-"""
+def pan_card(name: str, pan: str, date: str, father_name: str | None = None) -> PanCard:
+    return PanCard(name=name, pan=pan, date=date, father_name=father_name)
 
 
 def gst_certificate(gstin: str, legal: str, trade: str, address: str, mobile: str | None = None,
-                    liability_date: str = "01/07/2017") -> str:
-    mob = f"\nMobile: {mobile}" if mobile else ""
-    return f"""
-Government of India
-Form GST REG-06
-Registration Certificate
-Registration Number (GSTIN): {gstin}
-Legal Name: {legal}
-Trade Name: {trade}
-Constitution of Business: Private Limited Company
-Address of Principal Place of Business: {address}{mob}
-Date of Liability: {liability_date}
-Type of Registration: Regular
-"""
+                    liability_date: str = "01/07/2017") -> GstCertificate:
+    return GstCertificate(gstin=gstin, legal_name=legal, trade_name=trade, address=address,
+                          mobile=mobile, liability_date=liability_date)
 
 
-def incorporation_certificate(name: str, cin: str, date_words: str, address: str) -> str:
-    return f"""
-GOVERNMENT OF INDIA
-MINISTRY OF CORPORATE AFFAIRS
-Certificate of Incorporation
-I hereby certify that {name} is incorporated
-on this {date_words} under the Companies Act, 2013.
-Corporate Identity Number: {cin}
-Registered Office: {address}
-Registrar of Companies
-"""
+def incorporation_certificate(name: str, cin: str, date_words: str, address: str) -> IncCertificate:
+    return IncCertificate(company=name, cin=cin, date_words=date_words, address=address)
 
 
-def bank_proof(bank: str, holder: str, account: str, ifsc: str, branch: str) -> str:
-    return f"""
-{bank.upper()}
-CANCELLED CHEQUE
-Account Holder Name: {holder}
-A/C No: {account}
-IFSC: {ifsc}
-Branch: {branch}
-"""
+_COMPANY_WORDS = re.compile(r"\b(LTD|LIMITED|LLP|PVT|PRIVATE|CO|COMPANY|TRADERS|FOODS|WORKS|ENTERPRISES)\b", re.IGNORECASE)
+
+
+def bank_proof(bank: str, holder: str, account: str, ifsc: str, branch: str) -> CancelledCheque:
+    return CancelledCheque(bank=bank, holder=holder, account=account, ifsc=ifsc, branch=branch,
+                           company_account=bool(_COMPANY_WORDS.search(holder)))
 
 
 # ---------------------------------------------------------------------------
@@ -216,8 +208,11 @@ def _happy_docs(v: dict[str, Any], *, mobile: str | None = None, gst_address: st
     ]
 
 
-def _scenario(key: str, title: str, expected: str, story: str, form: dict[str, Any], docs: list) -> dict[str, Any]:
-    return {"key": key, "title": title, "expected": expected, "story": story, "form": form, "documents": docs}
+def _scenario(key: str, title: str, expected: str, story: str, form: dict[str, Any], docs: list,
+              mock_expected: str | None = None) -> dict[str, Any]:
+    """``mock_expected``: outcome in offline/mock mode, when a case depends on live OCR of an image."""
+    return {"key": key, "title": title, "expected": expected, "story": story, "form": form, "documents": docs,
+            "mock_expected": mock_expected or expected}
 
 
 def build_scenarios() -> list[dict[str, Any]]:
@@ -270,7 +265,7 @@ def build_scenarios() -> list[dict[str, Any]]:
              holder="Mehta Engineering Works Private Limited", bank="ICICI Bank", account="123405006789",
              ifsc="ICIC0000456", branch="Navrangpura, Ahmedabad")
     docs = _happy_docs(v)
-    docs[0] = ("pan_card", "pan_card.pdf", pan_card("RAJESH MEHTA", v["pan"], "11/02/1979"))
+    docs[0] = ("pan_card", "pan_card.pdf", pan_card("RAJESH MEHTA", v["pan"], "11/02/1979", father_name="SURESH KUMAR MEHTA"))
     s.append(_scenario(
         "personal_pan", "Mehta Engineering — director's personal PAN used for the company", "review",
         "Everything matches across documents, but the PAN's 4th character is 'P' (individual). A private limited "
@@ -321,6 +316,41 @@ def build_scenarios() -> list[dict[str, Any]]:
             ("pan_card", "pan_card.pdf", pan_card("SUNRISE FOODS", v["pan"], "01/04/2015")),
             ("bank_proof", "cheque_photo.jpg", None),  # None → blank scan image
         ],
+    ))
+
+    # 8. PAN card upload is a blank sample template ---------------------------
+    v = dict(ACME, ref="VND-DEMO-0008", legal_name="Zenith Packaging Private Limited", trade_name="Zenith Packaging",
+             cin="U21012TG2019PTC789012", inc_date="2019-09-16", street="Plot 8, IDA Cherlapally", city="Hyderabad",
+             state="Telangana", pincode="500051", first="Kiran", last="Reddy", phone="9849012345",
+             email="kiran@zenithpack.in", pan="AAACZ8890H", gstin="36AAACZ8890H1Z2",
+             holder="Zenith Packaging Private Limited", bank="Axis Bank", account="919020034567812",
+             ifsc="UTIB0000456", branch="Cherlapally, Hyderabad")
+    docs = _happy_docs(v)
+    docs[0] = ("pan_card", "pan_card_scan.jpg", asset("pan_card_blank_template.jpg"))
+    s.append(_scenario(
+        "blank_pan_template", "Zenith Packaging — PAN card is a blank sample template", "review",
+        "Every company document is consistent, but the 'PAN card' is a photo of a blank sample card: the PAN reads "
+        "XXXXXXXXXX and the name and date are placeholders. Nothing can be verified from it, so the vendor is asked "
+        "to upload their actual PAN card — this is a scanned image, so it exercises the OCR path.",
+        _vendor(**v), docs,
+    ))
+
+    # 9. PAN card is a screenshot of someone else's card ------------------------
+    v = dict(ACME, ref="VND-DEMO-0009", legal_name="Kumar Digital Services Private Limited", trade_name="Kumar Digital",
+             cin="U72900DL2020PTC890123", inc_date="2020-02-11", street="F-21 Connaught Place", city="New Delhi",
+             state="Delhi", pincode="110001", first="Rohit", last="Kumar", phone="9810098100",
+             email="rohit@kumardigital.in", pan="AAHCK4471B", gstin="07AAHCK4471B1Z6",
+             holder="Kumar Digital Services Private Limited", bank="ICICI Bank", account="012305008899",
+             ifsc="ICIC0000123", branch="Connaught Place, New Delhi")
+    docs = _happy_docs(v)
+    docs[0] = ("pan_card", "pan_card.jpg", asset("pan_card_video_screenshot.jpg"))
+    s.append(_scenario(
+        "pan_screenshot", "Kumar Digital — PAN card is a screenshot of someone else's card", "review",
+        "The uploaded 'PAN card' is a low-resolution screenshot from a social-media video showing an individual's card "
+        "(RAHUL KUMAR, ABCPK1234F). It can never be approved: when OCR cannot read it the case goes to review and the "
+        "vendor is asked for a clear copy of the company's own PAN card; when OCR does read it, the PAN matches neither "
+        "the form nor the GSTIN (AAHCK4471B) and is an individual's 'P' PAN, which escalates it to reject.",
+        _vendor(**v), docs,
     ))
     return s
 

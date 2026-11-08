@@ -60,7 +60,7 @@ from src.services.nvidia_super_vl_service import NvidiaSuperVLService
 logger = logging.getLogger(__name__)
 
 ENGINE_VERSION = "2.0.0"
-EXTRACTOR_VERSION = "identity-v3"
+EXTRACTOR_VERSION = "identity-v4"
 
 STAGES: list[tuple[str, str]] = [
     ("intake", "Load application"),
@@ -496,7 +496,8 @@ class ApplicationDecisionService:
             rules = rules_ocr
         llm = await self.llm.complete_json(
             LLM_EXTRACTION_SYSTEM_PROMPT,
-            build_llm_extraction_prompt(ev.category, text),
+            # The exact text layer (born-digital PDFs) beats OCR for the LLM too; OCR covers scans.
+            build_llm_extraction_prompt(ev.category, layer or text),
             max_tokens=1024,
         )
         fields, method = reconcile_extractions(rules, llm if isinstance(llm, dict) else None, f"{parse_text}\n{layer}")

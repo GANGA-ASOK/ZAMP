@@ -1,0 +1,45 @@
+Zenith Packaging — PAN card is a blank sample template  (expected AI decision: REVIEW)
+
+
+STEP 1 - COMPANY INFORMATION
+  Legal company name           Zenith Packaging Private Limited
+  Trade name                   Zenith Packaging
+  Business entity type         Private Limited Company
+  Country                      India
+  Registration number (CIN)    U21012TG2019PTC789012
+  Incorporation date           2019-09-16
+  Industry                     Information Technology
+  Registered address           Plot 8, IDA Cherlapally
+  City                         Hyderabad
+  State                        Telangana
+  Pincode                      500051
+  Operational address          Same as registered
+
+STEP 2 - CONTACT INFORMATION
+  Primary first name           Kiran
+  Primary last name            Reddy
+  Designation                  Director
+  Email                        kiran@zenithpack.in
+  Mobile                       9849012345
+  Department                   Management
+  Authorized signatory         Kiran Reddy
+  Signatory designation        Director
+  Signatory email              kiran@zenithpack.in
+
+STEP 3 - TAX & BANKING
+  PAN                          AAACZ8890H
+  GST status                   Registered
+  GSTIN                        36AAACZ8890H1Z2
+  GST state                    Telangana
+  Account holder name          Zenith Packaging Private Limited
+  Bank name                    Axis Bank
+  Account number               919020034567812
+  IFSC                         UTIB0000456
+  Account type                 Current Account
+  Branch                       Cherlapally, Hyderabad
+
+STEP 4 - DOCUMENTS TO UPLOAD
+  Pan Card                     pan_card_scan.jpg
+  Gst Certificate              gst_reg06.pdf
+  Certificate Of Incorporation certificate_of_incorporation.pdf
+  Bank Proof                   cancelled_cheque.pdf

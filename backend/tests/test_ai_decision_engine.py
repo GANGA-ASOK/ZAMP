@@ -56,7 +56,7 @@ def test_scenario_outcome(seeded, key):
     run = _run(seeded[key])
     assert run["status"] == "completed", run.get("error")
     decision = run["decision"]
-    assert decision["outcome"] == SCENARIOS[key]["expected"], (
+    assert decision["outcome"] == SCENARIOS[key]["mock_expected"], (
         key, decision["headline"], [(f["severity"], f["code"], f["detail"]) for f in decision["reasons"]]
     )
     # Every stage executed and was recorded.

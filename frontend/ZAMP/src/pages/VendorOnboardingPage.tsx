@@ -840,6 +840,9 @@ export const VendorOnboardingPage: FC = () => {
         </div>
       )}
 
+      {/* Test-case prefill: available on both the form and the documents view */}
+      <TestCasePicker onLoad={handleLoadTestCase} />
+
       {/* Main Body: Switch between Registration Form and Documents Hub */}
       {activeView === 'documents' && vendorId ? (
         <div className="flex-1 mb-6 animate-fadeIn">
@@ -853,8 +856,6 @@ export const VendorOnboardingPage: FC = () => {
         </div>
       ) : (
         <>
-          <TestCasePicker onLoad={handleLoadTestCase} />
-
           <StepHeader
             stepNumber={currentStep}
             totalSteps={4}
